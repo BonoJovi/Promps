@@ -346,6 +346,113 @@ validate_noun_relationships() {
 
 ---
 
+## 🤖 AI Collaboration Strategy
+
+### Understanding AI's Probabilistic Nature
+
+**Core Principle**: Modern AI/LLMs are based on statistical/probabilistic models, not deterministic logic.
+
+**Implication**: Output variation is **inherent to the technology**, not a bug.
+
+```
+Same prompt: "Create a modal dialog"
+↓ Probabilistic AI Model ↓
+Output A: <div class="modal-dialog">...
+Output B: <div class="modal-popup">...
+Output C: <div class="custom-modal">...
+```
+
+Each output is statistically valid, but structurally different → Creates checking burden.
+
+### Strategic Commonalization Approach
+
+**Problem**: Reviewing and correcting AI output variations consumes significant energy.
+
+**Solution**: Absorb variations through strategic commonalization.
+
+#### Traditional Approach (High Energy Cost)
+```
+Generate UI → Review → Fix variations → Repeat
+↓
+Endless cycle of checking and fixing
+Energy drain on every screen/component
+```
+
+#### Strategic Approach (Low Energy Cost)
+```
+1. Identify variation patterns
+   - Modal structures vary
+   - CSS class names vary
+   - Button layouts vary
+
+2. Create common modules
+   - Modal class (standardized structure)
+   - CSS standards (consistent naming)
+   - Component templates (reusable patterns)
+
+3. Instruct AI to use common modules
+   - "Use the Modal class from modal.js"
+   - Variations absorbed by module
+   - Checking burden minimized
+```
+
+### Commonalization Granularity
+
+**Flexibility**: Any granularity from 1 line to 100+ lines is valid for commonalization.
+
+**Decision Criteria**:
+- Cost of commonalization < Cost of repeated checking
+- If duplication appears → Commonalize immediately (not "later")
+- Applies to: Code, UI components, CSS classes, modal structures, etc.
+
+**Examples**:
+- **Code**: Validation functions (password, username)
+- **UI**: Modal class, form templates
+- **CSS**: Standard class naming conventions
+- **Patterns**: Event handlers, keyboard navigation
+
+### Energy Preservation
+
+**Rationale**: Developer energy is finite and precious.
+
+**Trade-offs**:
+- ✅ Spend energy on: Strategic commonalization, core logic, design decisions
+- ❌ Don't spend energy on: Checking AI output variations, fixing cosmetic differences
+
+**Result**: Energy preserved for essential thinking, not repetitive checking.
+
+### Real-World Validation (KakeiBon)
+
+**Achievement**: 525 tests, 100% success rate
+
+**Why it worked**:
+- Modal class absorbed UI variations
+- Validation helpers absorbed logic variations
+- CSS standards absorbed styling variations
+- Common patterns absorbed structural variations
+
+**Impact**: Minimal hand-back, rare specification changes, consistent quality.
+
+### Best Practices for AI Collaboration
+
+1. **Understand the technology**: AI is probabilistic → Variations are normal
+2. **See duplication, fix immediately**: Don't defer commonalization
+3. **Any granularity is valid**: 1 line or 100 lines, commonalize if cost-effective
+4. **Strategic, not reactive**: Anticipate variation points, commonalize proactively
+5. **Preserve energy**: Automate checking through commonalization
+
+### Why This Matters for Promps
+
+Promps itself generates prompts for AI → Understanding AI's probabilistic nature is **essential**.
+
+- **Input**: DSL with clear structure (_N: annotations)
+- **Output**: Natural language for probabilistic AI
+- **Strategy**: Syntax validation only (let AI handle semantic variations)
+
+By separating syntax (Promps) from semantics (AI), we allow AI to use its probabilistic strength (understanding meaning) while ensuring structural consistency through validation.
+
+---
+
 ## 🎨 Business Model
 
 **Open Core Strategy:**
