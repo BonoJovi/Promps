@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Promps - Visual Prompt Language</title>
+    <link rel="stylesheet" href="/css/common.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <h1>Promps - Phase 1</h1>
+            <p class="subtitle">Visual Prompt Language Generator</p>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Block Palette (Left) -->
+            <aside class="block-palette">
+                <h2>Block Palette</h2>
+                <p class="placeholder">Blockly.js workspace will be integrated here in Phase 1.</p>
+                <div class="block-preview noun-block">
+                    Noun Block
+                </div>
+            </aside>
+
+            <!-- Workspace (Center) -->
+            <section class="workspace">
+                <h2>Workspace</h2>
+                <div id="blocklyDiv" class="blockly-workspace">
+                    <p class="placeholder">Drag blocks here to build your prompt.</p>
+                </div>
+            </section>
+
+            <!-- Preview (Right) -->
+            <aside class="preview-pane">
+                <h2>Generated Prompt</h2>
+                <div id="promptPreview" class="prompt-output">
+                    <p class="placeholder">Generated prompt will appear here.</p>
+                </div>
+                <button id="testButton" class="btn-primary">Test Connection</button>
+            </aside>
+        </main>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+            <p>Promps v0.1.0 - Phase 1 (Tauri Integration)</p>
+        </footer>
+    </div>
+
+    <script src="/js/main.js"></script>
+</body>
+</html>

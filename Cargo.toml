@@ -3,11 +3,21 @@ name = "promps"
 version = "0.1.0"
 edition = "2021"
 authors = ["Yoshihiro NAKAHARA <promps-dev@zundou.org>"]
-description = "Promps: A ViPL (Visual Prompt Language) generation tool - Phase 0 CLI"
+description = "Promps: A ViPL (Visual Prompt Language) generation tool"
 license = "MIT"
 repository = "https://github.com/BonoJovi/Promps"
 
 [dependencies]
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+tauri = { version = "1.6", features = ["dialog-message", "shell-open"] }
+
+[build-dependencies]
+tauri-build = { version = "1.5", features = [] }
+
+[lib]
+name = "promps"
+path = "src/lib.rs"
 
 [[bin]]
 name = "promps"

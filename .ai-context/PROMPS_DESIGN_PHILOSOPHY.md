@@ -1,6 +1,6 @@
 # Promps Design Philosophy and Implementation Strategy
 
-**Last Updated**: 2025-11-24
+**Last Updated**: 2025-11-25
 **Purpose**: Core design decisions and implementation roadmap for AI context preservation
 
 ---
@@ -221,10 +221,11 @@ fn validate_pattern(parts: &[PromptPart]) -> Result<()> {
 | Phase | Content | Difficulty | Estimated Time |
 |-------|---------|-----------|----------------|
 | Phase 0 | CLI implementation | ⭐ | 1 hour ✅ |
-| Phase 1 | GUI (Blockly.js) | ⭐⭐ | 2-3 hours |
+| Phase 1 | Tauri + Blockly.js GUI | ⭐⭐ | 2-3 hours |
 | Phase 2 | Add block types | ⭐⭐ | 1-2 hours |
 | **Phase N** | **Logic Check (AST)** | **⭐⭐⭐⭐⭐** | **Weeks to months** |
-| Phase N+1 | Output optimization | ⭐⭐⭐ | Days |
+| Phase N+1 | Project file save/load | ⭐⭐ | 2-3 hours |
+| Phase N+2 | Layout customization | ⭐⭐ | 2-7 hours |
 
 ### Phase N: The Bottleneck
 
@@ -324,7 +325,8 @@ validate_noun_relationships() {
 
 ### Next Steps
 
-**Phase 1**: GUI implementation with Blockly.js
+**Phase 1**: Tauri + GUI implementation with Blockly.js
+- Tauri framework integration
 - Visual block builder (Scratch-like)
 - Automatic `_N:` annotation
 - Drag-and-drop interface
@@ -333,6 +335,16 @@ validate_noun_relationships() {
 - Pattern matching implementation
 - Particle analysis
 - Relationship validation
+
+**Phase N+1**: Project file persistence
+- Save/load project files (JSON format)
+- File I/O via Tauri commands
+- Project metadata management
+
+**Phase N+2**: UI customization
+- Layout presets (right-handed/left-handed)
+- Draggable pane boundaries
+- User preference persistence
 
 ---
 
@@ -460,6 +472,228 @@ By separating syntax (Promps) from semantics (AI), we allow AI to use its probab
 - Future Pro Version: Proprietary (Advanced features, Enterprise support)
 
 Repository will remain private initially, can be made public later.
+
+---
+
+## 🏗️ Phase 1 Technical Architecture (Confirmed)
+
+**Last Confirmed**: 2025-11-25
+
+### Technology Stack
+
+```
+┌─────────────────────────────────────┐
+│   Tauri Desktop Application         │
+├─────────────────────────────────────┤
+│  Frontend (HTML/CSS/JS)             │
+│  ├── Blockly.js (Block editor)     │
+│  ├── res/html/index.html            │
+│  ├── res/js/ (UI logic)             │
+│  └── res/css/ (Styling)             │
+├─────────────────────────────────────┤
+│  Backend (Rust)                     │
+│  ├── src/main.rs (Tauri entry)     │
+│  ├── src/lib.rs (Phase 0 core)     │
+│  ├── src/commands.rs (Tauri cmds)  │
+│  └── src/modules/ (Common modules) │
+└─────────────────────────────────────┘
+```
+
+### Directory Structure (Confirmed)
+
+```
+Promps/
+├── Cargo.toml                    # Tauri dependencies
+├── tauri.conf.json               # Tauri configuration
+├── build.rs                      # Tauri build script
+│
+├── src/                          # Rust code (unified)
+│   ├── main.rs                   # Tauri entry point
+│   ├── lib.rs                    # Phase 0 core logic
+│   ├── commands.rs               # Tauri commands
+│   ├── models.rs                 # Data structures
+│   │
+│   └── modules/                  # Common Rust modules
+│       ├── mod.rs                # Module declarations
+│       ├── validation.rs         # (Future) Validation logic
+│       ├── parser.rs             # (Future) Parser logic
+│       └── utils.rs              # (Future) Utilities
+│
+├── res/                          # Frontend resources
+│   ├── html/
+│   │   └── index.html            # Main UI
+│   │
+│   ├── js/
+│   │   ├── main.js               # Main application logic
+│   │   ├── blockly-config.js     # Blockly configuration
+│   │   ├── ui-helpers.js         # UI helper functions
+│   │   └── constants.js          # Constants
+│   │
+│   ├── css/
+│   │   ├── common.css            # Common styles
+│   │   └── blockly-theme.css     # Blockly theme
+│   │
+│   ├── locales/                  # (Future) i18n resources
+│   │   ├── ja.json
+│   │   └── en.json
+│   │
+│   └── sql/                      # (Future) SQL queries
+│       └── queries.rs            # (May move to src/modules/)
+│
+└── tests/                        # Test code
+    └── fixtures/                 # Hardcoded test data
+```
+
+### Key Design Decisions
+
+#### 1. **Unified src/ Directory**
+- ✅ All Rust code in `src/` (not `src-tauri/`)
+- ✅ Common modules in `src/modules/`
+- ✅ Avoids synchronization issues between frontend/backend
+- ✅ Simpler dependency management
+
+**Rationale**: Previous project experience showed `src-tauri/` separation caused code sync problems.
+
+#### 2. **No Project File Save/Load Until Phase N+1**
+- ❌ No save/load functionality in Phase 1-N
+- ❌ No localStorage auto-save
+- ✅ Test data is hardcoded in test files
+
+**Rationale**:
+- Phase 1-N: Block design and logic only (testing purpose)
+- Implementing save/load too early causes:
+  - Schema changes with each block type addition
+  - Migration complexity
+  - Energy drain on non-core features
+- Phase N+1: Implement once when all block types are finalized
+
+**YAGNI Principle**: "You Aren't Gonna Need It" - Don't implement features until actually needed.
+
+#### 3. **Module Extraction Strategy**
+- ✅ Extract common code immediately when duplication is found
+- ✅ "See duplication, fix immediately" (not "later")
+- ✅ Any granularity (1 line to 100+ lines) is valid
+
+**Workflow**:
+```rust
+// Initial: All logic in src/commands.rs
+#[tauri::command]
+fn process_blocks(blocks: Vec<Block>) -> String {
+    // 100 lines of logic here
+}
+
+// ↓ Found duplication
+
+// Refactored: Logic extracted to src/modules/
+use crate::modules::parser;
+use crate::modules::validation;
+
+#[tauri::command]
+fn process_blocks(blocks: Vec<Block>) -> Result<String, String> {
+    let parts = parser::parse_blocks(blocks);
+    validation::validate_pattern(&parts)?;
+    Ok(generate_prompt(&parts))
+}
+```
+
+### Phase 1 Implementation Scope (Minimal)
+
+**✅ Must Implement:**
+- Tauri framework integration
+- Blockly.js workspace UI
+- Noun block type only
+- Prompt generation preview
+- Basic styling
+
+**❌ Deferred to Later Phases:**
+- Project file save/load → Phase N+1
+- Layout customization → Phase N+2
+- Multiple block types → Phase 2
+- Logic validation → Phase N
+- i18n support → Phase N+2
+
+### Future Features (Phase N+1, N+2)
+
+#### Phase N+1: Project Persistence
+
+**Implementation**:
+```rust
+// src/commands.rs
+#[derive(Serialize, Deserialize)]
+struct ProjectFile {
+    version: String,
+    workspace: String,  // Blockly XML/JSON
+    metadata: ProjectMetadata,
+}
+
+#[tauri::command]
+async fn save_project(path: String, data: ProjectFile) -> Result<(), String> {
+    // Save to local file system
+}
+
+#[tauri::command]
+async fn load_project(path: String) -> Result<ProjectFile, String> {
+    // Load from local file system
+}
+```
+
+**File Format**: JSON (`.promps` extension)
+
+**Why Later**:
+- All block types will be finalized
+- Optimal schema design possible
+- Single implementation effort (no migrations)
+
+#### Phase N+2: Layout Customization
+
+**Target Users**:
+- Right-handed: Block palette on left (default)
+- Left-handed: Block palette on right (better ergonomics)
+
+**Implementation**:
+```javascript
+// res/js/layout-config.js
+const LAYOUT_PRESETS = {
+    'right-handed': {
+        blockPalette: 'left',
+        workspace: 'center',
+        preview: 'right'
+    },
+    'left-handed': {
+        blockPalette: 'right',
+        workspace: 'center',
+        preview: 'left'
+    }
+};
+```
+
+```css
+/* res/css/layout.css */
+.app-container {
+    display: grid;
+    grid-template-areas: "palette workspace preview";
+}
+
+.app-container.left-handed {
+    grid-template-areas: "preview workspace palette";
+}
+```
+
+**Features**:
+- Layout preset switching
+- Draggable pane boundaries
+- User preference persistence
+- Keyboard shortcuts
+
+**Why Later**:
+- Completely independent from block logic
+- UI must be stable first
+- Lower priority than core features
+
+### Platform Targets
+
+**Primary**: Linux (development environment)
+**Future**: Windows, macOS (cross-platform via Tauri)
 
 ---
 
