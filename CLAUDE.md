@@ -5,6 +5,9 @@ This file automatically loads project context at the start of each Claude Code s
 ## Project Overview
 @.ai-context/README.md
 
+## Design Philosophy (IMPORTANT - READ FIRST)
+@.ai-context/PROMPS_DESIGN_PHILOSOPHY.md
+
 ## Coding Conventions
 @.ai-context/CONVENTIONS.md
 
@@ -13,6 +16,3 @@ This file automatically loads project context at the start of each Claude Code s
 
 ## GitHub Projects Guidelines
 @.ai-context/projects-guidelines.md
-
-## Tauri Development Notes
-@.ai-context/TAURI_DEVELOPMENT.md
