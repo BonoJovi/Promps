@@ -43,23 +43,36 @@
 - **Example**: `feat(user-mgmt): add user deletion feature`
 
 ### Git Operations
-- **AI/LLM scope**: Up to `git commit` only
-- **Manual operation**: `git push` must be done by developer
-- **Reason**: GitHub operations require hardware key authentication
+- **AI/LLM scope**: Up to `git push` (depends on authentication method)
+- **Push policy**: Check remote URL to determine who should push
+- **Authentication methods**:
+  - **HTTPS (PAT authentication)**: AI/LLM can execute `git push`
+  - **SSH (Hardware key authentication)**: Developer must push manually
 - **Workflow**:
   1. AI/LLM creates/modifies files
   2. AI/LLM stages changes: `git add`
   3. AI/LLM commits: `git commit -m "message"`
-  4. **Developer pushes**: `git push` (manual, with hardware key)
+  4. AI/LLM checks remote URL: `git remote get-url origin`
+  5. **If HTTPS**: AI/LLM executes `git push`
+  6. **If SSH**: Developer pushes manually (hardware key required)
 
 ### Example Workflow
 ```bash
-# AI/LLM can do:
+# Check authentication method first:
+git remote get-url origin
+
+# If HTTPS (e.g., https://github.com/user/repo.git):
+# AI/LLM can do everything:
 git add src/new-feature.rs
 git commit -m "feat(feature): add new feature implementation"
+git push origin main  # PAT authentication (AI/LLM executes)
 
+# If SSH (e.g., git@github.com:user/repo.git):
+# AI/LLM does commit only:
+git add src/new-feature.rs
+git commit -m "feat(feature): add new feature implementation"
 # Developer must do:
-git push origin main  # Requires hardware key authentication
+git push origin main  # Hardware key authentication (manual)
 ```
 
 ### Session Limit Notification
@@ -583,20 +596,32 @@ docs(ai-context): add AI-specific conventions
 
 ### Git Workflow for AI/LLM
 ```bash
-# ✅ AI/LLM CAN do these:
+# ✅ AI/LLM CAN ALWAYS do these:
 git status
 git add <files>
 git commit -m "commit message in English"
 git log
 git diff
 
-# ❌ AI/LLM MUST NOT do these:
+# 🔍 AI/LLM MUST CHECK remote URL first:
+git remote get-url origin
+
+# ✅ If HTTPS (PAT authentication):
+# AI/LLM CAN do these:
+git push origin main
+git push origin dev
+
+# ❌ If SSH (Hardware key authentication):
+# AI/LLM MUST NOT do these:
 git push                    # Requires hardware key
 git push origin main        # Requires hardware key
 git push --force            # Requires hardware key
 
-# After commit, AI/LLM should inform:
+# After commit with SSH, AI/LLM should inform:
 "Changes have been committed. Please run 'git push' manually with your hardware key."
+
+# After push with HTTPS, AI/LLM confirms:
+"Changes have been committed and pushed to remote repository."
 ```
 
 ---
