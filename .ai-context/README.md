@@ -1,45 +1,118 @@
 # AI Context Directory
 
-このディレクトリには、AI/LLMアシスタントがプロジェクトを理解するためのコンテキスト情報が含まれています。
+**Last Updated**: 2025-11-25
+**Purpose**: Hierarchical AI context for efficient information retrieval
 
-## ファイル一覧
+---
 
-- **CONVENTIONS.md**: コーディング規約、命名規則、パターン
-- **PROJECT_STRUCTURE.md**: プロジェクト構造、モジュール責務、データフロー
-- **projects-guidelines.md**: GitHub Projects使用ガイドライン
-- **init.zsh**: コンテキスト初期化スクリプト（レガシー）
+## Directory Structure
 
-## GitHub Copilot CLI統合
-
-GitHub Copilot CLIは自動的に `.github/copilot-instructions.md` を読み込みます。
-このファイルは `.ai-context/` の内容を要約したものです。
-
-### 使用方法
-
-1. **自動読み込み**: GitHub Copilot CLIを起動すると自動的に読み込まれます
-2. **手動確認**: `cat .github/copilot-instructions.md` で内容を確認できます
-
-### 従来の方法（レガシー）
-
-```bash
-# 従来はセッション開始時に手動実行が必要でした
-ghcp-init
 ```
-
-現在は不要です。GitHub Copilot CLIが自動的にコンテキストを読み込みます。
-
-## 詳細情報の参照
-
-詳細な情報が必要な場合は、このディレクトリ内のファイルを直接参照してください：
-
-```bash
-# 例：コーディング規約の確認
-cat .ai-context/CONVENTIONS.md
-
-# 例：プロジェクト構造の確認
-cat .ai-context/PROJECT_STRUCTURE.md
+.ai-context/
+├── README.md                          # This file
+│
+├── core/                              # [Always Load] Critical context
+│   ├── QUICK_REFERENCE.md            # Fast lookup, current status
+│   └── DESIGN_PHILOSOPHY.md          # Core design principles
+│
+├── development/                       # [When Coding] Development practices
+│   ├── METHODOLOGY.md                # AI collaboration methodology
+│   ├── TESTING_STRATEGY.md           # TDD strategies
+│   └── CONVENTIONS.md                # Coding standards
+│
+├── architecture/                      # [When Designing] System design
+│   ├── PROJECT_STRUCTURE.md          # Module organization
+│   └── TAURI_INTEGRATION.md          # Tauri framework specifics
+│
+└── workflows/                         # [When Managing] Project workflows
+    ├── GITHUB_PROJECTS.md            # Issue & feature tracking
+    └── I18N_MANAGEMENT.md            # Localization management
 ```
 
 ---
 
-**最終更新**: 2025-10-29
+## Usage Guidelines for AI
+
+### When Starting a Session
+**Always read**:
+- `core/QUICK_REFERENCE.md` - Current phase status, critical decisions
+- `core/DESIGN_PHILOSOPHY.md` - Design principles, architecture rationale
+
+### When Implementing Code
+**Read**:
+- `development/METHODOLOGY.md` - AI collaboration patterns
+- `development/CONVENTIONS.md` - Coding standards
+- `development/TESTING_STRATEGY.md` - Testing approach
+
+### When Making Design Decisions
+**Read**:
+- `architecture/PROJECT_STRUCTURE.md` - Module responsibilities
+- `architecture/TAURI_INTEGRATION.md` - Framework constraints
+
+### When Managing Tasks
+**Read**:
+- `workflows/GITHUB_PROJECTS.md` - Issue tracking guidelines
+- `workflows/I18N_MANAGEMENT.md` - Translation workflows
+
+---
+
+## File Size Reference
+
+| File | Lines | Category | Priority |
+|------|-------|----------|----------|
+| QUICK_REFERENCE.md | ~150 | Core | High |
+| DESIGN_PHILOSOPHY.md | ~950 | Core | High |
+| METHODOLOGY.md | ~1,540 | Development | Medium |
+| TESTING_STRATEGY.md | ~280 | Development | Medium |
+| CONVENTIONS.md | ~870 | Development | Medium |
+| PROJECT_STRUCTURE.md | ~320 | Architecture | Low |
+| TAURI_INTEGRATION.md | ~55 | Architecture | Low |
+| GITHUB_PROJECTS.md | ~110 | Workflow | Low |
+| I18N_MANAGEMENT.md | ~280 | Workflow | Low |
+
+---
+
+## Design Rationale
+
+### Why Hierarchical Structure?
+
+1. **Token Efficiency**: Load only necessary context for current task
+2. **Scalability**: Easy to add Phase 2, 3, N... documentation
+3. **Maintainability**: Clear separation of concerns
+4. **Discoverability**: Intuitive categorization for AI navigation
+
+### Priority Levels
+
+- **High**: Core context, always relevant
+- **Medium**: Development context, frequently needed when coding
+- **Low**: Specialized context, needed for specific tasks
+
+---
+
+## Maintenance Policy
+
+### When to Update
+
+- **core/**: When fundamental design decisions change
+- **development/**: When coding patterns or methodologies evolve
+- **architecture/**: When module structure or framework integration changes
+- **workflows/**: When project management practices change
+
+### File Size Guidelines
+
+- **core/**: Keep concise, < 200 lines preferred for QUICK_REFERENCE
+- **development/**: Split if > 2,000 lines
+- **architecture/**: Split by subsystem if needed
+- **workflows/**: One file per workflow type
+
+---
+
+## GitHub Copilot CLI Integration
+
+**Automatic Loading**: GitHub Copilot CLI automatically loads contexts referenced in `CLAUDE.md` at the root of the repository.
+
+**No Manual Initialization Required**: The hierarchical structure is transparent to Copilot CLI.
+
+---
+
+**This structure ensures AI assistants can efficiently access the right information at the right time.**
