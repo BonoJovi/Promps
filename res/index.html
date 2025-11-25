@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Promps - Visual Prompt Language</title>
     <link rel="stylesheet" href="/css/common.css">
+
+    <!-- Blockly.js -->
+    <script src="https://unpkg.com/blockly/blockly.min.js"></script>
 </head>
 <body>
     <div class="app-container">
@@ -16,20 +19,11 @@
 
         <!-- Main Content -->
         <main class="main-content">
-            <!-- Block Palette (Left) -->
-            <aside class="block-palette">
-                <h2>Block Palette</h2>
-                <p class="placeholder">Blockly.js workspace will be integrated here in Phase 1.</p>
-                <div class="block-preview noun-block">
-                    Noun Block
-                </div>
-            </aside>
-
-            <!-- Workspace (Center) -->
+            <!-- Workspace (Left + Center) -->
             <section class="workspace">
                 <h2>Workspace</h2>
                 <div id="blocklyDiv" class="blockly-workspace">
-                    <p class="placeholder">Drag blocks here to build your prompt.</p>
+                    <p class="placeholder">Loading Blockly workspace...</p>
                 </div>
             </section>
 
@@ -49,6 +43,7 @@
         </footer>
     </div>
 
+    <script src="/js/blockly-config.js"></script>
     <script src="/js/main.js"></script>
 </body>
 </html>

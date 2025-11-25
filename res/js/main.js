@@ -36,6 +36,28 @@ async function generatePrompt(input) {
 }
 
 /**
+ * Update preview pane with generated prompt
+ */
+async function updatePreview(dslCode) {
+    const previewDiv = document.getElementById('promptPreview');
+
+    if (!dslCode || dslCode.trim() === '') {
+        previewDiv.innerHTML = '<p class="placeholder">Generated prompt will appear here.</p>';
+        return;
+    }
+
+    try {
+        // Generate prompt from DSL code
+        const prompt = await generatePrompt(dslCode);
+
+        // Update preview
+        previewDiv.textContent = prompt;
+    } catch (error) {
+        previewDiv.innerHTML = `<p style="color: red;">Error: ${error}</p>`;
+    }
+}
+
+/**
  * Initialize application
  */
 async function init() {
@@ -56,9 +78,13 @@ async function init() {
         testButton.addEventListener('click', testConnection);
     }
 
-    // TODO: Initialize Blockly.js workspace (Phase 1)
-    // TODO: Setup block change listeners
-    // TODO: Implement real-time preview
+    // Initialize Blockly.js workspace
+    if (typeof initBlockly === 'function') {
+        initBlockly();
+        console.log('Blockly workspace initialized');
+    } else {
+        console.error('initBlockly function not found');
+    }
 }
 
 // Initialize when DOM is ready
