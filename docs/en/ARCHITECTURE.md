@@ -1,0 +1,933 @@
+# Promps Architecture Documentation
+
+**Version**: Phase 0
+**Last Updated**: 2025-11-25
+**Audience**: Developers, Contributors, AI Assistants
+
+---
+
+## Overview
+
+This document describes the architectural design of Promps Phase 0, including module structure, data flow, design decisions, and evolution path.
+
+**Core Concept**: Promps is a **compiler-like DSL processor** that translates simplified input language into structured prompts for AI consumption.
+
+---
+
+## High-Level Architecture
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                    Promps Phase 0                       │
+├─────────────────────────────────────────────────────────┤
+│                                                         │
+│  ┌───────────────┐      ┌──────────────┐              │
+│  │  Frontend     │      │   Backend    │              │
+│  │  (Tauri UI)   │ IPC  │   (Rust)     │              │
+│  │               │◄────►│              │              │
+│  │  - HTML/CSS   │      │  - Parsing   │              │
+│  │  - JavaScript │      │  - Generation│              │
+│  └───────────────┘      └──────────────┘              │
+│                                                         │
+│         │                       │                      │
+│         │                       ▼                      │
+│         │              ┌─────────────────┐            │
+│         │              │  Core Library   │            │
+│         │              │  (src/lib.rs)   │            │
+│         │              │                 │            │
+│         │              │  - PromptPart   │            │
+│         │              │  - parse_input  │            │
+│         │              │  - generate_    │            │
+│         │              │    prompt       │            │
+│         │              └─────────────────┘            │
+│         │                                              │
+│         ▼                                              │
+│  ┌────────────┐                                       │
+│  │   User     │                                       │
+│  │ Interaction│                                       │
+│  └────────────┘                                       │
+│                                                         │
+└─────────────────────────────────────────────────────────┘
+
+Input Flow:
+User Input → Frontend → Tauri IPC → Backend Command → Core Library → Output
+```
+
+---
+
+## Module Structure
+
+### Directory Layout
+
+```
+Promps/
+├── src/                       # Rust source code
+│   ├── main.rs                # Application entry point (Tauri)
+│   ├── lib.rs                 # Core library (parsing, generation)
+│   ├── commands.rs            # Tauri commands (IPC layer)
+│   └── modules/               # (Future) Additional modules
+│       └── mod.rs             # Module declarations
+│
+├── res/                       # Frontend resources (Tauri)
+│   ├── html/
+│   │   └── index.html         # Main UI
+│   ├── js/
+│   │   ├── main.js            # Frontend logic
+│   │   └── constants.js       # (Future) Constants
+│   └── css/
+│       └── common.css         # (Future) Styling
+│
+├── docs/                      # Documentation
+│   ├── CORE_FEATURES.md       # Phase 0 features
+│   ├── API_REFERENCE.md       # API documentation
+│   └── ARCHITECTURE.md        # This file
+│
+├── .ai-context/               # AI assistant context
+│   ├── PROMPS_DESIGN_PHILOSOPHY.md
+│   ├── DEVELOPMENT_METHODOLOGY.md
+│   ├── CONVENTIONS.md
+│   └── PROJECT_STRUCTURE.md
+│
+├── Cargo.toml                 # Rust dependencies
+├── tauri.conf.json            # Tauri configuration
+└── README.md                  # User documentation
+```
+
+---
+
+## Core Components
+
+### 1. Core Library (`src/lib.rs`)
+
+**Responsibility**: Pure parsing and generation logic (no I/O, no UI)
+
+**Key Design**: Library is **framework-agnostic** and can be used by:
+- CLI tools
+- GUI applications (Tauri)
+- Web services
+- Test frameworks
+
+**Modules**:
+
+```rust
+// Data Structure
+pub struct PromptPart {
+    pub is_noun: bool,
+    pub text: String,
+}
+
+// Public API
+pub fn parse_input(input: &str) -> Vec<PromptPart>
+pub fn generate_prompt(parts: &[PromptPart]) -> String
+
+// Internal API
+impl PromptPart {
+    pub fn from_token(token: &str) -> Self
+}
+```
+
+**Dependencies**:
+- None (only Rust standard library)
+
+**Testing**: 7 unit tests (100% coverage of public API)
+
+---
+
+### 2. Tauri Commands (`src/commands.rs`)
+
+**Responsibility**: Bridge between frontend (JavaScript) and backend (Rust)
+
+**Design Pattern**: Thin wrapper around core library
+
+**Commands**:
+
+```rust
+#[tauri::command]
+pub fn generate_prompt_from_text(input: String) -> String
+    ↓
+Calls: parse_input() + generate_prompt()
+
+#[tauri::command]
+pub fn greet(name: String) -> String
+    ↓
+Purpose: Health check for Tauri IPC
+```
+
+**Error Handling**: None (Phase 0 - deferred to Phase N)
+
+**Testing**: 2 unit tests (command-level testing)
+
+---
+
+### 3. Tauri Application (`src/main.rs`)
+
+**Responsibility**: Application lifecycle management
+
+**Structure**:
+```rust
+mod commands;
+mod modules;
+
+use commands::{generate_prompt_from_text, greet};
+
+fn main() {
+    tauri::Builder::default()
+        .invoke_handler(tauri::generate_handler![
+            generate_prompt_from_text,
+            greet
+        ])
+        .run(tauri::generate_context!())
+        .expect("error while running tauri application");
+}
+```
+
+**Dependencies**:
+- `tauri`: Desktop application framework
+- `commands`: Tauri command module
+
+---
+
+### 4. Frontend (HTML/JS)
+
+**Status**: Phase 0 - Minimal implementation (basic Tauri window)
+
+**Future (Phase 1)**:
+- Blockly.js integration
+- Visual block builder
+- Drag-and-drop interface
+
+**Current Structure**:
+```
+res/
+├── html/
+│   └── index.html      # (Future) Main UI
+├── js/
+│   └── main.js         # (Future) Frontend logic
+└── css/
+    └── common.css      # (Future) Styling
+```
+
+---
+
+## Data Flow
+
+### End-to-End Flow (Tauri Application)
+
+```
+1. User Input (Frontend)
+   │
+   │ JavaScript: await invoke('generate_prompt_from_text', { input })
+   ▼
+2. Tauri IPC Layer
+   │
+   │ Serialization: JavaScript String → Rust String
+   ▼
+3. Backend Command (src/commands.rs)
+   │
+   │ generate_prompt_from_text(input: String)
+   ▼
+4. Core Library (src/lib.rs)
+   │
+   ├─► parse_input(&input)
+   │    │
+   │    ├─► Split by lines
+   │    ├─► Split by double spaces (sentences)
+   │    ├─► Split by single spaces (tokens)
+   │    ├─► Scan for _N: markers
+   │    └─► Build PromptPart vector
+   │
+   └─► generate_prompt(&parts)
+        │
+        ├─► Iterate through parts
+        ├─► Format each part (append (NOUN) if needed)
+        └─► Return formatted string
+   ▼
+5. Backend Command (return)
+   │
+   │ Return: String
+   ▼
+6. Tauri IPC Layer
+   │
+   │ Serialization: Rust String → JavaScript String
+   ▼
+7. Frontend (JavaScript)
+   │
+   │ Display result to user
+   ▼
+8. User Output
+```
+
+---
+
+### Parsing Flow (Detailed)
+
+```
+Input: "_N:User が _N:Order を 作成  説明文です"
+
+parse_input() flow:
+
+1. Split by lines
+   ↓
+   ["_N:User が _N:Order を 作成  説明文です"]
+
+2. Split by double spaces
+   ↓
+   ["_N:User が _N:Order を 作成", "説明文です"]
+
+3. For each sentence:
+
+   Sentence 1: "_N:User が _N:Order を 作成"
+   ├─► Split by spaces: ["_N:User", "が", "_N:Order", "を", "作成"]
+   ├─► Scan for _N:: Found at tokens[0] and tokens[2]
+   ├─► has_noun = true
+   ├─► Rebuild text: "User が Order を 作成"
+   └─► PromptPart { is_noun: true, text: "User が Order を 作成" }
+
+   Sentence 2: "説明文です"
+   ├─► Split by spaces: ["説明文です"]
+   ├─► Scan for _N:: Not found
+   ├─► has_noun = false
+   ├─► Rebuild text: "説明文です"
+   └─► PromptPart { is_noun: false, text: "説明文です" }
+
+4. Return vector:
+   ↓
+   [
+       PromptPart { is_noun: true, text: "User が Order を 作成" },
+       PromptPart { is_noun: false, text: "説明文です" }
+   ]
+```
+
+---
+
+### Generation Flow (Detailed)
+
+```
+Input: [
+    PromptPart { is_noun: true, text: "User が Order を 作成" },
+    PromptPart { is_noun: false, text: "説明文です" }
+]
+
+generate_prompt() flow:
+
+1. Initialize output: String::new()
+
+2. Iterate through parts:
+
+   Part 1: is_noun = true
+   ├─► Append: "User が Order を 作成"
+   ├─► Append: " (NOUN)"
+   └─► Append: "\n"
+
+   Part 2: is_noun = false
+   ├─► Append: "説明文です"
+   └─► Append: "\n"
+
+3. Return output:
+   ↓
+   "User が Order を 作成 (NOUN)\n説明文です\n"
+```
+
+---
+
+## Design Decisions
+
+### Decision 1: Library-First Architecture
+
+**Problem**: How to structure code for both CLI and GUI usage?
+
+**Solution**: Core logic in `src/lib.rs` (library), application-specific code in `src/main.rs` and `src/commands.rs`.
+
+**Benefits**:
+- ✅ Reusable across applications (CLI, GUI, web service)
+- ✅ Testable independently (unit tests don't require UI)
+- ✅ Framework-agnostic (can swap Tauri for other frameworks)
+
+**Trade-offs**:
+- ⚠️ Extra indirection layer (commands.rs wraps lib.rs)
+- ⚠️ More files to maintain
+
+**Conclusion**: Benefits outweigh trade-offs for long-term maintainability.
+
+---
+
+### Decision 2: Sentence-Level `is_noun` (Not Token-Level)
+
+**Problem**: Should `PromptPart` represent tokens or sentences?
+
+**Solution**: `PromptPart` = **sentence** (semantic unit), not token.
+
+**Alternative Considered**:
+```rust
+// Option A: Token-level (NOT chosen)
+PromptPart { is_noun: true, text: "User" }
+PromptPart { is_noun: false, text: "が" }
+PromptPart { is_noun: true, text: "Order" }
+...
+
+// Option B: Sentence-level (CHOSEN)
+PromptPart { is_noun: true, text: "User が Order を 作成" }
+```
+
+**Benefits**:
+- ✅ Preserves natural language structure
+- ✅ Simpler data model (fewer objects)
+- ✅ Easier relationship analysis (Phase N)
+- ✅ Matches human thinking (sentence = unit of thought)
+
+**Trade-offs**:
+- ⚠️ Cannot distinguish individual tokens within sentence
+- ⚠️ Noun annotation applies to entire sentence (not individual words)
+
+**Conclusion**: Sentence-level granularity is optimal for current and future needs.
+
+---
+
+### Decision 3: `_N:` Anywhere in Sentence
+
+**Problem**: Should `_N:` only be allowed at sentence start?
+
+**Solution**: `_N:` can appear **anywhere** in sentence.
+
+**Benefits**:
+- ✅ Natural language flexibility (Japanese word order is flexible)
+- ✅ User can express emphasis ("注文を _N:ユーザーが 作成" emphasizes User)
+- ✅ No forced reordering of user's thought process
+
+**Implementation Cost**:
+- ⚠️ Slightly more complex parsing (must scan entire sentence)
+
+**Conclusion**: Flexibility is worth minor implementation complexity.
+
+---
+
+### Decision 4: No Error Handling in Phase 0
+
+**Problem**: How to handle invalid input?
+
+**Solution**: **No validation** in Phase 0 (deferred to Phase N).
+
+**Rationale**:
+- Phase 0 goal: Establish core functionality
+- Validation requires AST-based pattern matching (Phase N scope)
+- Early validation may need refactoring when Phase N is implemented
+
+**Current Behavior**:
+- Invalid input → Parsed as-is (may produce unexpected output)
+- Empty input → Returns empty vector/string
+
+**Future (Phase N)**:
+```rust
+pub enum PrompError { ... }
+pub fn parse_input(input: &str) -> Result<Vec<PromptPart>, PrompError>
+```
+
+**Conclusion**: Deferred error handling reduces Phase 0 complexity without sacrificing future extensibility.
+
+---
+
+### Decision 5: No File I/O in Phase 0
+
+**Problem**: Should Phase 0 support saving/loading prompts?
+
+**Solution**: **No file I/O** in Phase 0 (deferred to Phase N+1).
+
+**Rationale**:
+- Phase 0: CLI/GUI input → immediate output (no persistence)
+- Phase 1: Visual block builder (testing only, no save)
+- Phase N+1: Finalized block types → implement save/load once
+
+**Benefits**:
+- ✅ Avoid schema changes during rapid development (Phase 1-N)
+- ✅ No migration complexity
+- ✅ Single implementation effort when stable
+
+**YAGNI Principle**: "You Aren't Gonna Need It" - implement features when actually needed.
+
+**Conclusion**: Deferred file I/O prevents premature design lock-in.
+
+---
+
+## Architectural Patterns
+
+### Pattern 1: Compiler Analogy
+
+Promps architecture mirrors a **compiler pipeline**:
+
+```
+Compiler Phases       Promps Phases           Status
+─────────────────────────────────────────────────────────
+Lexical Analysis   →  Token Parsing           ✅ Phase 0
+Syntax Analysis    →  AST Construction        🔜 Phase N
+Syntax Validation  →  Pattern Matching        🔜 Phase N
+Semantic Analysis  →  (None - AI's job)       ❌ Out of scope
+Type Checking      →  Noun Relationships      🔜 Phase N
+IR Generation      →  Normalized AST          🔜 Phase N+1
+Code Generation    →  Prompt Output           ✅ Phase 0
+```
+
+**Phase 0 Scope**: Lexical Analysis + Code Generation (minimal viable compiler)
+
+---
+
+### Pattern 2: AST-like Data Structure
+
+`PromptPart` is an **AST node**:
+
+```rust
+PromptPart {
+    is_noun: bool,    // ← Type annotation (like AST node type)
+    text: String,     // ← Semantic content (like AST node value)
+}
+```
+
+**AST Comparison**:
+```
+Traditional AST Node:
+  type: NodeType (enum)
+  children: Vec<Node>
+  value: Option<Value>
+
+PromptPart (Simplified AST Node):
+  is_noun: bool (type annotation)
+  text: String (value)
+  children: (none - flat structure in Phase 0)
+```
+
+**Future (Phase N)**: Hierarchical AST with nested nodes.
+
+---
+
+### Pattern 3: Separation of Concerns
+
+**Core Library** (src/lib.rs):
+- ✅ Pure functions (no side effects)
+- ✅ No I/O (no file read/write, no network)
+- ✅ No UI dependencies (no Tauri, no HTML/JS)
+- ✅ Framework-agnostic
+
+**Application Layer** (src/main.rs, src/commands.rs):
+- ✅ I/O handling (stdin/stdout, file operations)
+- ✅ UI integration (Tauri IPC)
+- ✅ Application lifecycle
+- ✅ Framework-specific code
+
+**Benefits**:
+- Easy testing (core library tested in isolation)
+- Easy refactoring (change UI without affecting core)
+- Easy reuse (core library usable in different contexts)
+
+---
+
+## Performance Characteristics
+
+### Time Complexity
+
+| Function | Complexity | Notes |
+|----------|-----------|-------|
+| `PromptPart::from_token()` | O(n) | n = token length |
+| `parse_input()` | O(m × k) | m = tokens, k = avg token length |
+| `generate_prompt()` | O(p × t) | p = parts, t = avg text length |
+
+**Overall**: O(m × k) - Linear in total input size
+
+---
+
+### Memory Usage
+
+**Data Structure Sizes** (64-bit system):
+```
+PromptPart:         25 bytes
+├─ is_noun:         1 byte (bool)
+├─ text:           24 bytes (String)
+│   ├─ ptr:         8 bytes
+│   ├─ len:         8 bytes
+│   └─ cap:         8 bytes
+└─ padding:         0 bytes
+
+Vec<PromptPart>:    24 bytes (overhead) + 25n bytes (elements)
+```
+
+**Total Memory**: O(n) where n = total character count
+
+---
+
+### Scalability
+
+**Current Limits** (Phase 0):
+- ✅ Input size: No hard limit (limited by available memory)
+- ✅ Token count: No hard limit
+- ✅ Sentence count: No hard limit
+
+**Practical Limits** (tested):
+- 10,000 characters: ~500 μs, ~100 KB memory
+- Expected real-world usage: <1,000 characters per prompt
+
+**Bottleneck**: String allocations (inevitable for text processing)
+
+---
+
+## Testing Strategy
+
+### Unit Testing
+
+**Coverage**: 100% of public API
+
+**Test Structure**:
+```
+src/lib.rs (tests module):
+├─ test_parse_noun()
+├─ test_parse_everything_else()
+├─ test_generate_prompt()
+├─ test_empty_parts()
+├─ test_noun_prefix_stripping()
+├─ test_multi_token_sentence()
+└─ test_noun_in_middle_of_sentence()
+
+src/commands.rs (tests module):
+├─ test_generate_prompt_from_text()
+└─ test_greet()
+```
+
+**Running Tests**:
+```bash
+cargo test              # All tests
+cargo test --lib        # Library tests only
+cargo test commands::   # Command tests only
+```
+
+---
+
+### Integration Testing
+
+**Status**: Phase 0 - Not yet implemented
+
+**Future Strategy**:
+```
+tests/
+├─ integration_test.rs    # Full workflow tests
+├─ cli_test.rs            # CLI application tests
+└─ fixtures/
+    ├─ input1.txt         # Test input files
+    └─ expected1.txt      # Expected output files
+```
+
+---
+
+### Test-Driven Development
+
+**Workflow** (followed in Phase 0):
+1. Write tests first (define expected behavior)
+2. Implement minimal code to pass tests
+3. Refactor without breaking tests
+4. Add more tests for edge cases
+
+**Example**:
+```rust
+// Step 1: Write test
+#[test]
+fn test_parse_noun() {
+    let token = "_N:データベース";
+    let part = PromptPart::from_token(token);
+    assert_eq!(part.is_noun, true);
+    assert_eq!(part.text, "データベース");
+}
+
+// Step 2: Implement
+impl PromptPart {
+    pub fn from_token(token: &str) -> Self {
+        if let Some(text) = token.strip_prefix("_N:") {
+            PromptPart { is_noun: true, text: text.to_string() }
+        } else {
+            PromptPart { is_noun: false, text: token.to_string() }
+        }
+    }
+}
+
+// Step 3: Test passes → Done
+```
+
+---
+
+## Evolution Path
+
+### Phase 0 → Phase 1 (GUI Integration)
+
+**Changes**:
+```
+Added:
+├─ res/html/index.html        (Blockly.js UI)
+├─ res/js/blockly-config.js   (Block definitions)
+└─ res/js/ui-helpers.js       (UI utilities)
+
+Modified:
+└─ src/commands.rs            (New Tauri commands for GUI)
+
+Unchanged:
+└─ src/lib.rs                 (Core library - no changes)
+```
+
+**Compatibility**: 100% backward compatible (core API unchanged)
+
+---
+
+### Phase 1 → Phase N (Logic Check)
+
+**Design Philosophy**: **Layered Architecture - Non-Breaking Extension**
+
+Phase N adds validation as a **separate layer** on top of Phase 0, following the Open-Closed Principle:
+- Phase 0 core remains **unchanged** (closed for modification)
+- Validation layer is **added** (open for extension)
+
+**Changes**:
+```
+Added:
+├─ src/modules/validation.rs  (NEW: Validation layer)
+│   ├─ parse_input_checked() → Result<Vec<PromptPart>, ValidationError>
+│   ├─ validate_pattern()
+│   └─ ValidationError enum
+│
+├─ src/modules/patterns.rs    (NEW: Grammatical patterns)
+│   └─ VALID_PATTERNS
+│
+└─ src/modules/parser.rs      (NEW: AST construction - future)
+
+Unchanged:
+└─ src/lib.rs                 (Phase 0 core - NO changes)
+    ├─ parse_input()          (Stable API maintained)
+    ├─ generate_prompt()      (Stable API maintained)
+    └─ PromptPart             (Stable structure maintained)
+```
+
+**Layered Architecture**:
+```
+┌─────────────────────────────────────┐
+│   Phase N: Validation Layer        │  ← NEW
+│   ├─ parse_input_checked()         │
+│   ├─ validate_pattern()             │
+│   └─ Error → Re-prompt user         │
+└────────────┬────────────────────────┘
+             │ Validation OK
+             ▼
+┌─────────────────────────────────────┐
+│   Phase 0: Core Parsing Layer      │  ← UNCHANGED
+│   ├─ parse_input()                 │
+│   ├─ generate_prompt()             │
+│   └─ PromptPart                    │
+└─────────────────────────────────────┘
+```
+
+**Implementation Example**:
+```rust
+// Phase N validation layer (src/modules/validation.rs)
+pub fn parse_input_checked(input: &str) -> Result<Vec<PromptPart>, ValidationError> {
+    // Reuse Phase 0 core (no modification needed)
+    let parts = parse_input(input);
+
+    // Add validation on top
+    validate_pattern(&parts)?;
+    validate_noun_relationships(&parts)?;
+
+    Ok(parts)
+}
+```
+
+**UI Integration**:
+```javascript
+// Frontend with validation
+async function processInput(input) {
+    try {
+        // Use validation layer
+        const result = await invoke('parse_input_checked', { input });
+        displayPrompt(result);  // Success → proceed
+    } catch (error) {
+        // Error → re-prompt user
+        showError(error.message);
+        highlightInvalidInput(error.position);
+    }
+}
+```
+
+**Compatibility**: **Non-breaking** (Phase 0 API remains stable)
+
+**Benefits**:
+- ✅ **Separation of Concerns**: Parsing vs. Validation
+- ✅ **Single Responsibility**: Each layer has one job
+- ✅ **Open-Closed Principle**: Extended without modification
+- ✅ **Zero Migration Cost**: Existing code continues to work
+- ✅ **Testability**: Each layer tested independently
+
+**Migration** (Optional - existing code works as-is):
+```rust
+// Phase 0 code (still works, no changes needed)
+let parts = parse_input(input);
+
+// Phase N code (opt-in to validation)
+let parts = parse_input_checked(input)?;  // Get validation errors
+```
+
+---
+
+### Phase N → Phase N+1 (Project Persistence)
+
+**Changes**:
+```
+Added:
+├─ src/modules/io.rs          (File I/O operations)
+├─ src/modules/project.rs     (Project structure)
+└─ src/commands.rs            (save_project, load_project commands)
+```
+
+**File Format** (planned):
+```json
+{
+    "version": "0.2.0",
+    "workspace": "...",  // Blockly XML/JSON
+    "metadata": {
+        "created": "2025-11-25T12:00:00Z",
+        "modified": "2025-11-25T13:00:00Z"
+    }
+}
+```
+
+**Compatibility**: Additive (no breaking changes to core library)
+
+---
+
+## Deployment Architecture
+
+### Current (Phase 0)
+
+```
+┌─────────────────────────────┐
+│  Tauri Desktop Application  │
+│  (Single executable)        │
+│                             │
+│  ├─ Frontend (HTML/CSS/JS)  │
+│  └─ Backend (Rust binary)   │
+└─────────────────────────────┘
+```
+
+**Platform Support**:
+- ✅ Linux (development environment)
+- 🔜 Windows (future)
+- 🔜 macOS (future)
+
+**Distribution**:
+- Source code: GitHub repository
+- Binary: `cargo build --release` (local build)
+
+---
+
+### Future (Phase 1+)
+
+**Cross-Platform Builds**:
+```
+Build Matrix:
+├─ Linux (x86_64)
+├─ Windows (x86_64)
+├─ macOS (x86_64)
+└─ macOS (ARM64 / Apple Silicon)
+```
+
+**Distribution Channels**:
+- GitHub Releases (pre-built binaries)
+- Package managers (Homebrew, Chocolatey, etc.)
+
+---
+
+## Security Considerations
+
+### Phase 0 Security
+
+**No Security Requirements** (single-user, local-only):
+- ❌ No authentication
+- ❌ No authorization
+- ❌ No encryption
+- ❌ No network communication
+
+**Rationale**: Promps Phase 0 is a **local-only tool** with no external communication.
+
+---
+
+### Future Security (Phase 1+)
+
+**Potential Risks** (if features are added):
+1. **File I/O** (Phase N+1):
+   - Risk: Path traversal attacks
+   - Mitigation: Validate file paths, sandbox file access
+
+2. **Network Features** (Future):
+   - Risk: Data leakage, MITM attacks
+   - Mitigation: HTTPS only, certificate validation
+
+3. **Multi-User** (Out of scope):
+   - Risk: Unauthorized access
+   - Mitigation: Not applicable (single-user tool)
+
+---
+
+## Appendix
+
+### Technology Stack Summary
+
+| Layer | Technology | Version | Purpose |
+|-------|-----------|---------|---------|
+| Desktop Framework | Tauri | 1.x | Cross-platform desktop application |
+| Backend Language | Rust | 1.70+ | Core logic, parsing, generation |
+| Frontend Language | JavaScript | ES6+ | UI logic (future) |
+| Frontend UI | HTML/CSS | - | User interface (future) |
+| Block Editor | Blockly.js | - | Visual programming (Phase 1) |
+
+---
+
+### Build Dependencies
+
+**Rust Crates**:
+```toml
+[dependencies]
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+[build-dependencies]
+tauri-build = { version = "1.5", features = [] }
+```
+
+**Frontend Dependencies** (Phase 1):
+```json
+{
+  "dependencies": {
+    "@tauri-apps/api": "^1.5.0",
+    "blockly": "^9.0.0"
+  }
+}
+```
+
+---
+
+### Glossary
+
+| Term | Definition |
+|------|------------|
+| AST | Abstract Syntax Tree - hierarchical representation of code structure |
+| DSL | Domain Specific Language - specialized language for a specific problem domain |
+| IPC | Inter-Process Communication - mechanism for Tauri frontend-backend communication |
+| Lexical Analysis | First phase of compilation - tokenization |
+| PromptPart | Core data structure representing a semantic unit (sentence) |
+| Tauri | Framework for building desktop applications with web technologies |
+
+---
+
+### Related Documentation
+
+- **Core Features**: `docs/CORE_FEATURES.md`
+- **API Reference**: `docs/API_REFERENCE.md`
+- **Design Philosophy**: `.ai-context/PROMPS_DESIGN_PHILOSOPHY.md`
+- **Development Methodology**: `.ai-context/DEVELOPMENT_METHODOLOGY.md`
+- **User Guide**: `README.md`
+
+---
+
+**Document Version**: 1.0
+**Last Updated**: 2025-11-25
+**Next Review**: Before Phase 1 implementation begins

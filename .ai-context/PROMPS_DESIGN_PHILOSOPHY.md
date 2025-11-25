@@ -272,6 +272,263 @@ validate_noun_relationships() {
 
 ---
 
+## 🏛️ Layered Architecture: Critical Design Philosophy
+
+### The Non-Breaking Extension Principle
+
+**Core Principle**: Phase N validation is implemented as a **separate layer on top of Phase 0**, not as modifications to Phase 0 core.
+
+### Why Layered Architecture?
+
+```
+Traditional Approach (Breaking Changes):
+  Phase 0: parse_input() → Vec<PromptPart>
+  ↓ (Modify Phase 0)
+  Phase N: parse_input() → Result<Vec<PromptPart>, ValidationError>
+  ↓
+  Problem: All existing code breaks!
+```
+
+```
+Layered Approach (Non-Breaking):
+  ┌─────────────────────────────────────┐
+  │   Phase N: Validation Layer        │  ← NEW
+  │   ├─ parse_input_checked()         │
+  │   ├─ validate_pattern()             │
+  │   └─ Error → Re-prompt user         │
+  └────────────┬────────────────────────┘
+               │ Validation OK
+               ▼
+  ┌─────────────────────────────────────┐
+  │   Phase 0: Core Parsing Layer      │  ← UNCHANGED
+  │   ├─ parse_input()                 │
+  │   ├─ generate_prompt()             │
+  │   └─ PromptPart                    │
+  └─────────────────────────────────────┘
+```
+
+### Implementation Example
+
+**Phase 0 Core (Unchanged)**:
+```rust
+// src/lib.rs (Phase 0)
+pub fn parse_input(input: &str) -> Vec<PromptPart> {
+    // Original implementation
+    // No modifications needed
+}
+
+pub fn generate_prompt(parts: &[PromptPart]) -> String {
+    // Original implementation
+    // No modifications needed
+}
+```
+
+**Phase N Validation Layer (New)**:
+```rust
+// src/modules/validation.rs (Phase N)
+use crate::{parse_input, PromptPart};
+
+pub fn parse_input_checked(input: &str) -> Result<Vec<PromptPart>, ValidationError> {
+    // 1. Reuse Phase 0 core (no modification)
+    let parts = parse_input(input);
+
+    // 2. Add validation on top
+    validate_pattern(&parts)?;
+    validate_noun_relationships(&parts)?;
+
+    // 3. Return validated result
+    Ok(parts)
+}
+
+fn validate_pattern(parts: &[PromptPart]) -> Result<(), ValidationError> {
+    // Pattern matching logic
+}
+
+fn validate_noun_relationships(parts: &[PromptPart]) -> Result<(), ValidationError> {
+    // Relationship checking logic
+}
+```
+
+**Tauri Command Layer**:
+```rust
+// src/commands.rs
+#[tauri::command]
+pub fn process_prompt_with_validation(input: String) -> Result<String, String> {
+    // Use Phase N validation layer
+    let parts = parse_input_checked(&input)
+        .map_err(|e| format!("Validation error: {:?}", e))?;
+
+    Ok(generate_prompt(&parts))
+}
+
+#[tauri::command]
+pub fn process_prompt_without_validation(input: String) -> String {
+    // Direct Phase 0 usage (still available)
+    let parts = parse_input(&input);
+    generate_prompt(&parts)
+}
+```
+
+### Benefits of Layered Architecture
+
+**1. Zero Migration Cost**
+```
+Existing code: parse_input() → Still works
+New code: parse_input_checked() → Optional upgrade
+  ↓
+No breaking changes, no migration needed
+```
+
+**2. Separation of Concerns**
+```
+Phase 0 Layer: Responsible for parsing only
+Phase N Layer: Responsible for validation only
+  ↓
+Each layer has one job (Single Responsibility Principle)
+```
+
+**3. Testability**
+```
+Phase 0 tests: Test parsing logic
+Phase N tests: Test validation logic
+  ↓
+Independent test suites, clear boundaries
+```
+
+**4. Flexibility**
+```
+Use case A: Need validation → Use parse_input_checked()
+Use case B: Skip validation → Use parse_input()
+  ↓
+Users choose based on needs
+```
+
+**5. Open-Closed Principle**
+```
+Open for extension: Add new validation layer
+Closed for modification: Phase 0 core unchanged
+  ↓
+Fundamental design principle from SOLID
+```
+
+### Real-World Usage Pattern
+
+**GUI Application (Phase 1+)**:
+```javascript
+// res/js/blockly-handler.js
+async function processBlocks() {
+    const input = generateInputFromBlocks();
+
+    try {
+        // Use validation layer in GUI
+        const prompt = await invoke('process_prompt_with_validation', { input });
+        displayPrompt(prompt);
+    } catch (error) {
+        // Show validation error to user
+        showValidationError(error);
+        highlightInvalidBlocks();
+    }
+}
+```
+
+**CLI Tool (Advanced Users)**:
+```rust
+// src/main.rs
+fn main() {
+    let input = get_user_input();
+
+    if args.strict {
+        // Strict mode: Use validation
+        match parse_input_checked(&input) {
+            Ok(parts) => println!("{}", generate_prompt(&parts)),
+            Err(e) => eprintln!("Error: {:?}", e),
+        }
+    } else {
+        // Permissive mode: Skip validation
+        let parts = parse_input(&input);
+        println!("{}", generate_prompt(&parts));
+    }
+}
+```
+
+### Architectural Principles Applied
+
+**1. Dependency Inversion**
+```
+Phase N depends on Phase 0 abstractions (parse_input)
+Phase 0 does not depend on Phase N
+  ↓
+High-level modules depend on low-level modules
+```
+
+**2. Interface Segregation**
+```
+parse_input(): Minimal interface (Vec<PromptPart>)
+parse_input_checked(): Extended interface (Result<...>)
+  ↓
+Clients use only what they need
+```
+
+**3. Liskov Substitution**
+```
+parse_input_checked() returns Vec<PromptPart> when Ok
+Can be used anywhere parse_input() is expected (when unwrapped)
+  ↓
+Behavioral compatibility maintained
+```
+
+### Why This Matters
+
+**Traditional "Add Error Handling" Approach**:
+```
+Problems:
+- Breaks existing code
+- Requires migration
+- Forces validation on all users
+- Couples parsing and validation
+```
+
+**Layered Architecture Approach**:
+```
+Benefits:
+- Preserves existing code
+- No migration needed
+- Validation is optional
+- Clear separation of concerns
+- Follows SOLID principles
+- Extensible for future phases
+```
+
+### Future Phase Extensions
+
+This pattern extends naturally to future phases:
+
+```
+┌─────────────────────────────────────┐
+│   Phase N+2: Optimization Layer    │
+│   optimize_prompt()                 │
+└────────────┬────────────────────────┘
+             │
+┌─────────────────────────────────────┐
+│   Phase N+1: Serialization Layer   │
+│   save_project() / load_project()   │
+└────────────┬────────────────────────┘
+             │
+┌─────────────────────────────────────┐
+│   Phase N: Validation Layer         │
+│   parse_input_checked()             │
+└────────────┬────────────────────────┘
+             │
+┌─────────────────────────────────────┐
+│   Phase 0: Core Parsing Layer       │
+│   parse_input() / generate_prompt() │
+└─────────────────────────────────────┘
+```
+
+Each new phase adds a layer without modifying existing layers. This is the **foundation of sustainable software architecture**.
+
+---
+
 ## 📐 Logic Check Scope
 
 ### What to Validate

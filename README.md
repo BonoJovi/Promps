@@ -86,13 +86,13 @@ Phase1で実装予定
 
 **Input:**
 ```
-_N:GUI ブロック ビルダー 機能  ドラッグ アンド ドロップで ブロックを 配置する  _N:技術 スタック  Blockly.js または Scratch Blocks
+_N:GUI ブロック ビルダー 機能  ドラッグ アンド ドロップ で ブロック を 配置 する  _N:技術 スタック  Blockly.js または Scratch Blocks
 ```
 
 **Output:**
 ```
 GUI ブロック ビルダー 機能 (NOUN)
-ドラッグ アンド ドロップで ブロックを 配置する
+ドラッグ アンド ドロップ で ブロック を 配置 する
 技術 スタック (NOUN)
 Blockly.js または Scratch Blocks
 ```
