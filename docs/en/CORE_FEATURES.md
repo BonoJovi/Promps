@@ -302,32 +302,36 @@ The `_N:` prefix serves as **AST-like type annotation**, similar to compiler met
 
 ---
 
-### Why Sentence-Level `is_noun` (Not Token-Level)?
+### Token-Level Noun Detection (Phase 0-1)
 
-**Design Decision**: Each `PromptPart` represents a **semantic unit** (sentence/clause), not individual tokens.
+**Design Decision**: Each `_N:` token creates a separate `PromptPart` with `is_noun=true`, allowing multiple nouns in a single sentence to each have `(NOUN)` markers.
 
 **Rationale**:
 ```
 Japanese sentence: "_N:ユーザー が _N:注文 を 作成"
 
-Option A - Token-level (NOT chosen):
+Phase 0-1 Implementation (Token-level):
   PromptPart { is_noun: true, text: "ユーザー" }
   PromptPart { is_noun: false, text: "が" }
   PromptPart { is_noun: true, text: "注文" }
-  PromptPart { is_noun: false, text: "を" }
-  PromptPart { is_noun: false, text: "作成" }
-  → Too granular, loses sentence context
+  PromptPart { is_noun: false, text: "を 作成" }
 
-Option B - Sentence-level (CHOSEN):
-  PromptPart { is_noun: true, text: "ユーザー が 注文 を 作成" }
-  → Preserves semantic unit, simpler structure
+Output:
+  "ユーザー (NOUN) が 注文 (NOUN) を 作成"
+  → Each noun marked individually, preserves sentence context
 ```
 
+**Why Token-Level for Phase 0-1**:
+- Multiple nouns in one sentence each get `(NOUN)` markers
+- Simpler for AI to understand explicit noun boundaries
+- Works correctly with Blockly.js block sequences
+- Phase N+1 will add part-of-speech blocks for more accurate detection
+
 **Benefits**:
-- Preserves natural language structure
-- Easier relationship analysis (Phase N)
-- Simpler data structure (less memory)
-- Aligns with human thinking (sentence = unit of thought)
+- Natural handling of complex sentences ("_N:タコ と _N:イカ を 食べる")
+- Clear noun identification for AI processing
+- Single-line output maintains sentence unity for AI task processing
+- Foundation for future part-of-speech block expansion
 
 ---
 

@@ -96,8 +96,8 @@ Documentation is updated:
 | Concept | Description | Document |
 |---------|-------------|----------|
 | `_N:` Prefix | AST-like type annotation for nouns | CORE_FEATURES.md, ARCHITECTURE.md |
-| PromptPart | Core data structure (sentence + type) | CORE_FEATURES.md, API_REFERENCE.md |
-| Sentence-Level Granularity | Why sentences, not tokens | CORE_FEATURES.md, ARCHITECTURE.md |
+| PromptPart | Core data structure (token + type) | CORE_FEATURES.md, API_REFERENCE.md |
+| Token-Level Detection | Individual marker for each noun | CORE_FEATURES.md, ARCHITECTURE.md |
 | Compiler Analogy | Architecture mirrors compiler pipeline | ARCHITECTURE.md |
 
 ---
@@ -129,16 +129,17 @@ Documentation is updated:
 
 ---
 
-### Why sentence-level `is_noun` instead of token-level?
+### Why token-level noun detection?
 
-**Short Answer**: Preserves semantic units.
+**Short Answer**: To mark each noun individually.
 
-**Detailed Answer**: See ARCHITECTURE.md "Decision 2: Sentence-Level is_noun"
+**Detailed Answer**: See ARCHITECTURE.md "Decision 2: Token-Level Noun Detection"
 
 **Key Points**:
-- Matches natural language structure
-- Simpler data model
-- Easier relationship analysis in future phases
+- Explicit `(NOUN)` marker for each noun
+- Natural handling of complex sentences ("_N:タコ と _N:イカ を 食べる")
+- AI can clearly understand noun boundaries
+- Evolution planned with part-of-speech blocks in Phase N+1
 
 ---
 

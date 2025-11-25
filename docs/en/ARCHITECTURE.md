@@ -351,35 +351,37 @@ generate_prompt() flow:
 
 ---
 
-### Decision 2: Sentence-Level `is_noun` (Not Token-Level)
+### Decision 2: Token-Level Noun Detection (Phase 0-1)
 
-**Problem**: Should `PromptPart` represent tokens or sentences?
+**Problem**: How to handle multiple nouns in a single sentence?
 
-**Solution**: `PromptPart` = **sentence** (semantic unit), not token.
+**Solution**: Each `_N:` token creates a separate `PromptPart`, with individual `(NOUN)` markers.
 
-**Alternative Considered**:
+**Implementation**:
 ```rust
-// Option A: Token-level (NOT chosen)
+// Phase 0-1: Token-level detection (CHOSEN)
+Input: "_N:User が _N:Order を 作成"
+
 PromptPart { is_noun: true, text: "User" }
 PromptPart { is_noun: false, text: "が" }
 PromptPart { is_noun: true, text: "Order" }
-...
+PromptPart { is_noun: false, text: "を 作成" }
 
-// Option B: Sentence-level (CHOSEN)
-PromptPart { is_noun: true, text: "User が Order を 作成" }
+Output: "User (NOUN) が Order (NOUN) を 作成"
 ```
 
 **Benefits**:
-- ✅ Preserves natural language structure
-- ✅ Simpler data model (fewer objects)
-- ✅ Easier relationship analysis (Phase N)
-- ✅ Matches human thinking (sentence = unit of thought)
+- ✅ Correctly handles multiple nouns ("_N:タコ と _N:イカ を 食べる")
+- ✅ Explicit `(NOUN)` marker for each noun
+- ✅ AI can clearly understand noun boundaries
+- ✅ Single-line output maintains sentence unity for AI task processing
 
-**Trade-offs**:
-- ⚠️ Cannot distinguish individual tokens within sentence
-- ⚠️ Noun annotation applies to entire sentence (not individual words)
+**Evolution in Phase N+1**:
+- Addition of part-of-speech blocks (particles, verbs, etc.)
+- More accurate grammar validation
+- More sophisticated output formatting
 
-**Conclusion**: Sentence-level granularity is optimal for current and future needs.
+**Conclusion**: Token-level detection fulfills Phase 0-1 requirements (natural handling of multiple nouns) while ensuring future extensibility.
 
 ---
 

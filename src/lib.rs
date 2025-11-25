@@ -64,35 +64,51 @@ pub fn parse_input(input: &str) -> Vec<PromptPart> {
                 continue;
             }
 
-            // Build the sentence text, checking each token for _N: prefix
-            let mut text = String::new();
-            let mut has_noun = false;
+            // Phase 0-1 behavior: Token-level noun detection
+            // Each _N: token becomes a separate PromptPart with is_noun=true
+            // This allows multiple nouns in a single sentence to each have (NOUN) markers
+            let mut current_text = String::new();
+            let mut current_is_noun = false;
+            let mut first_in_part = true;
 
-            for (i, token) in tokens.iter().enumerate() {
-                // Check if this token is a noun marker
+            for token in tokens {
                 match token.strip_prefix("_N:") {
                     Some(stripped) => {
-                        // This is a noun token
-                        has_noun = true;
-                        if i > 0 {
-                            text.push(' ');
+                        // Found a noun token - flush current part if any
+                        if !current_text.is_empty() {
+                            parts.push(PromptPart {
+                                is_noun: current_is_noun,
+                                text: current_text.trim().to_string(),
+                            });
+                            current_text.clear();
+                            first_in_part = true;
                         }
-                        text.push_str(stripped);
+
+                        // Create a new part for this noun
+                        parts.push(PromptPart {
+                            is_noun: true,
+                            text: stripped.to_string(),
+                        });
+                        current_is_noun = false;
                     }
                     None => {
-                        // Regular token
-                        if i > 0 {
-                            text.push(' ');
+                        // Regular token - accumulate into current part
+                        if !first_in_part {
+                            current_text.push(' ');
                         }
-                        text.push_str(token);
+                        current_text.push_str(token);
+                        first_in_part = false;
                     }
                 }
             }
 
-            parts.push(PromptPart {
-                is_noun: has_noun,
-                text,
-            });
+            // Flush remaining accumulated text
+            if !current_text.is_empty() {
+                parts.push(PromptPart {
+                    is_noun: current_is_noun,
+                    text: current_text.trim().to_string(),
+                });
+            }
         }
     }
 
@@ -109,13 +125,23 @@ pub fn parse_input(input: &str) -> Vec<PromptPart> {
 pub fn generate_prompt(parts: &[PromptPart]) -> String {
     let mut output = String::new();
 
-    for part in parts {
+    for (i, part) in parts.iter().enumerate() {
+        // Add space between parts (but not at the start)
+        if i > 0 && !output.is_empty() && !output.ends_with('\n') {
+            output.push(' ');
+        }
+
         // Add text with noun annotation if applicable
         if part.is_noun {
-            output.push_str(&format!("{} (NOUN)\n", part.text));
+            output.push_str(&format!("{} (NOUN)", part.text));
         } else {
-            output.push_str(&format!("{}\n", part.text));
+            output.push_str(&part.text);
         }
+    }
+
+    // Add final newline if content exists
+    if !output.is_empty() {
+        output.push('\n');
     }
 
     output
@@ -162,9 +188,14 @@ mod tests {
 
         let prompt = generate_prompt(&parts);
 
+        // Phase 0-1: All parts on one line with spaces
         assert!(prompt.contains("テーブルブロック機能 (NOUN)"));
-        assert!(prompt.contains("データベーステーブルを定義します\n"));
+        assert!(prompt.contains("データベーステーブルを定義します"));
         assert!(prompt.contains("対象ユーザー (NOUN)"));
+
+        // Should be a single line output
+        let lines: Vec<&str> = prompt.lines().collect();
+        assert_eq!(lines.len(), 1);
     }
 
     #[test]
