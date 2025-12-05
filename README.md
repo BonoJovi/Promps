@@ -121,3 +121,27 @@ Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for gu
 ---
 
 **Built with ❤️ for better AI collaboration**
+
+
+<!-- STATS_START -->
+## 📊 Repository Statistics
+
+<div align="center">
+
+### 📈 Daily Traffic
+
+![Daily Traffic Stats](docs/stats_graph_daily.png)
+
+### 📊 Cumulative Traffic
+
+![Cumulative Traffic Stats](docs/stats_graph_cumulative.png)
+
+| Metric | Count |
+|--------|-------|
+| 👁️ **Total Views** | **10** |
+| 📦 **Total Clones** | **19** |
+
+*Last Updated: 2025-12-05 08:46 UTC*
+
+</div>
+<!-- STATS_END -->
