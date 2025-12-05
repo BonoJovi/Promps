@@ -1,17 +1,24 @@
 # Quick Reference - Promps Project
 
-**Last Updated**: 2025-11-25
+**Last Updated**: 2025-11-26
 **Purpose**: Fast lookup for AI assistants during active development
 
 ---
 
 ## Current Phase Status
 
-- **Phase 0 (CLI)**: ✅ Complete (100%)
-- **Phase 1 (GUI)**: ✅ Complete (100%)
-- **Phase 2 (Block Types)**: 🔜 Next
-- **Phase N (Logic Check)**: 📋 Planned
+- **Phase 0 (CLI)**: ✅ Complete (100%) - **Critical Foundation**
+- **Phase 1 (GUI)**: ✅ Complete (100%) - 42 tests at 100% passing
+- **Phase 2 (Block Types)**: 🔜 Next - Adding more block types
+- **Phase N (Logic Check)**: ⏳ Main Challenge - 50-100 pattern matching
 - **Phase N+1 (File I/O)**: 📋 Planned
+- **Phase N+2 (Layout)**: 📋 Planned
+
+**Current Development Status**:
+- **Architecture**: Mostly finalized
+- **Strategy**: Pattern expansion (not new features)
+- **Bottleneck**: Phase N logic check (Japanese particle analysis)
+- **Foundation**: Phase 0's `_N:` prefix enables noun identification, Phase N focuses on particle patterns only
 
 ---
 

@@ -257,4 +257,78 @@ mod tests {
         assert_eq!(parts[1].is_noun, false);
         assert_eq!(parts[1].text, "データベースのテーブル構造を視覚的に定義する機能です");
     }
+
+    // Edge Case Tests
+
+    #[test]
+    fn test_consecutive_noun_markers() {
+        // Edge case: _N:_N: without space (malformed input)
+        let input = "_N:_N:User";
+        let parts = parse_input(input);
+
+        // Should treat "_N:" as the text part of first noun
+        assert_eq!(parts.len(), 1);
+        assert_eq!(parts[0].is_noun, true);
+        assert_eq!(parts[0].text, "_N:User");
+    }
+
+    #[test]
+    fn test_consecutive_noun_markers_with_space() {
+        // Two consecutive noun markers with space
+        let input = "_N:User _N:Order";
+        let parts = parse_input(input);
+
+        // Should create two separate noun parts
+        assert_eq!(parts.len(), 2);
+        assert_eq!(parts[0].is_noun, true);
+        assert_eq!(parts[0].text, "User");
+        assert_eq!(parts[1].is_noun, true);
+        assert_eq!(parts[1].text, "Order");
+    }
+
+    #[test]
+    fn test_very_long_input() {
+        // Test with 10,000+ characters (performance baseline)
+        let long_text = "あ".repeat(10000);
+        let input = format!("_N:{}", long_text);
+        let parts = parse_input(&input);
+
+        assert_eq!(parts.len(), 1);
+        assert_eq!(parts[0].is_noun, true);
+        assert_eq!(parts[0].text.chars().count(), 10000);
+    }
+
+    #[test]
+    fn test_many_nouns() {
+        // Test with 100 nouns (Phase 1 GUI limit consideration)
+        let mut input_parts = Vec::new();
+        for i in 0..100 {
+            input_parts.push(format!("_N:Noun{}", i));
+        }
+        let input = input_parts.join(" ");
+        let parts = parse_input(&input);
+
+        // Should create 100 noun parts
+        assert_eq!(parts.len(), 100);
+        for (i, part) in parts.iter().enumerate() {
+            assert_eq!(part.is_noun, true);
+            assert_eq!(part.text, format!("Noun{}", i));
+        }
+    }
+
+    #[test]
+    fn test_extreme_many_nouns() {
+        // Test with 1000 nouns (stress test for performance)
+        let mut input_parts = Vec::new();
+        for i in 0..1000 {
+            input_parts.push(format!("_N:N{}", i));
+        }
+        let input = input_parts.join(" ");
+        let parts = parse_input(&input);
+
+        // Should handle 1000 nouns without panic
+        assert_eq!(parts.len(), 1000);
+        assert_eq!(parts[0].text, "N0");
+        assert_eq!(parts[999].text, "N999");
+    }
 }

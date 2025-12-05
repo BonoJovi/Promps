@@ -1,0 +1,242 @@
+# Promps TODO List
+
+**Last Updated**: 2025-11-28
+
+---
+
+## Phase 1: GUI Integration (Blockly.js)
+
+### 🚨 Critical: Input Validation & Limits
+
+**Status**: Not Implemented  
+**Priority**: HIGH  
+**Reason**: Prevent performance degradation and DoS attacks via direct Tauri IPC calls
+
+#### Required Implementation
+
+**Frontend Validation (UX Optimization)**:
+```javascript
+// File: res/js/blockly-config.js or res/js/ui-helpers.js
+
+const LIMITS = {
+    MAX_BLOCKS_RECOMMENDED: 100,    // Optimal UX, tested in Phase 0
+    MAX_BLOCKS_WARNING: 50,         // Show warning to user
+    MAX_BLOCKS_HARD_LIMIT: 10000,   // Technical maximum (tested)
+};
+
+function validateBlockCount() {
+    const blockCount = getBlockCount();
+    
+    if (blockCount >= LIMITS.MAX_BLOCKS_RECOMMENDED) {
+        showError("Block limit reached (100). Please reduce blocks for optimal performance.");
+        return false;
+    }
+    
+    if (blockCount >= LIMITS.MAX_BLOCKS_WARNING) {
+        showWarning("Warning: Many blocks detected. Consider reducing for better UX.");
+    }
+    
+    return true;
+}
+```
+
+**Backend Validation (Security Layer - Phase N)**:
+```rust
+// File: src/commands.rs (Phase N implementation)
+
+pub const MAX_INPUT_LENGTH: usize = 100_000;      // 100,000 characters
+pub const MAX_NOUN_COUNT: usize = 10_000;         // 10,000 nouns
+pub const MAX_BLOCKS_RECOMMENDED: usize = 100;    // Recommended limit
+pub const MAX_BLOCKS_WARNING: usize = 50;         // Warning threshold
+
+#[tauri::command]
+pub fn generate_prompt_from_text_checked(input: String) -> Result<String, String> {
+    // Validate input length
+    if input.len() > MAX_INPUT_LENGTH {
+        return Err(format!("Input too large: {} bytes (max: {})", 
+                          input.len(), MAX_INPUT_LENGTH));
+    }
+    
+    let parts = parse_input(&input);
+    
+    // Validate noun count
+    let noun_count = parts.iter().filter(|p| p.is_noun).count();
+    if noun_count > MAX_NOUN_COUNT {
+        return Err(format!("Too many nouns: {} (max: {})", 
+                          noun_count, MAX_NOUN_COUNT));
+    }
+    
+    Ok(generate_prompt(&parts))
+}
+```
+
+#### Test Coverage (Phase 0 ✅)
+
+**Already Tested**:
+- ✅ 100 nouns: `test_many_nouns()` - Baseline for UI limit
+- ✅ 1,000 nouns: `test_extreme_many_nouns()` - Stress test
+- ✅ 10,000 characters: `test_very_long_input()` - Long text handling
+- ✅ Consecutive markers: `test_consecutive_noun_markers()` - Edge case
+
+**Location**: `src/lib.rs:260-333`
+
+#### Implementation Checklist
+
+- [ ] **Frontend**: Add block count limit (100 blocks recommended)
+- [ ] **Frontend**: Show warning at 50 blocks
+- [ ] **Frontend**: Prevent exceeding 100 blocks (hard UI limit)
+- [ ] **Frontend**: Display clear error messages
+- [ ] **Backend (Phase N)**: Add `generate_prompt_from_text_checked()` command
+- [ ] **Backend (Phase N)**: Add input length validation (100,000 chars)
+- [ ] **Backend (Phase N)**: Add noun count validation (10,000 nouns)
+- [ ] **Documentation**: Update Phase 1 docs with limit specifications
+
+#### Rationale
+
+**Why 100 blocks?**
+- Tested in Phase 0: `test_many_nouns()` passes in <1ms
+- UX consideration: Manageable visual complexity
+- Performance: No noticeable latency
+
+**Why 10,000 hard limit?**
+- Tested in Phase 0: `test_extreme_many_nouns()` passes (1,000 nouns)
+- DoS prevention: Protects against malicious direct Tauri IPC calls
+- Memory safety: Within reasonable bounds for most systems
+
+**Why delegate to OS beyond this?**
+- Memory availability is dynamic (other processes)
+- OS has better resource management (OOM Killer, swap)
+- Prevents false negatives (rejecting valid operations)
+
+See: `docs/en/ARCHITECTURE.md#resource-management-philosophy`
+
+---
+
+## Phase 1: Other Tasks
+
+### Blockly.js Integration
+
+- [ ] Add Blockly.js library to frontend
+- [ ] Define custom blocks (Noun, Verb, Particle, etc.)
+- [ ] Implement workspace serialization
+- [ ] Implement DSL generation from blocks
+- [ ] Add code preview panel
+
+### UI/UX
+
+- [ ] Design main application layout
+- [ ] Add toolbar (New, Open, Save, Export)
+- [ ] Add block palette (categorized blocks)
+- [ ] Add output preview (real-time)
+- [ ] Add example projects
+
+---
+
+## Phase N: Logic Check (AST Validation)
+
+### Grammatical Pattern Validation
+
+- [ ] Define 50-100 valid Japanese sentence patterns
+- [ ] Implement AST-based pattern matching
+- [ ] Add particle validation (が、を、に、で、etc.)
+- [ ] Add noun relationship validation
+- [ ] Implement error reporting with suggestions
+
+### Error Handling
+
+- [ ] Define `PrompError` enum
+- [ ] Update `parse_input()` signature: `Result<Vec<PromptPart>, PrompError>`
+- [ ] Update Tauri commands to return `Result<T, String>`
+- [ ] Add user-friendly error messages (Japanese + English)
+
+---
+
+## Phase N+1: Project Persistence
+
+### File I/O
+
+- [ ] Define project file format (JSON)
+- [ ] Implement save/load functionality
+- [ ] Add autosave feature
+- [ ] Add recent projects list
+- [ ] Implement project templates
+
+---
+
+## Documentation Updates
+
+### When Implementing Phase 1
+
+- [ ] Update `docs/en/ARCHITECTURE.md` with GUI architecture
+- [ ] Update `docs/ja/ARCHITECTURE.md` with GUI architecture
+- [ ] Create `docs/en/BLOCKLY_INTEGRATION.md`
+- [ ] Create `docs/ja/BLOCKLY_INTEGRATION.md`
+- [ ] Update `README.md` with GUI usage examples
+
+### When Implementing Phase N
+
+- [ ] Create `docs/en/LOGIC_CHECK.md`
+- [ ] Create `docs/ja/LOGIC_CHECK.md`
+- [ ] Update `docs/en/API_REFERENCE.md` with error types
+- [ ] Update `docs/ja/API_REFERENCE.md` with error types
+
+---
+
+## Testing
+
+### Phase 1 Tests
+
+- [ ] Add frontend unit tests (if using testing framework)
+- [ ] Add integration tests (Blockly → DSL → Prompt)
+- [ ] Add UI interaction tests (block placement, deletion)
+- [ ] Add limit validation tests (50, 100 block scenarios)
+
+### Phase N Tests
+
+- [ ] Add pattern matching tests (50-100 test cases)
+- [ ] Add error handling tests (invalid patterns)
+- [ ] Add edge case tests (complex sentences)
+
+---
+
+## Security
+
+### Phase 1
+
+- [x] Document resource management philosophy (completed 2025-11-28)
+- [x] Add stress tests (100, 1000 nouns) (completed 2025-11-28)
+- [ ] Implement frontend block limit (100 blocks)
+- [ ] Add user warnings (50+ blocks)
+
+### Phase N
+
+- [ ] Implement backend validation (`generate_prompt_from_text_checked()`)
+- [ ] Add rate limiting (optional, future consideration)
+- [ ] Add input sanitization (if accepting external files)
+
+---
+
+## Notes
+
+### Design Decisions (2025-11-28)
+
+**Memory Management Responsibility**:
+- Application handles business logic limits (100 blocks UI, 10,000 backend)
+- OS handles system resource limits (OOM, memory pressure)
+- Rationale: Dynamic memory availability, OS expertise, better UX
+
+**Test Strategy**:
+- Test realistic scenarios (100, 1,000 nouns)
+- Do NOT test extreme memory exhaustion (100,000+ items)
+- Reason: Hardware-dependent, risks system instability
+
+**Multi-layer Defense**:
+1. Frontend: UX optimization (100 block limit)
+2. Backend: DoS prevention (10,000 noun limit, Phase N)
+3. OS: System protection (OOM Killer, swap management)
+
+---
+
+**Document Version**: 1.0  
+**Created**: 2025-11-28  
+**Next Review**: Before Phase 1 implementation begins

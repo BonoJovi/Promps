@@ -63,13 +63,19 @@ async function updatePreview(dslCode) {
 async function init() {
     console.log('Promps Phase 1 initialized');
 
-    // Initialize Tauri API
-    if (window.__TAURI__) {
+    // Initialize Tauri API (v2 compatible)
+    if (window.__TAURI_INTERNALS__) {
+        // Tauri v2
+        invoke = window.__TAURI_INTERNALS__.invoke;
+        console.log('Tauri API v2 loaded successfully');
+    } else if (window.__TAURI__) {
+        // Tauri v1 (fallback)
         invoke = window.__TAURI__.invoke;
-        console.log('Tauri API loaded successfully');
+        console.log('Tauri API v1 loaded successfully');
     } else {
         console.error('Tauri API not available');
-        return;
+        console.log('Available globals:', Object.keys(window).filter(k => k.includes('TAURI')));
+        // Continue anyway to initialize Blockly
     }
 
     // Test button event listener

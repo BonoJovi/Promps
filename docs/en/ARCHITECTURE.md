@@ -563,9 +563,56 @@ Vec<PromptPart>:    24 bytes (overhead) + 25n bytes (elements)
 
 **Practical Limits** (tested):
 - 10,000 characters: ~500 μs, ~100 KB memory
+- 100 nouns: Tested, recommended UI limit
+- 1,000 nouns: Tested, stress test passed
 - Expected real-world usage: <1,000 characters per prompt
 
 **Bottleneck**: String allocations (inevitable for text processing)
+
+---
+
+## Resource Management Philosophy
+
+### Memory Management Responsibility
+
+Promps follows the **Separation of Concerns** principle for resource management:
+
+**Application Layer (Promps)**:
+- **Business logic limits**: 
+  - Recommended: 100 blocks (UX optimization)
+  - Warning threshold: 50 blocks (UX guidance)
+  - Hard limit (Phase N): 10,000 blocks (DoS prevention)
+- **Performance optimization**: Tested up to 1,000 nouns
+- **Testing scope**: Up to 10,000 characters, 1,000 nouns
+
+**OS Layer (Delegated)**:
+- **System memory management**: Dynamic allocation
+- **OOM (Out of Memory) handling**: OS-specific mechanisms
+  - Linux: OOM Killer terminates appropriate processes
+  - Windows: Memory exhaustion error dialogs
+  - macOS: Memory compression + process termination
+- **Process termination**: On resource exhaustion
+
+**Rationale**:
+1. **Dynamic nature**: Available memory changes with system load
+2. **System dependencies**: Other processes affect available resources
+3. **OS expertise**: Operating systems are better equipped for memory pressure handling
+4. **User experience**: OS error messages are clearer than app-imposed limits
+5. **False negatives prevention**: Avoiding rejection of valid operations
+
+**Testing Strategy**:
+- ✅ Test business logic limits (100, 1,000 nouns)
+- ✅ Test performance characteristics (10,000 characters)
+- ❌ Do NOT test memory exhaustion (10,000+ nouns, 100,000+ characters)
+  - Reason: Hardware-dependent, OS responsibility
+  - Risk: May cause system instability on low-memory machines
+
+**Phase N Planned Limits**:
+```rust
+pub const MAX_BLOCKS_RECOMMENDED: usize = 100;    // UX optimal
+pub const MAX_BLOCKS_WARNING: usize = 50;         // Show warning
+pub const MAX_BLOCKS_HARD_LIMIT: usize = 10_000;  // DoS prevention
+```
 
 ---
 
@@ -584,12 +631,37 @@ src/lib.rs (tests module):
 ├─ test_empty_parts()
 ├─ test_noun_prefix_stripping()
 ├─ test_multi_token_sentence()
-└─ test_noun_in_middle_of_sentence()
+├─ test_noun_in_middle_of_sentence()
+├─ test_parse_input()
+├─ test_consecutive_noun_markers()
+├─ test_consecutive_noun_markers_with_space()
+├─ test_very_long_input()
+├─ test_many_nouns()
+└─ test_extreme_many_nouns()
 
 src/commands.rs (tests module):
 ├─ test_generate_prompt_from_text()
-└─ test_greet()
+├─ test_greet()
+├─ test_single_noun_block()
+├─ test_multiple_noun_blocks()
+├─ test_japanese_noun_blocks()
+├─ test_empty_input()
+├─ test_whitespace_only_input()
+├─ test_complex_sentence_structure()
+├─ test_noun_and_description_alternating()
+├─ test_blockly_generated_code_pattern()
+├─ test_special_characters_in_noun()
+├─ test_greet_with_empty_name()
+└─ test_greet_with_japanese_name()
 ```
+
+**Total Tests**: 26 (13 in lib.rs, 13 in commands.rs)
+
+**Edge Case Coverage** (added 2025-11-28):
+- Consecutive noun markers (with/without space)
+- Very long input (10,000 characters)
+- Many nouns (100 blocks - UI limit baseline)
+- Extreme many nouns (1,000 blocks - stress test)
 
 **Running Tests**:
 ```bash

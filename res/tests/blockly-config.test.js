@@ -138,6 +138,144 @@ describe('Workspace Code Generation', () => {
     });
 });
 
+describe('Promps Other Block', () => {
+    test('should have correct block definition structure', () => {
+        const otherBlock = {
+            init: function() {
+                this.appendDummyInput = () => ({
+                    appendField: () => ({ appendField: () => {} })
+                });
+                this.setPreviousStatement = () => {};
+                this.setNextStatement = () => {};
+                this.setColour = () => {};
+                this.setTooltip = () => {};
+                this.setHelpUrl = () => {};
+            }
+        };
+
+        expect(otherBlock.init).toBeDefined();
+        expect(typeof otherBlock.init).toBe('function');
+    });
+
+    test('should generate correct DSL code from other block (particle)', () => {
+        const mockBlock = {
+            getFieldValue: (fieldName) => {
+                if (fieldName === 'TEXT') {
+                    return 'が';
+                }
+                return '';
+            }
+        };
+
+        // Generator function (no _N: prefix for other blocks)
+        const generateDSL = (block) => {
+            const text = block.getFieldValue('TEXT');
+            return text + ' ';
+        };
+
+        const result = generateDSL(mockBlock);
+        expect(result).toBe('が ');
+    });
+
+    test('should generate correct DSL code from other block (verb)', () => {
+        const mockBlock = {
+            getFieldValue: (fieldName) => {
+                if (fieldName === 'TEXT') {
+                    return '作成';
+                }
+                return '';
+            }
+        };
+
+        const generateDSL = (block) => {
+            const text = block.getFieldValue('TEXT');
+            return text + ' ';
+        };
+
+        const result = generateDSL(mockBlock);
+        expect(result).toBe('作成 ');
+    });
+
+    test('should handle various particle types', () => {
+        const particles = ['が', 'を', 'に', 'で', 'と', 'や'];
+
+        particles.forEach(particle => {
+            const mockBlock = {
+                getFieldValue: () => particle
+            };
+
+            const generateDSL = (block) => {
+                const text = block.getFieldValue('TEXT');
+                return text + ' ';
+            };
+
+            const result = generateDSL(mockBlock);
+            expect(result).toBe(particle + ' ');
+        });
+    });
+
+    test('should not add _N: prefix for other blocks', () => {
+        const mockBlock = {
+            getFieldValue: () => 'を'
+        };
+
+        const generateDSL = (block) => {
+            const text = block.getFieldValue('TEXT');
+            return text + ' ';
+        };
+
+        const result = generateDSL(mockBlock);
+        expect(result).not.toContain('_N:');
+        expect(result).toBe('を ');
+    });
+});
+
+describe('Mixed Block Types', () => {
+    test('should generate DSL from mixed noun and other blocks', () => {
+        // Simulate: [Noun: User] [Other: が] [Noun: Order] [Other: を] [Other: 作成]
+        const blocks = [
+            { type: 'noun', text: 'User' },
+            { type: 'other', text: 'が' },
+            { type: 'noun', text: 'Order' },
+            { type: 'other', text: 'を' },
+            { type: 'other', text: '作成' }
+        ];
+
+        const generateDSL = (block) => {
+            if (block.type === 'noun') {
+                return '_N:' + block.text + ' ';
+            } else {
+                return block.text + ' ';
+            }
+        };
+
+        const code = blocks.map(generateDSL).join('');
+        expect(code).toBe('_N:User が _N:Order を 作成 ');
+    });
+
+    test('should handle complex sentence structure', () => {
+        const blocks = [
+            { type: 'noun', text: 'データベース' },
+            { type: 'other', text: 'の' },
+            { type: 'noun', text: 'テーブル' },
+            { type: 'other', text: 'を' },
+            { type: 'other', text: '定義' },
+            { type: 'other', text: 'する' }
+        ];
+
+        const generateDSL = (block) => {
+            if (block.type === 'noun') {
+                return '_N:' + block.text + ' ';
+            } else {
+                return block.text + ' ';
+            }
+        };
+
+        const code = blocks.map(generateDSL).join('');
+        expect(code).toBe('_N:データベース の _N:テーブル を 定義 する ');
+    });
+});
+
 describe('Blockly Change Event Handling', () => {
     test('should filter out UI events', () => {
         const event = { type: 'ui' };

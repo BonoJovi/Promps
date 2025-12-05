@@ -36,6 +36,32 @@ javascriptGenerator.forBlock['promps_noun'] = function(block, generator) {
 };
 
 /**
+ * Define custom "Other" block
+ * For particles, verbs, adjectives, and connectives
+ */
+Blockly.Blocks['promps_other'] = {
+    init: function() {
+        this.appendDummyInput()
+            .appendField("その他:")
+            .appendField(new Blockly.FieldTextInput("が"), "TEXT");
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setColour(230); // Blue color
+        this.setTooltip("その他ブロック (助詞、動詞、形容詞、接続詞など)");
+        this.setHelpUrl("");
+    }
+};
+
+/**
+ * Generate DSL code from Other block
+ */
+javascriptGenerator.forBlock['promps_other'] = function(block, generator) {
+    const text = block.getFieldValue('TEXT');
+    // No prefix for other blocks
+    return text + ' ';
+};
+
+/**
  * Initialize Blockly workspace
  */
 function initBlockly() {
@@ -56,6 +82,10 @@ function initBlockly() {
                     {
                         "kind": "block",
                         "type": "promps_noun"
+                    },
+                    {
+                        "kind": "block",
+                        "type": "promps_other"
                     }
                 ]
             }

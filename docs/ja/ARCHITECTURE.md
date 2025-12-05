@@ -557,9 +557,56 @@ Vec<PromptPart>:    24 バイト（オーバーヘッド）+ 25n バイト（要
 
 **実用的な制限**（テスト済み）:
 - 10,000 文字: ~500 μs、~100 KB メモリ
+- 100 個の名詞: テスト済み、推奨 UI 制限
+- 1,000 個の名詞: テスト済み、ストレステスト合格
 - 予想される実際の使用: プロンプトあたり <1,000 文字
 
 **ボトルネック**: 文字列割り当て（テキスト処理では避けられない）
+
+---
+
+## リソース管理哲学
+
+### メモリ管理の責任分離
+
+Promps はリソース管理において**関心の分離**原則に従います：
+
+**アプリケーション層（Promps）**:
+- **ビジネスロジック制限**: 
+  - 推奨値: 100 ブロック（UX 最適化）
+  - 警告閾値: 50 ブロック（UX ガイダンス）
+  - ハード制限（Phase N）: 10,000 ブロック（DoS 防止）
+- **パフォーマンス最適化**: 1,000 個の名詞までテスト済み
+- **テスト範囲**: 10,000 文字、1,000 個の名詞まで
+
+**OS 層（委譲）**:
+- **システムメモリ管理**: 動的割り当て
+- **OOM（メモリ不足）処理**: OS 固有のメカニズム
+  - Linux: OOM Killer が適切なプロセスを終了
+  - Windows: メモリ枯渇エラーダイアログ
+  - macOS: メモリ圧縮 + プロセス終了
+- **プロセス終了**: リソース枯渇時
+
+**根拠**:
+1. **動的な性質**: 利用可能メモリはシステム負荷により変動
+2. **システム依存性**: 他のプロセスが利用可能リソースに影響
+3. **OS の専門性**: OS はメモリ圧力処理により適している
+4. **ユーザー体験**: OS のエラーメッセージの方がアプリ独自制限より明確
+5. **偽陰性の防止**: 有効な操作の拒否を回避
+
+**テスト戦略**:
+- ✅ ビジネスロジック制限をテスト（100、1,000 個の名詞）
+- ✅ パフォーマンス特性をテスト（10,000 文字）
+- ❌ メモリ枯渇はテストしない（10,000+ 名詞、100,000+ 文字）
+  - 理由: ハードウェア依存、OS の責任
+  - リスク: 低メモリマシンでシステム不安定化の可能性
+
+**Phase N 予定制限値**:
+```rust
+pub const MAX_BLOCKS_RECOMMENDED: usize = 100;    // UX 最適
+pub const MAX_BLOCKS_WARNING: usize = 50;         // 警告表示
+pub const MAX_BLOCKS_HARD_LIMIT: usize = 10_000;  // DoS 防止
+```
 
 ---
 
@@ -578,12 +625,37 @@ src/lib.rs（tests モジュール）:
 ├─ test_empty_parts()
 ├─ test_noun_prefix_stripping()
 ├─ test_multi_token_sentence()
-└─ test_noun_in_middle_of_sentence()
+├─ test_noun_in_middle_of_sentence()
+├─ test_parse_input()
+├─ test_consecutive_noun_markers()
+├─ test_consecutive_noun_markers_with_space()
+├─ test_very_long_input()
+├─ test_many_nouns()
+└─ test_extreme_many_nouns()
 
 src/commands.rs（tests モジュール）:
 ├─ test_generate_prompt_from_text()
-└─ test_greet()
+├─ test_greet()
+├─ test_single_noun_block()
+├─ test_multiple_noun_blocks()
+├─ test_japanese_noun_blocks()
+├─ test_empty_input()
+├─ test_whitespace_only_input()
+├─ test_complex_sentence_structure()
+├─ test_noun_and_description_alternating()
+├─ test_blockly_generated_code_pattern()
+├─ test_special_characters_in_noun()
+├─ test_greet_with_empty_name()
+└─ test_greet_with_japanese_name()
 ```
+
+**合計テスト数**: 26（lib.rs に 13、commands.rs に 13）
+
+**エッジケースカバレッジ**（2025-11-28 追加）:
+- 連続する名詞マーカー（スペース有り/無し）
+- 非常に長い入力（10,000 文字）
+- 多数の名詞（100 ブロック - UI 制限のベースライン）
+- 極端に多数の名詞（1,000 ブロック - ストレステスト）
 
 **テスト実行**:
 ```bash

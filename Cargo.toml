@@ -1,6 +1,6 @@
 [package]
 name = "promps"
-version = "0.1.0"
+version = "0.0.1"
 edition = "2021"
 authors = ["Yoshihiro NAKAHARA <promps-dev@zundou.org>"]
 description = "Promps: A ViPL (Visual Prompt Language) generation tool"
@@ -10,10 +10,10 @@ repository = "https://github.com/BonoJovi/Promps"
 [dependencies]
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
-tauri = { version = "1.6", features = ["dialog-message", "shell-open"] }
+tauri = { version = "2", features = [] }
 
 [build-dependencies]
-tauri-build = { version = "1.5", features = [] }
+tauri-build = { version = "2", features = [] }
 
 [lib]
 name = "promps"
