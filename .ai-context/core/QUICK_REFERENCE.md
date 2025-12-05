@@ -1,6 +1,6 @@
 # Quick Reference - Promps Project
 
-**Last Updated**: 2025-11-26
+**Last Updated**: 2025-12-05
 **Purpose**: Fast lookup for AI assistants during active development
 
 ---
@@ -144,6 +144,38 @@ cargo tauri build
 4. Update documentation
 
 **Phase N dependency**: Logic check requires knowing parts of speech.
+
+---
+
+## Future Features (Post v1.0 Release)
+
+### Multiple Noun Enumeration Feature (Phase N+4 or later)
+
+**Purpose**: Allow listing multiple nouns under a single subject (e.g., database table column definitions)
+
+**Use Case Example**:
+```
+Input (Blockly):
+  Table: User
+    Columns: ID, Name, Email, CreatedAt
+
+Output (DSL):
+  _N:User { _N:ID _N:Name _N:Email _N:CreatedAt }
+```
+
+**Implementation Options**:
+1. **Fixed slots** (⭐ Easy, ~30 min, low flexibility)
+2. **Statement Input** (⭐⭐ Medium, 1-2 hours, medium flexibility)
+3. **Mutator with +/- buttons** (⭐⭐⭐ Advanced, 3-5 hours, high flexibility) ← Recommended
+
+**Release Strategy**:
+- v1.0: Simple subject + single noun pattern
+- Collect user feedback and usage patterns
+- v2.0+: Add multiple noun enumeration as "power user feature"
+
+**Phase N Impact**: Requires new pattern validation rules for table-like structures
+
+**Status**: Deferred until post-v1.0 (awaiting user feedback)
 
 ---
 
