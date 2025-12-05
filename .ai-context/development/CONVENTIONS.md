@@ -46,12 +46,14 @@
 - **AI/LLM scope**: Full git operations including `git push`
 - **Authentication method**: HTTPS with PAT (Personal Access Token)
 - **Status**: Migrated from SSH to HTTPS authentication (hardware key no longer required)
+- **⚠️ IMPORTANT**: Always `git pull` before `git push` (GitHub Actions may update files daily)
 - **Workflow**:
   1. AI/LLM creates/modifies files
   2. AI/LLM stages changes: `git add`
   3. AI/LLM commits: `git commit -m "message"`
-  4. AI/LLM pushes to remote: `git push origin <branch>`
-  5. AI/LLM confirms push completion to user
+  4. **AI/LLM pulls latest changes: `git pull --rebase origin <branch>`**
+  5. AI/LLM pushes to remote: `git push origin <branch>`
+  6. AI/LLM confirms push completion to user
 
 ### Example Workflow
 ```bash
@@ -59,14 +61,21 @@
 git remote get-url origin
 # Output: https://github.com/BonoJovi/Promps.git
 
-# AI/LLM can execute full workflow:
+# AI/LLM must follow this workflow:
 git add src/new-feature.rs
 git commit -m "feat(feature): add new feature implementation"
-git push origin dev  # PAT authentication (AI/LLM executes)
+git pull --rebase origin dev  # ⚠️ ALWAYS pull before push
+git push origin dev           # PAT authentication (AI/LLM executes)
 
 # AI/LLM confirms:
 # "Changes have been committed and pushed to remote repository."
 ```
+
+### GitHub Actions Integration
+- **Daily automation**: GitHub Actions updates README.md with traffic statistics
+- **Frequency**: Once per day (automated)
+- **Impact**: Remote branch may be ahead of local
+- **Required action**: Always pull before push to avoid conflicts
 
 ### Session Limit Notification
 - **Threshold**: 90% of session request budget
@@ -595,15 +604,17 @@ git add <files>
 git commit -m "commit message in English"
 git log
 git diff
+git pull --rebase origin <branch>  # ⚠️ REQUIRED before push
 git push origin <branch>
 
 # Current repository uses HTTPS authentication:
 git remote get-url origin
 # Output: https://github.com/BonoJovi/Promps.git
 
-# AI/LLM standard workflow:
+# AI/LLM standard workflow (with required pull):
 git add .
 git commit -m "docs(conventions): update git operations for HTTPS authentication"
+git pull --rebase origin dev  # ⚠️ ALWAYS pull before push
 git push origin dev
 
 # AI/LLM confirms after successful push:
