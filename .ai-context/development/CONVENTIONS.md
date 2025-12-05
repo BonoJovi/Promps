@@ -1,7 +1,7 @@
 # AI Context: Coding Conventions
 
 **Purpose**: Coding standards and patterns for AI assistants to follow.
-**Last Updated**: 2025-11-09
+**Last Updated**: 2025-12-05
 
 ---
 
@@ -43,36 +43,29 @@
 - **Example**: `feat(user-mgmt): add user deletion feature`
 
 ### Git Operations
-- **AI/LLM scope**: Up to `git push` (depends on authentication method)
-- **Push policy**: Check remote URL to determine who should push
-- **Authentication methods**:
-  - **HTTPS (PAT authentication)**: AI/LLM can execute `git push`
-  - **SSH (Hardware key authentication)**: Developer must push manually
+- **AI/LLM scope**: Full git operations including `git push`
+- **Authentication method**: HTTPS with PAT (Personal Access Token)
+- **Status**: Migrated from SSH to HTTPS authentication (hardware key no longer required)
 - **Workflow**:
   1. AI/LLM creates/modifies files
   2. AI/LLM stages changes: `git add`
   3. AI/LLM commits: `git commit -m "message"`
-  4. AI/LLM checks remote URL: `git remote get-url origin`
-  5. **If HTTPS**: AI/LLM executes `git push`
-  6. **If SSH**: Developer pushes manually (hardware key required)
+  4. AI/LLM pushes to remote: `git push origin <branch>`
+  5. AI/LLM confirms push completion to user
 
 ### Example Workflow
 ```bash
-# Check authentication method first:
+# Current authentication method (HTTPS with PAT):
 git remote get-url origin
+# Output: https://github.com/BonoJovi/Promps.git
 
-# If HTTPS (e.g., https://github.com/user/repo.git):
-# AI/LLM can do everything:
+# AI/LLM can execute full workflow:
 git add src/new-feature.rs
 git commit -m "feat(feature): add new feature implementation"
-git push origin main  # PAT authentication (AI/LLM executes)
+git push origin dev  # PAT authentication (AI/LLM executes)
 
-# If SSH (e.g., git@github.com:user/repo.git):
-# AI/LLM does commit only:
-git add src/new-feature.rs
-git commit -m "feat(feature): add new feature implementation"
-# Developer must do:
-git push origin main  # Hardware key authentication (manual)
+# AI/LLM confirms:
+# "Changes have been committed and pushed to remote repository."
 ```
 
 ### Session Limit Notification
@@ -550,8 +543,8 @@ Last Updated: 2024-10-26 04:21 UTC  # Don't use UTC for user docs
 
 ### Important: Language and Operations
 - ⚠️ **All commit messages MUST be in English**
-- ⚠️ **AI/LLM operations stop at `git commit`**
-- ⚠️ **Never execute `git push`** - developer will do manually
+- ✅ **AI/LLM can execute full git operations including `git push`**
+- ✅ **Authentication**: HTTPS with PAT (migrated from SSH hardware key)
 
 ### Commit Message Format
 ```
@@ -596,31 +589,24 @@ docs(ai-context): add AI-specific conventions
 
 ### Git Workflow for AI/LLM
 ```bash
-# ✅ AI/LLM CAN ALWAYS do these:
+# ✅ AI/LLM CAN execute all git operations:
 git status
 git add <files>
 git commit -m "commit message in English"
 git log
 git diff
+git push origin <branch>
 
-# 🔍 AI/LLM MUST CHECK remote URL first:
+# Current repository uses HTTPS authentication:
 git remote get-url origin
+# Output: https://github.com/BonoJovi/Promps.git
 
-# ✅ If HTTPS (PAT authentication):
-# AI/LLM CAN do these:
-git push origin main
+# AI/LLM standard workflow:
+git add .
+git commit -m "docs(conventions): update git operations for HTTPS authentication"
 git push origin dev
 
-# ❌ If SSH (Hardware key authentication):
-# AI/LLM MUST NOT do these:
-git push                    # Requires hardware key
-git push origin main        # Requires hardware key
-git push --force            # Requires hardware key
-
-# After commit with SSH, AI/LLM should inform:
-"Changes have been committed. Please run 'git push' manually with your hardware key."
-
-# After push with HTTPS, AI/LLM confirms:
+# AI/LLM confirms after successful push:
 "Changes have been committed and pushed to remote repository."
 ```
 
@@ -863,10 +849,14 @@ res/tests/
   - Transaction edit pattern (memo management, account handling)
   - Test patterns and current statistics (525 tests)
 
+- **2025-12-05**: Updated Git operations policy
+  - Migrated from SSH to HTTPS authentication (PAT)
+  - AI/LLM can now execute `git push` operations
+  - Hardware key authentication no longer required
+
 - **2024-10-26**: Initial conventions established
   - Common module pattern for tests introduced
   - ES Modules with `.js` extensions required
   - AI/LLM specific guidelines added:
     - User documentation timestamps in JST
     - Commit messages in English only
-    - Git push operations restricted to developer (hardware key required)
