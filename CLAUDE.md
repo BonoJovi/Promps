@@ -48,6 +48,9 @@ This file automatically loads project context at the start of each Claude Code s
 ### i18n Management - Localization Strategy
 @.ai-context/workflows/I18N_MANAGEMENT.md
 
+### Release Process - Version & Tag Management
+@.ai-context/workflows/RELEASE_PROCESS.md
+
 ---
 
 **Note**: The hierarchical structure allows AI to efficiently access only the information needed for the current task. Core context is always loaded, while specialized contexts are available on demand.

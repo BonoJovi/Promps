@@ -1,0 +1,281 @@
+# Release Process
+
+**Last Updated**: 2025-12-06
+**Purpose**: Step-by-step release procedure for Promps project
+
+---
+
+## Overview
+
+Promps uses GitHub Actions for automated builds and releases. The release workflow is triggered by pushing a git tag.
+
+---
+
+## Prerequisites
+
+Before creating a release, ensure:
+- All changes are committed and pushed to `dev` branch
+- All tests pass (42+ tests at 100%)
+- Documentation is up to date
+- Version numbers are updated in configuration files
+
+---
+
+## Release Workflow
+
+### Step 1: Update Version Numbers
+
+Update version in **both** configuration files:
+
+**Files to update:**
+1. `tauri.conf.json` - Application version
+2. `Cargo.toml` - Rust package version
+
+**Example:**
+```json
+// tauri.conf.json
+{
+  "version": "0.0.2",  // Update this
+  ...
+}
+```
+
+```toml
+# Cargo.toml
+[package]
+version = "0.0.2"  # Update this
+```
+
+**Commit and push:**
+```bash
+git add tauri.conf.json Cargo.toml
+git commit -m "chore(release): bump version to X.Y.Z"
+git pull --rebase origin dev
+git push origin dev
+```
+
+---
+
+### Step 2: Clean Up Previous Draft Releases
+
+⚠️ **CRITICAL**: GitHub Actions fails if Draft releases exist from previous failed builds.
+
+**Check for Draft releases:**
+```bash
+gh release list
+```
+
+**Delete any Draft releases:**
+```bash
+# Get Draft release ID
+gh api repos/BonoJovi/Promps/releases --jq '.[] | select(.draft == true) | {id: .id, tag_name: .tag_name}'
+
+# Delete Draft release (replace ID)
+gh api -X DELETE repos/BonoJovi/Promps/releases/<RELEASE_ID>
+```
+
+**Why this is necessary:**
+- Previous failed builds may leave Draft releases
+- GitHub API rejects creating new releases if Drafts exist
+- This prevents "already_exists" errors
+
+---
+
+### Step 3: Create and Push Git Tag
+
+**Create tag:**
+```bash
+git tag vX.Y.Z
+git push origin vX.Y.Z
+```
+
+**If tag already exists (re-releasing):**
+```bash
+# Delete old tag locally and remotely
+git tag -d vX.Y.Z
+git push origin :refs/tags/vX.Y.Z
+
+# Create new tag
+git tag vX.Y.Z
+git push origin vX.Y.Z
+```
+
+---
+
+### Step 4: Monitor GitHub Actions
+
+**Workflow automatically triggers** when tag is pushed.
+
+**Check workflow status:**
+- Web: https://github.com/BonoJovi/Promps/actions
+- CLI: `gh run list --limit 3`
+
+**Workflow steps:**
+1. `create-release`: Creates Draft release
+2. `build-tauri`: Builds for 4 platforms (macOS aarch64/x86_64, Ubuntu, Windows)
+3. `publish-release`: Publishes release (changes Draft to public)
+
+**Expected duration:** 5-10 minutes
+
+---
+
+### Step 5: Verify Release
+
+**Check release page:**
+- Web: https://github.com/BonoJovi/Promps/releases
+- CLI: `gh release list`
+
+**Verify:**
+- ✅ Release is marked as "Latest" (not "Draft")
+- ✅ All 4 platform binaries are attached
+- ✅ Version number matches your tag
+- ✅ Release notes are present (auto-generated from commits)
+
+---
+
+## Common Issues and Solutions
+
+### Issue 1: "Validation Failed: already_exists"
+
+**Symptom:**
+```
+HttpError: Validation Failed: {"resource":"Release","code":"already_exists","field":"tag_name"}
+```
+
+**Cause:**
+- Draft release exists from previous failed build
+
+**Solution:**
+1. Delete Draft release: `gh api -X DELETE repos/BonoJovi/Promps/releases/<ID>`
+2. Re-run workflow: `gh run rerun <RUN_ID>`
+
+---
+
+### Issue 2: Wrong Version in Build Artifacts
+
+**Symptom:**
+- Created tag v0.0.2, but workflow creates v0.0.1 release
+
+**Cause:**
+- Forgot to update version in `tauri.conf.json` and `Cargo.toml`
+
+**Solution:**
+1. Update both config files with correct version
+2. Commit and push changes
+3. Delete old tag and create new one
+4. Push new tag
+
+---
+
+### Issue 3: Multiple Draft Releases
+
+**Symptom:**
+- Multiple Draft releases visible in `gh release list`
+
+**Cause:**
+- Failed builds leave Draft releases behind
+
+**Solution:**
+```bash
+# List all Drafts
+gh api repos/BonoJovi/Promps/releases --jq '.[] | select(.draft == true)'
+
+# Delete each Draft
+gh api -X DELETE repos/BonoJovi/Promps/releases/<ID1>
+gh api -X DELETE repos/BonoJovi/Promps/releases/<ID2>
+```
+
+---
+
+## Release Checklist
+
+Before creating a release:
+
+- [ ] All tests passing (100% success rate)
+- [ ] Documentation updated
+- [ ] Version updated in `tauri.conf.json`
+- [ ] Version updated in `Cargo.toml`
+- [ ] Changes committed and pushed to `dev`
+- [ ] Existing Draft releases deleted
+- [ ] Tag created and pushed
+- [ ] GitHub Actions workflow completed successfully
+- [ ] Release verified on GitHub
+
+---
+
+## Rollback Procedure
+
+If a release has critical issues:
+
+**Delete release:**
+```bash
+gh release delete vX.Y.Z --yes
+```
+
+**Delete tag:**
+```bash
+git tag -d vX.Y.Z
+git push origin :refs/tags/vX.Y.Z
+```
+
+**Fix issues, then re-release following normal procedure.**
+
+---
+
+## Release Strategy (Tech Preview)
+
+**Current approach:**
+- Releases on `dev` branch only
+- No `main` branch yet (Tech Preview stage)
+- Gradual releases for user adoption
+
+**Reasoning:**
+- Working users have limited time for code review
+- Gradual releases allow users to keep pace with changes
+- Feedback loop works better with smaller increments
+
+**When to create `main` branch:**
+- After v1.0.0 (stable release)
+- When user base grows significantly
+
+---
+
+## Automated Testing in Release Workflow
+
+**Since v0.0.2**, the release workflow includes test execution:
+
+```yaml
+- name: run backend tests
+  run: cargo test
+
+- name: run frontend tests
+  run: npm test
+  working-directory: ./res/tests
+```
+
+**This ensures:**
+- No broken releases
+- All 42+ tests pass before building
+- Quality assurance at release time
+
+---
+
+## Version Numbering
+
+**Format:** `MAJOR.MINOR.PATCH`
+
+**Current stage:** v0.0.x (Tech Preview)
+
+**Examples:**
+- v0.0.1: Phase 0 + Phase 1 (CLI + GUI foundation)
+- v0.0.2: Phase 2 (Particle blocks)
+- v0.0.3: Phase 3 (Verb blocks) - Planned
+- v1.0.0: Stable release with all planned features
+
+---
+
+## See Also
+
+- [GitHub Projects Workflow](.ai-context/workflows/GITHUB_PROJECTS.md)
+- [Conventions](.ai-context/development/CONVENTIONS.md)
+- [Quick Reference](.ai-context/core/QUICK_REFERENCE.md)
