@@ -1,6 +1,6 @@
 # Quick Reference - Promps Project
 
-**Last Updated**: 2025-12-05
+**Last Updated**: 2025-12-06
 **Purpose**: Fast lookup for AI assistants during active development
 
 ---
@@ -9,7 +9,8 @@
 
 - **Phase 0 (CLI)**: ✅ Complete (100%) - **Critical Foundation**
 - **Phase 1 (GUI)**: ✅ Complete (100%) - 42 tests at 100% passing
-- **Phase 2 (Block Types)**: 🔜 Next - Adding more block types
+- **Phase 2 (Particle Blocks)**: ✅ Complete (100%) - 68 tests at 100% passing - **v0.0.2**
+- **Phase 3 (Verb Blocks)**: 🔜 Next - Adding verb block types
 - **Phase N (Logic Check)**: ⏳ Main Challenge - 50-100 pattern matching
 - **Phase N+1 (File I/O)**: 📋 Planned
 - **Phase N+2 (Layout)**: 📋 Planned
@@ -19,6 +20,7 @@
 - **Strategy**: Pattern expansion (not new features)
 - **Bottleneck**: Phase N logic check (Japanese particle analysis)
 - **Foundation**: Phase 0's `_N:` prefix enables noun identification, Phase N focuses on particle patterns only
+- **Latest**: v0.0.2 adds 9 particle blocks with collapsible category UI
 
 ---
 
@@ -59,12 +61,13 @@ Output: "User (NOUN) が Order (NOUN) を 作成\n"
 - **Frontend logic**: `res/js/main.js`, `res/js/blockly-config.js`
 
 ### Tests
-- **Backend**: `src/lib.rs` (8 tests), `src/commands.rs` (13 tests)
-- **Frontend**: `res/tests/blockly-config.test.js` (10 tests), `res/tests/main.test.js` (11 tests)
-- **Total**: 42 tests at 100% passing
+- **Backend**: `src/lib.rs` (13 tests), `src/commands.rs` (13 tests)
+- **Frontend**: `res/tests/blockly-config.test.js` (30 tests), `res/tests/main.test.js` (12 tests)
+- **Total**: 68 tests at 100% passing
 
 ### Documentation
-- **User docs**: `docs/en/`, `docs/ja/`
+- **User docs**: `docs/ja/USER_GUIDE.md`
+- **Testing docs**: `docs/testing/ja/TEST_OVERVIEW.md`, `FRONTEND_TEST_INDEX.md`
 - **AI context**: `.ai-context/` (this directory)
 
 ---
@@ -119,29 +122,38 @@ cargo tauri build
 
 | Component | Tests | Status |
 |-----------|-------|--------|
-| Core parsing (lib.rs) | 8 | ✅ 100% |
+| Core parsing (lib.rs) | 13 | ✅ 100% |
 | Tauri integration (commands.rs) | 13 | ✅ 100% |
-| Blockly config | 10 | ✅ 100% |
-| UI logic | 11 | ✅ 100% |
-| **Total** | **42** | **✅ 100%** |
+| Blockly config | 30 | ✅ 100% |
+| UI logic | 12 | ✅ 100% |
+| **Total** | **68** | **✅ 100%** |
 
 ---
 
-## Phase 2 Scope (Next)
+## Phase 2 Complete ✅
 
-**Goal**: Add more block types beyond "noun_block"
+**Goal**: Add particle block types
+
+**Implemented**:
+- ✅ 9 particle blocks (が、を、に、で、と、へ、から、まで、より)
+- ✅ Collapsible category UI
+- ✅ Fixed labels (non-editable)
+- ✅ Enhanced visual separation with CSS
+- ✅ 11 new tests added (total: 68 tests)
+- ✅ Documentation created (USER_GUIDE.md, TEST_OVERVIEW.md, FRONTEND_TEST_INDEX.md)
+
+**Release**: v0.0.2 (Tech Preview)
+
+---
+
+## Phase 3 Scope (Next)
+
+**Goal**: Add verb block types
 
 **Planned blocks**:
-- Particle blocks (が、を、に、で、etc.)
-- Verb blocks (action representation)
-- Adjective blocks (descriptors)
-- Connective blocks (と、や、など)
-
-**Implementation approach**:
-1. Define new block types in `blockly-config.js`
-2. Update DSL generation logic
-3. Add tests for each block type
-4. Update documentation
+- Verb blocks (作成、更新、削除、取得、etc.)
+- Action representation
+- Fixed labels
 
 **Phase N dependency**: Logic check requires knowing parts of speech.
 
