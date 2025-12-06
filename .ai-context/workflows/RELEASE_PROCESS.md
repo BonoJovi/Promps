@@ -25,11 +25,12 @@ Before creating a release, ensure:
 
 ### Step 1: Update Version Numbers
 
-Update version in **both** configuration files:
+Update version in **all three** configuration files:
 
 **Files to update:**
 1. `tauri.conf.json` - Application version
 2. `Cargo.toml` - Rust package version
+3. `package.json` - Release name (used by GitHub Actions)
 
 **Example:**
 ```json
@@ -46,9 +47,17 @@ Update version in **both** configuration files:
 version = "0.0.2"  # Update this
 ```
 
+```json
+// package.json
+{
+  "version": "0.0.2",  // Update this
+  ...
+}
+```
+
 **Commit and push:**
 ```bash
-git add tauri.conf.json Cargo.toml
+git add tauri.conf.json Cargo.toml package.json
 git commit -m "chore(release): bump version to X.Y.Z"
 git pull --rebase origin dev
 git push origin dev
