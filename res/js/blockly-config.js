@@ -61,6 +61,172 @@ javascriptGenerator.forBlock['promps_other'] = function(block, generator) {
     return text + ' ';
 };
 
+// ============================================================================
+// Particle Blocks (助詞ブロック)
+// ============================================================================
+
+/**
+ * Particle: が (subject marker)
+ */
+Blockly.Blocks['promps_particle_ga'] = {
+    init: function() {
+        this.appendDummyInput()
+            .appendField(new Blockly.FieldLabel("が"));
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setColour(230);
+        this.setTooltip("助詞: が（主語を示す）");
+        this.setHelpUrl("");
+    }
+};
+javascriptGenerator.forBlock['promps_particle_ga'] = function(block, generator) {
+    return 'が ';
+};
+
+/**
+ * Particle: を (object marker)
+ */
+Blockly.Blocks['promps_particle_wo'] = {
+    init: function() {
+        this.appendDummyInput()
+            .appendField(new Blockly.FieldLabel("を"));
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setColour(230);
+        this.setTooltip("助詞: を（目的語を示す）");
+        this.setHelpUrl("");
+    }
+};
+javascriptGenerator.forBlock['promps_particle_wo'] = function(block, generator) {
+    return 'を ';
+};
+
+/**
+ * Particle: に (direction/target marker)
+ */
+Blockly.Blocks['promps_particle_ni'] = {
+    init: function() {
+        this.appendDummyInput()
+            .appendField(new Blockly.FieldLabel("に"));
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setColour(230);
+        this.setTooltip("助詞: に（方向・対象を示す）");
+        this.setHelpUrl("");
+    }
+};
+javascriptGenerator.forBlock['promps_particle_ni'] = function(block, generator) {
+    return 'に ';
+};
+
+/**
+ * Particle: で (means/location marker)
+ */
+Blockly.Blocks['promps_particle_de'] = {
+    init: function() {
+        this.appendDummyInput()
+            .appendField(new Blockly.FieldLabel("で"));
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setColour(230);
+        this.setTooltip("助詞: で（手段・場所を示す）");
+        this.setHelpUrl("");
+    }
+};
+javascriptGenerator.forBlock['promps_particle_de'] = function(block, generator) {
+    return 'で ';
+};
+
+/**
+ * Particle: と (and/with marker)
+ */
+Blockly.Blocks['promps_particle_to'] = {
+    init: function() {
+        this.appendDummyInput()
+            .appendField(new Blockly.FieldLabel("と"));
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setColour(230);
+        this.setTooltip("助詞: と（並列・共同を示す）");
+        this.setHelpUrl("");
+    }
+};
+javascriptGenerator.forBlock['promps_particle_to'] = function(block, generator) {
+    return 'と ';
+};
+
+/**
+ * Particle: へ (direction marker)
+ */
+Blockly.Blocks['promps_particle_he'] = {
+    init: function() {
+        this.appendDummyInput()
+            .appendField(new Blockly.FieldLabel("へ"));
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setColour(230);
+        this.setTooltip("助詞: へ（方向を示す）");
+        this.setHelpUrl("");
+    }
+};
+javascriptGenerator.forBlock['promps_particle_he'] = function(block, generator) {
+    return 'へ ';
+};
+
+/**
+ * Particle: から (from marker)
+ */
+Blockly.Blocks['promps_particle_kara'] = {
+    init: function() {
+        this.appendDummyInput()
+            .appendField(new Blockly.FieldLabel("から"));
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setColour(230);
+        this.setTooltip("助詞: から（起点を示す）");
+        this.setHelpUrl("");
+    }
+};
+javascriptGenerator.forBlock['promps_particle_kara'] = function(block, generator) {
+    return 'から ';
+};
+
+/**
+ * Particle: まで (until marker)
+ */
+Blockly.Blocks['promps_particle_made'] = {
+    init: function() {
+        this.appendDummyInput()
+            .appendField(new Blockly.FieldLabel("まで"));
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setColour(230);
+        this.setTooltip("助詞: まで（終点を示す）");
+        this.setHelpUrl("");
+    }
+};
+javascriptGenerator.forBlock['promps_particle_made'] = function(block, generator) {
+    return 'まで ';
+};
+
+/**
+ * Particle: より (comparison marker)
+ */
+Blockly.Blocks['promps_particle_yori'] = {
+    init: function() {
+        this.appendDummyInput()
+            .appendField(new Blockly.FieldLabel("より"));
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setColour(230);
+        this.setTooltip("助詞: より（比較を示す）");
+        this.setHelpUrl("");
+    }
+};
+javascriptGenerator.forBlock['promps_particle_yori'] = function(block, generator) {
+    return 'より ';
+};
+
 /**
  * Initialize Blockly workspace
  */
@@ -74,15 +240,68 @@ function initBlockly() {
     const toolbox = {
         "kind": "categoryToolbox",
         "contents": [
+            // Noun category
             {
                 "kind": "category",
-                "name": "基本ブロック",
+                "name": "名詞",
                 "colour": "120",
                 "contents": [
                     {
                         "kind": "block",
                         "type": "promps_noun"
+                    }
+                ]
+            },
+            // Particle category (collapsible)
+            {
+                "kind": "category",
+                "name": "助詞",
+                "colour": "230",
+                "contents": [
+                    {
+                        "kind": "block",
+                        "type": "promps_particle_ga"
                     },
+                    {
+                        "kind": "block",
+                        "type": "promps_particle_wo"
+                    },
+                    {
+                        "kind": "block",
+                        "type": "promps_particle_ni"
+                    },
+                    {
+                        "kind": "block",
+                        "type": "promps_particle_de"
+                    },
+                    {
+                        "kind": "block",
+                        "type": "promps_particle_to"
+                    },
+                    {
+                        "kind": "block",
+                        "type": "promps_particle_he"
+                    },
+                    {
+                        "kind": "block",
+                        "type": "promps_particle_kara"
+                    },
+                    {
+                        "kind": "block",
+                        "type": "promps_particle_made"
+                    },
+                    {
+                        "kind": "block",
+                        "type": "promps_particle_yori"
+                    }
+                ]
+            },
+            // Other category (for backward compatibility)
+            {
+                "kind": "category",
+                "name": "その他",
+                "colour": "290",
+                "contents": [
                     {
                         "kind": "block",
                         "type": "promps_other"

@@ -156,3 +156,72 @@ h2 {
 ::-webkit-scrollbar-thumb:hover {
     background: #555;
 }
+
+/* ============================================================================
+   Blockly Category Styling - Enhanced Visual Separation
+   ============================================================================ */
+
+/* Category container - add borders and spacing */
+.blocklyToolboxCategory {
+    margin: 4px 6px !important;
+    border-radius: 6px !important;
+    border: 2px solid transparent !important;
+    transition: all 0.2s ease !important;
+    font-weight: 500 !important;
+}
+
+/* Category row - align text and border properly */
+.blocklyTreeRow {
+    display: flex !important;
+    align-items: center !important;
+    cursor: pointer !important;
+    padding: 8px 12px !important;
+    margin: 0 !important;
+    min-height: 32px !important;
+}
+
+/* Category hover effect */
+.blocklyToolboxCategory:hover {
+    border-color: rgba(0, 0, 0, 0.15) !important;
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    transform: translateX(2px);
+}
+
+/* Selected category */
+.blocklyToolboxCategory.blocklyTreeSelected {
+    border: 2px solid rgba(0, 0, 0, 0.2) !important;
+    background-color: rgba(255, 255, 255, 0.2) !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Category label */
+.blocklyTreeLabel {
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    line-height: 1 !important;
+    vertical-align: middle !important;
+}
+
+/* Category icon (expand/collapse arrow) */
+.blocklyTreeIcon {
+    vertical-align: middle !important;
+    margin-right: 4px !important;
+}
+
+/* Add visual separator between categories */
+.blocklyToolboxCategory + .blocklyToolboxCategory {
+    margin-top: 8px !important;
+}
+
+/* Toolbox background */
+.blocklyToolboxDiv {
+    background-color: #f8f9fa !important;
+    border-right: 1px solid #dee2e6 !important;
+    padding: 8px 0 !important;
+}
+
+/* Flyout (the popup showing blocks when category is clicked) */
+.blocklyFlyout {
+    border: 1px solid #dee2e6 !important;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1) !important;
+}

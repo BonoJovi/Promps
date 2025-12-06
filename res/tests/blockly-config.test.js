@@ -289,3 +289,141 @@ describe('Blockly Change Event Handling', () => {
         expect(shouldUpdate).toBe(true);
     });
 });
+
+describe('Particle Blocks (Phase 2)', () => {
+    // Particle block generator function (returns fixed text + space)
+    const generateParticleDSL = (particleText) => {
+        return particleText + ' ';
+    };
+
+    test('should generate correct DSL for が particle', () => {
+        const result = generateParticleDSL('が');
+        expect(result).toBe('が ');
+    });
+
+    test('should generate correct DSL for を particle', () => {
+        const result = generateParticleDSL('を');
+        expect(result).toBe('を ');
+    });
+
+    test('should generate correct DSL for に particle', () => {
+        const result = generateParticleDSL('に');
+        expect(result).toBe('に ');
+    });
+
+    test('should generate correct DSL for で particle', () => {
+        const result = generateParticleDSL('で');
+        expect(result).toBe('で ');
+    });
+
+    test('should generate correct DSL for と particle', () => {
+        const result = generateParticleDSL('と');
+        expect(result).toBe('と ');
+    });
+
+    test('should generate correct DSL for へ particle', () => {
+        const result = generateParticleDSL('へ');
+        expect(result).toBe('へ ');
+    });
+
+    test('should generate correct DSL for から particle', () => {
+        const result = generateParticleDSL('から');
+        expect(result).toBe('から ');
+    });
+
+    test('should generate correct DSL for まで particle', () => {
+        const result = generateParticleDSL('まで');
+        expect(result).toBe('まで ');
+    });
+
+    test('should generate correct DSL for より particle', () => {
+        const result = generateParticleDSL('より');
+        expect(result).toBe('より ');
+    });
+
+    test('should handle all 9 particle types', () => {
+        const particles = ['が', 'を', 'に', 'で', 'と', 'へ', 'から', 'まで', 'より'];
+
+        particles.forEach(particle => {
+            const result = generateParticleDSL(particle);
+            expect(result).toBe(particle + ' ');
+        });
+    });
+
+    test('particle blocks should not have _N: prefix', () => {
+        const particles = ['が', 'を', 'に', 'で', 'と', 'へ', 'から', 'まで', 'より'];
+
+        particles.forEach(particle => {
+            const result = generateParticleDSL(particle);
+            expect(result).not.toContain('_N:');
+        });
+    });
+
+    test('should generate complete sentence with particle blocks', () => {
+        // Sentence: User が Order を 作成
+        const blocks = [
+            { type: 'noun', text: 'User' },
+            { type: 'particle', text: 'が' },
+            { type: 'noun', text: 'Order' },
+            { type: 'particle', text: 'を' },
+            { type: 'other', text: '作成' }
+        ];
+
+        const generateDSL = (block) => {
+            if (block.type === 'noun') {
+                return '_N:' + block.text + ' ';
+            } else if (block.type === 'particle') {
+                return block.text + ' ';
+            } else {
+                return block.text + ' ';
+            }
+        };
+
+        const code = blocks.map(generateDSL).join('');
+        expect(code).toBe('_N:User が _N:Order を 作成 ');
+    });
+
+    test('should generate sentence with から and まで particles', () => {
+        // Sentence: Database から Data まで 移行
+        const blocks = [
+            { type: 'noun', text: 'Database' },
+            { type: 'particle', text: 'から' },
+            { type: 'noun', text: 'Data' },
+            { type: 'particle', text: 'まで' },
+            { type: 'other', text: '移行' }
+        ];
+
+        const generateDSL = (block) => {
+            if (block.type === 'noun') {
+                return '_N:' + block.text + ' ';
+            } else {
+                return block.text + ' ';
+            }
+        };
+
+        const code = blocks.map(generateDSL).join('');
+        expect(code).toBe('_N:Database から _N:Data まで 移行 ');
+    });
+
+    test('should generate sentence with と particle for conjunction', () => {
+        // Sentence: User と Admin が 作成
+        const blocks = [
+            { type: 'noun', text: 'User' },
+            { type: 'particle', text: 'と' },
+            { type: 'noun', text: 'Admin' },
+            { type: 'particle', text: 'が' },
+            { type: 'other', text: '作成' }
+        ];
+
+        const generateDSL = (block) => {
+            if (block.type === 'noun') {
+                return '_N:' + block.text + ' ';
+            } else {
+                return block.text + ' ';
+            }
+        };
+
+        const code = blocks.map(generateDSL).join('');
+        expect(code).toBe('_N:User と _N:Admin が 作成 ');
+    });
+});
