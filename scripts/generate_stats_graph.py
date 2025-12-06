@@ -34,6 +34,23 @@ def generate_daily_graph(data):
     if not clones_df.empty:
         clones_df['timestamp'] = pd.to_datetime(clones_df['timestamp'])
 
+    # Determine date range from all data
+    all_dates = []
+    if not views_df.empty:
+        all_dates.extend(views_df['timestamp'].tolist())
+    if not clones_df.empty:
+        all_dates.extend(clones_df['timestamp'].tolist())
+    
+    if all_dates:
+        min_date = min(all_dates)
+        max_date = max(all_dates)
+        # Add padding: 1 day before and after
+        date_padding = pd.Timedelta(days=1)
+        x_min = min_date - date_padding
+        x_max = max_date + date_padding
+    else:
+        x_min = x_max = None
+
     # Create figure with reduced height (5.5 instead of 8)
     fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(12, 5.5))
     fig.suptitle('Daily Repository Traffic', fontsize=14, fontweight='bold')
@@ -59,8 +76,10 @@ def generate_daily_graph(data):
 
     # Format x-axis
     for ax in [ax1, ax2]:
+        if x_min and x_max:
+            ax.set_xlim(x_min, x_max)
         ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
-        ax.xaxis.set_major_locator(mdates.AutoDateLocator())
+        ax.xaxis.set_major_locator(mdates.DayLocator(interval=max(1, (max_date - min_date).days // 10) if all_dates else 1))
         plt.setp(ax.xaxis.get_majorticklabels(), rotation=45, ha='right')
 
     plt.tight_layout()
@@ -87,6 +106,23 @@ def generate_cumulative_graph(data):
         clones_df = clones_df.sort_values('timestamp')
         clones_df['cumulative'] = clones_df['count'].cumsum()
 
+    # Determine date range from all data
+    all_dates = []
+    if not views_df.empty:
+        all_dates.extend(views_df['timestamp'].tolist())
+    if not clones_df.empty:
+        all_dates.extend(clones_df['timestamp'].tolist())
+    
+    if all_dates:
+        min_date = min(all_dates)
+        max_date = max(all_dates)
+        # Add padding: 1 day before and after
+        date_padding = pd.Timedelta(days=1)
+        x_min = min_date - date_padding
+        x_max = max_date + date_padding
+    else:
+        x_min = x_max = None
+
     # Create figure with reduced height
     fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(12, 5.5))
     fig.suptitle('Cumulative Repository Traffic', fontsize=14, fontweight='bold')
@@ -112,8 +148,10 @@ def generate_cumulative_graph(data):
 
     # Format x-axis
     for ax in [ax1, ax2]:
+        if x_min and x_max:
+            ax.set_xlim(x_min, x_max)
         ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
-        ax.xaxis.set_major_locator(mdates.AutoDateLocator())
+        ax.xaxis.set_major_locator(mdates.DayLocator(interval=max(1, (max_date - min_date).days // 10) if all_dates else 1))
         plt.setp(ax.xaxis.get_majorticklabels(), rotation=45, ha='right')
 
     plt.tight_layout()
