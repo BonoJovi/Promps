@@ -258,12 +258,13 @@ We welcome **all types of contributions** - not just code!
 
 ### 💡 Feature Requests & Feedback / 機能リクエスト & フィードバック
 
-Have ideas to make Promps better?  
+Have ideas to make Promps better?
 Prompsをより良くするアイデアはありますか？
 
 - 🆕 **[Submit Feature Request](https://github.com/BonoJovi/Promps/issues/new)**
 - 🐛 **[Report a Bug](https://github.com/BonoJovi/Promps/issues/new)**
-- 💬 **[Join Discussions](https://github.com/BonoJovi/Promps/discussions)**
+- 💬 **[Join Discussions](https://github.com/BonoJovi/Promps/discussions)** - Q&A, Ideas, General chat / 質問、アイデア、雑談
+  - 📖 **[Discussion Guidelines](.github/DISCUSSIONS.md)** - How to use discussions / ディスカッション利用ガイド
 
 ---
 
