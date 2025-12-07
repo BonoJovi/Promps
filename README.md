@@ -264,6 +264,7 @@ Prompsをより良くするアイデアはありますか？
 - 🆕 **[Submit Feature Request](https://github.com/BonoJovi/Promps/issues/new)**
 - 🐛 **[Report a Bug](https://github.com/BonoJovi/Promps/issues/new)**
 - 💬 **[Join Discussions](https://github.com/BonoJovi/Promps/discussions)** - Q&A, Ideas, General chat / 質問、アイデア、雑談
+  - 👋 **[Welcome Post](https://github.com/BonoJovi/Promps/discussions/1)** - Start here! / ここから始めよう！
   - 📖 **[Discussion Guidelines](.github/DISCUSSIONS.md)** - How to use discussions / ディスカッション利用ガイド
 
 ---
