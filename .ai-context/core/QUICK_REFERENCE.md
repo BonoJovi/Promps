@@ -1,6 +1,6 @@
 # Quick Reference - Promps Project
 
-**Last Updated**: 2025-12-06
+**Last Updated**: 2025-12-08
 **Purpose**: Fast lookup for AI assistants during active development
 
 ---
@@ -191,15 +191,70 @@ Output (DSL):
 
 ---
 
+## Branching Strategy (Critical)
+
+**Strategy**: Persistent Feature Branch (branches are NOT deleted after merge)
+
+**Branch Structure**:
+```
+dev (integration branch)
+  ├── feature/phase-0 (persistent)
+  ├── feature/phase-1 (persistent)
+  ├── feature/phase-2 (persistent)
+  └── feature/phase-n (persistent)
+```
+
+**Key Rules**:
+1. **Do NOT delete** feature/phase-N branches after merge to dev
+2. Each branch = Phase/Layer (module-like persistence)
+3. Bug fixes: Work on corresponding feature/phase-N branch, then merge to dev
+
+**Why This Works**:
+- Phase count is finite (5-10 branches max)
+- Layered architecture = independent modules
+- Each Phase modifies different files/sections
+- Merge conflicts are rare (file/section separation)
+
+**API Stability**:
+- Phase 0 APIs are **immutable**
+- Add new functions instead of changing existing ones
+- Upper layers call lower layers, never modify them
+
+**Details**: See `workflows/BRANCHING_STRATEGY.md` and `development/API_STABILITY.md`
+
+---
+
+## Scalability Context (Critical)
+
+**Why Promps is Minimal**: Intentional design choice, not limitation
+
+**Key Points**:
+- Phase count: 5-10 (finite, manageable)
+- This scale enables pure layered architecture
+- Larger projects (KakeiBon: 15-20+ phases) require different approaches
+- Architecture is a tool, not a dogma - choose based on scale
+
+**Guidance**:
+- For projects with < 10 phases → Layered architecture works
+- For projects with > 10 phases → Consider modular architecture
+- Scale determines strategy, not the other way around
+
+**Details**: See `core/SCALE_AND_ARCHITECTURE.md`
+
+---
+
 ## Immediate Context Needs
 
 When working on:
 
 - **Code implementation** → Read `development/CONVENTIONS.md`
 - **Architecture decisions** → Read `core/DESIGN_PHILOSOPHY.md`
+- **Scalability/scope questions** → Read `core/SCALE_AND_ARCHITECTURE.md`
 - **Testing strategy** → Read `development/TESTING_STRATEGY.md`
 - **Project structure** → Read `architecture/PROJECT_STRUCTURE.md`
 - **Workflow management** → Read `workflows/GITHUB_PROJECTS.md`
+- **Branching/Git operations** → Read `workflows/BRANCHING_STRATEGY.md`
+- **API changes** → Read `development/API_STABILITY.md`
 
 ---
 

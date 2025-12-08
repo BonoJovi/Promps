@@ -1,6 +1,6 @@
 # Promps Design Philosophy and Implementation Strategy
 
-**Last Updated**: 2025-11-25
+**Last Updated**: 2025-12-08
 **Purpose**: Core design decisions and implementation roadmap for AI context preservation
 
 ---
@@ -526,6 +526,269 @@ This pattern extends naturally to future phases:
 ```
 
 Each new phase adds a layer without modifying existing layers. This is the **foundation of sustainable software architecture**.
+
+---
+
+## 🔗 Loose Coupling: An Emergent Property
+
+**Last Updated**: 2025-12-08
+
+### The Automatic Benefit
+
+A critical insight about layered architecture: **Loose coupling emerges automatically** from the design, not as an explicit goal.
+
+When you enforce the Non-Breaking Extension Principle, the system naturally becomes loosely coupled without additional effort.
+
+### Why Loose Coupling Emerges
+
+**1. Unidirectional Dependencies**
+
+```
+Phase N → Phase 0 (calls only)
+Phase 0 ← Phase N (never modified)
+```
+
+**Traditional Development (Tight Coupling)**:
+```rust
+// Tight coupling example
+fn process_data(data: &mut Data) {
+    validate(data);      // validate might modify data?
+    transform(data);     // transform might modify data?
+    save(data);          // save might modify data?
+}
+// → Functions mutually influence each other
+```
+
+**Layered Architecture (Loose Coupling)**:
+```rust
+// Phase 0: Core (immutable)
+pub fn parse_input(input: &str) -> Vec<PromptPart> {
+    // Pure function: input → output only
+}
+
+// Phase N: Validation (upper layer)
+pub fn parse_input_checked(input: &str) -> Result<Vec<PromptPart>, ValidationError> {
+    let parts = parse_input(input);  // Just "use" Phase 0
+    validate_pattern(&parts)?;        // Phase N's own logic
+    Ok(parts)
+}
+// → Phase 0 is untouched = Loose coupling
+```
+
+**2. Stable Interfaces**
+
+```
+Phase 0 API = Contract
+  ↓
+Upper layers depend on this contract
+  ↓
+Contract never changes = Low coupling
+```
+
+**3. Clear Separation of Concerns**
+
+```
+Phase 0: Parsing (DSL → Data structure)
+Phase N: Validation (Data structure → Error checking)
+Phase N+1: File I/O (Data structure → JSON)
+  ↓
+Each layer does one thing (Single Responsibility Principle)
+  ↓
+Changes are local = Loose coupling
+```
+
+---
+
+### Module Separation Becomes Trivial
+
+**1. Natural File Division**
+
+```
+src/
+├── lib.rs              # Phase 0 (Core)
+├── modules/
+│   ├── validation.rs   # Phase N
+│   ├── serialization.rs # Phase N+1
+│   └── layout.rs       # Phase N+2
+```
+
+Each Phase = Independent file → Directly becomes a module
+
+**2. Test Independence**
+
+```rust
+// Phase 0 tests (independent of Phase N)
+#[test]
+fn test_parse_input() {
+    let result = parse_input("_N:User");
+    assert_eq!(result.len(), 1);
+}
+
+// Phase N tests (uses Phase 0, tests Phase N)
+#[test]
+fn test_validate_pattern() {
+    let parts = parse_input("_N:User が _N:Order を");  // Use Phase 0
+    assert!(validate_pattern(&parts).is_ok());          // Test Phase N
+}
+```
+
+Even if Phase 0 is broken, Phase N tests can be written (mockable).
+
+**3. Easy Refactoring**
+
+```rust
+// Completely change Phase N implementation
+// Phase 0 remains untouched
+
+// Before
+pub fn validate_pattern(parts: &[PromptPart]) -> Result<()> {
+    // Implementation A
+}
+
+// After (complete rewrite)
+pub fn validate_pattern(parts: &[PromptPart]) -> Result<()> {
+    // Implementation B (totally different algorithm)
+}
+
+// Phase 0: Zero changes!
+```
+
+---
+
+### Practical Benefits of Loose Coupling
+
+**1. Parallel Development**
+
+```
+Developer A: Develops Phase 3 (Verb blocks)
+Developer B: Develops Phase N (Logic check)
+  ↓
+If Phase 0 is stable, no conflicts
+```
+
+**2. Incremental Replacement**
+
+```
+Phase N Implementation A is slow
+  ↓
+Develop Phase N Implementation B on separate branch
+  ↓
+Implementation B is faster → Swap
+  ↓
+Phase 0, N+1, N+2: No impact
+```
+
+**3. Easy Feature Toggle**
+
+```rust
+// To disable Phase N
+pub fn parse_input_checked(input: &str) -> Result<Vec<PromptPart>, ValidationError> {
+    let parts = parse_input(input);
+    // validate_pattern(&parts)?;  // ← Just comment out
+    Ok(parts)
+}
+```
+
+**4. Risk Isolation**
+
+```
+Phase N has a critical bug
+  ↓
+Disable Phase N temporarily
+  ↓
+Phase 0, Phase 1, Phase 2 continue working
+  ↓
+System remains partially functional
+```
+
+---
+
+### Comparison: Traditional vs Layered
+
+| Aspect | Traditional | Layered Architecture |
+|--------|-------------|---------------------|
+| **Coupling** | Functions call each other bidirectionally | Unidirectional dependency |
+| **Change Impact** | Ripple effect across modules | Isolated to single layer |
+| **Testing** | Complex mocking needed | Simple, independent tests |
+| **Refactoring** | High risk, wide impact | Low risk, local impact |
+| **Parallel Development** | Difficult (merge conflicts) | Easy (layer isolation) |
+| **Module Extraction** | Requires careful planning | Natural file boundaries |
+
+---
+
+### Code Quality Metrics Improvement
+
+With layered architecture, the following metrics improve automatically:
+
+**Cohesion**: ⬆️ High
+- Each layer has a single, well-defined purpose
+- Functions within a layer work together closely
+
+**Coupling**: ⬇️ Low
+- Layers interact only through stable interfaces
+- No bidirectional dependencies
+
+**Testability**: ⬆️ High
+- Each layer can be tested independently
+- Mock dependencies are minimal
+
+**Maintainability**: ⬆️ High
+- Changes are localized to one layer
+- Understanding requires reading only relevant layer
+
+**Reusability**: ⬆️ High
+- Lower layers (e.g., Phase 0) can be reused in different contexts
+- Each layer is self-contained
+
+---
+
+### Why This Matters for Promps
+
+**Specific to Promps**:
+
+1. **Phase count is finite** (5-10 phases)
+   - Loose coupling remains manageable
+   - Not at risk of "spaghetti architecture"
+
+2. **Each Phase has clear responsibility**
+   - Phase 0: Parsing
+   - Phase 1: GUI
+   - Phase 2+: Block types
+   - Phase N: Validation
+   - Module boundaries are obvious
+
+3. **API stability policy reinforces loose coupling**
+   - Phase 0 APIs never change
+   - Upper layers never modify lower layers
+   - Coupling cannot increase over time
+
+4. **Branching strategy matches module structure**
+   - Each feature/phase-N branch = One module
+   - Git workflow mirrors architectural design
+   - Merge conflicts are rare (module isolation)
+
+---
+
+### The Emergent Pattern
+
+```
+Start with: Layered Architecture
+  ↓
+Enforce: Non-Breaking Extension Principle
+  ↓
+Result: Loose Coupling (automatic)
+  ↓
+Benefits:
+  - Easy module separation
+  - Independent testing
+  - Parallel development
+  - Simple refactoring
+  - Risk isolation
+```
+
+**Key insight**: You don't design for loose coupling directly. You design for layered architecture with stable interfaces, and loose coupling emerges as a natural consequence.
+
+This is the **power of architectural patterns** - they give you benefits you didn't explicitly design for.
 
 ---
 

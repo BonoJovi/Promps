@@ -12,6 +12,9 @@ This file automatically loads project context at the start of each Claude Code s
 ### Design Philosophy - Architecture & Principles
 @.ai-context/core/DESIGN_PHILOSOPHY.md
 
+### Scale and Architecture - Size Matters
+@.ai-context/core/SCALE_AND_ARCHITECTURE.md
+
 ### Project Overview - Directory Structure
 @.ai-context/README.md
 
@@ -28,6 +31,9 @@ This file automatically loads project context at the start of each Claude Code s
 ### Coding Conventions - Standards & Patterns
 @.ai-context/development/CONVENTIONS.md
 
+### API Stability Policy - Conflict Prevention
+@.ai-context/development/API_STABILITY.md
+
 ---
 
 ## Load When Designing (Architecture Context)
@@ -41,6 +47,9 @@ This file automatically loads project context at the start of each Claude Code s
 ---
 
 ## Load When Managing (Workflow Context)
+
+### Branching Strategy - Persistent Feature Branches
+@.ai-context/workflows/BRANCHING_STRATEGY.md
 
 ### GitHub Projects - Issue & Feature Tracking
 @.ai-context/workflows/GITHUB_PROJECTS.md
