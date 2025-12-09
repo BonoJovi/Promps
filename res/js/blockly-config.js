@@ -227,6 +227,84 @@ javascriptGenerator.forBlock['promps_particle_yori'] = function(block, generator
     return 'より ';
 };
 
+// ============================================================================
+// Verb Blocks (動詞ブロック)
+// ============================================================================
+
+/**
+ * Fixed Verb: 分析して (analyze)
+ */
+Blockly.Blocks['promps_verb_analyze'] = {
+    init: function() {
+        this.appendDummyInput()
+            .appendField(new Blockly.FieldLabel("分析して"));
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setColour(290); // Red color for verbs
+        this.setTooltip("動詞: 分析して");
+        this.setHelpUrl("");
+    }
+};
+javascriptGenerator.forBlock['promps_verb_analyze'] = function(block, generator) {
+    return '分析して ';
+};
+
+/**
+ * Fixed Verb: 要約して (summarize)
+ */
+Blockly.Blocks['promps_verb_summarize'] = {
+    init: function() {
+        this.appendDummyInput()
+            .appendField(new Blockly.FieldLabel("要約して"));
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setColour(290);
+        this.setTooltip("動詞: 要約して");
+        this.setHelpUrl("");
+    }
+};
+javascriptGenerator.forBlock['promps_verb_summarize'] = function(block, generator) {
+    return '要約して ';
+};
+
+/**
+ * Fixed Verb: 翻訳して (translate)
+ */
+Blockly.Blocks['promps_verb_translate'] = {
+    init: function() {
+        this.appendDummyInput()
+            .appendField(new Blockly.FieldLabel("翻訳して"));
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setColour(290);
+        this.setTooltip("動詞: 翻訳して");
+        this.setHelpUrl("");
+    }
+};
+javascriptGenerator.forBlock['promps_verb_translate'] = function(block, generator) {
+    return '翻訳して ';
+};
+
+/**
+ * Custom Verb (user input)
+ */
+Blockly.Blocks['promps_verb_custom'] = {
+    init: function() {
+        this.appendDummyInput()
+            .appendField("動詞:")
+            .appendField(new Blockly.FieldTextInput("作成して"), "TEXT");
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setColour(290);
+        this.setTooltip("カスタム動詞ブロック");
+        this.setHelpUrl("");
+    }
+};
+javascriptGenerator.forBlock['promps_verb_custom'] = function(block, generator) {
+    const text = block.getFieldValue('TEXT');
+    return text + ' ';
+};
+
 /**
  * Initialize Blockly workspace
  */
@@ -296,11 +374,35 @@ function initBlockly() {
                     }
                 ]
             },
+            // Verb category (collapsible)
+            {
+                "kind": "category",
+                "name": "動詞",
+                "colour": "290",
+                "contents": [
+                    {
+                        "kind": "block",
+                        "type": "promps_verb_analyze"
+                    },
+                    {
+                        "kind": "block",
+                        "type": "promps_verb_summarize"
+                    },
+                    {
+                        "kind": "block",
+                        "type": "promps_verb_translate"
+                    },
+                    {
+                        "kind": "block",
+                        "type": "promps_verb_custom"
+                    }
+                ]
+            },
             // Other category (for backward compatibility)
             {
                 "kind": "category",
                 "name": "その他",
-                "colour": "290",
+                "colour": "20",
                 "contents": [
                     {
                         "kind": "block",

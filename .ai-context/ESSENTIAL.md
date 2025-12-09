@@ -7,8 +7,8 @@
 
 ## Current Status
 
-**Phase**: Phase 2 Complete (v0.0.2) → Phase 3 Next (Verb blocks)
-**Tests**: 68 tests at 100% passing
+**Phase**: Phase 3-前半 Complete (Verb blocks prototype)
+**Tests**: 81 tests at 100% passing (Backend 26 + Frontend 55)
 **Branch**: dev (integration branch)
 
 ---
@@ -26,7 +26,7 @@
 - Details: `@.ai-context/context/workflows/BRANCHING.md`
 
 ### 3. Testing Policy
-- **All tests must pass before merge** (68 tests currently)
+- **All tests must pass before merge** (81 tests currently)
 - Implement tests immediately after feature completion
 - Details: `@.ai-context/context/coding/TESTING.md`
 
@@ -40,7 +40,7 @@
 
 **Tests**:
 - Backend: `src/lib.rs` (13 tests), `src/commands.rs` (13 tests)
-- Frontend: `res/tests/` (42 tests)
+- Frontend: `res/tests/` (55 tests)
 
 ---
 

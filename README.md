@@ -117,14 +117,17 @@ Drag blocks from the left panel to the workspace.
 
 **Available block types: / 利用可能なブロックタイプ：**
 
-- **🏷️ Noun Block (名詞)**: For entities like "User", "Order", "Database"  
+- **🏷️ Noun Block (名詞)**: For entities like "User", "Order", "Database"
   エンティティ用（「ユーザー」「注文」「データベース」など）
 
-- **✨ Particle Block (助詞) [NEW in v0.0.2]**: Japanese particles  
+- **✨ Particle Block (助詞) [v0.0.2]**: Japanese particles
   日本語の助詞（「が」「を」「に」「で」「と」「へ」「から」「まで」「より」）
 
-- **📝 Other Block (その他)**: For verbs and other words  
-  動詞やその他の単語用
+- **🎬 Verb Block (動詞) [NEW in v0.0.3-preview]**: Common verbs + custom input
+  よく使う動詞（「分析して」「要約して」「翻訳して」）+ カスタム入力
+
+- **📝 Other Block (その他)**: For other words
+  その他の単語用
 
 ### Step 2: Connect Blocks / ステップ2: ブロックを接続
 
@@ -161,11 +164,33 @@ Drag blocks from the left panel to the workspace.
 User (NOUN) が Order (NOUN) を 作成
 ```
 
+### Using Verb Blocks (v0.0.3-preview) / 動詞ブロックの使用
+
+**Blocks: / ブロック：**
+```
+[Noun: Document] → [Particle: を] → [Verb: 分析して]
+```
+
+**Generated Output: / 生成される出力：**
+```
+Document (NOUN) を 分析して
+```
+
+**Blocks: / ブロック：**
+```
+[Noun: Text] → [Particle: を] → [Noun: English] → [Particle: に] → [Verb: 翻訳して]
+```
+
+**Generated Output: / 生成される出力：**
+```
+Text (NOUN) を English (NOUN) に 翻訳して
+```
+
 ### Building a Complex Prompt / 複雑なプロンプトの構築
 
 **Blocks: / ブロック：**
 ```
-[Noun: データベース] → [Particle: から] → [Noun: レコード] → [Particle: を] 
+[Noun: データベース] → [Particle: から] → [Noun: レコード] → [Particle: を]
 → [Other: 取得して] → [Noun: ファイル] → [Particle: に] → [Other: 保存]
 ```
 
@@ -180,36 +205,39 @@ User (NOUN) が Order (NOUN) を 作成
 
 ### Current Features / 現在の機能
 
-- ✅ Visual block-based interface (powered by Blockly.js)  
+- ✅ Visual block-based interface (powered by Blockly.js)
   ビジュアルブロックベースのインターフェース（Blockly.js搭載）
 
-- ✅ **NEW:** 9 types of particle blocks (が、を、に、で、と、へ、から、まで、より)  
-  **新機能:** 9種類の助詞ブロック
+- ✅ 9 types of particle blocks (が、を、に、で、と、へ、から、まで、より)
+  9種類の助詞ブロック
 
-- ✅ **NEW:** Collapsible category UI (Noun, Particle, Other)  
-  **新機能:** 折りたたみ可能なカテゴリUI（名詞、助詞、その他）
+- ✅ **NEW in v0.0.3-preview:** Verb blocks (3 fixed + custom input)
+  **v0.0.3-preview新機能:** 動詞ブロック（固定3種＋カスタム入力）
 
-- ✅ Real-time prompt preview  
+- ✅ Collapsible category UI (Noun, Particle, Verb, Other)
+  折りたたみ可能なカテゴリUI（名詞、助詞、動詞、その他）
+
+- ✅ Real-time prompt preview
   リアルタイムプロンプトプレビュー
 
-- ✅ Automatic noun detection and marking  
+- ✅ Automatic noun detection and marking
   自動名詞検出とマーキング
 
-- ✅ Simple drag-and-drop operation  
+- ✅ Simple drag-and-drop operation
   シンプルなドラッグ&ドロップ操作
 
-- ✅ Desktop application (Tauri + Rust)  
+- ✅ Desktop application (Tauri + Rust)
   デスクトップアプリケーション（Tauri + Rust）
 
-- ✅ Multi-platform support (Linux, Windows, macOS)  
+- ✅ Multi-platform support (Linux, Windows, macOS)
   マルチプラットフォーム対応
 
 ### Coming Soon / 近日実装予定
 
-- 🔜 More block types (verbs, adjectives)  
-  より多くのブロックタイプ（動詞、形容詞）
+- 🔜 More verb types and adjective blocks
+  より多くの動詞タイプと形容詞ブロック
 
-- 🔜 Grammar validation  
+- 🔜 Grammar validation
   文法検証
 
 - 🔜 Project save/load  
@@ -308,9 +336,10 @@ For code contributions:
 - **Build System**: Cargo + Tauri CLI
 
 **Tests: / テスト：**
-- 🧪 68 frontend tests (100% passing)
-- 🧪 Particle block integration tests
-- 🧪 Category UI behavior tests
+- 🧪 Backend: 26 tests (100% passing)
+- 🧪 Frontend: 55 tests (100% passing)
+- 🧪 **Total: 81 tests** (100% passing)
+- 🧪 Includes: Particle blocks, Verb blocks (Phase 3), Category UI tests
 
 ---
 

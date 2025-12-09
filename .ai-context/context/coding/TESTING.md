@@ -148,6 +148,209 @@ Result: High quality without human debugging
 
 ---
 
+## Testing Levels (3-Tier Approach)
+
+**Last Updated**: 2025-12-09
+**Purpose**: Structured testing process to catch bugs at different levels
+
+### Overview
+
+```
+1. Unit Tests (Automated)
+   ├─ Backend: cargo test
+   └─ Frontend: npm test
+
+2. Integration Tests (Automated)
+   └─ Full test suite: cargo test && npm test
+
+3. Human Tests (Manual)
+   ├─ UI/UX verification
+   ├─ Real-world usage scenarios
+   └─ Visual quality checks
+```
+
+---
+
+### Level 1: Unit Tests
+
+**Purpose**: Test individual components in isolation
+
+**Backend (Rust)**:
+```bash
+cargo test
+```
+
+**What to verify**:
+- ✅ Core parsing logic (`parse_input`, `generate_prompt`)
+- ✅ Data structure correctness (`PromptPart`)
+- ✅ Edge cases (empty input, special characters)
+
+**Frontend (JavaScript)**:
+```bash
+cd res/tests && npm test
+```
+
+**What to verify**:
+- ✅ Block definitions (noun, particle, verb blocks)
+- ✅ DSL generation logic
+- ✅ Event handling
+- ✅ Mock-based component tests
+
+**Success criteria**: 100% test pass rate
+
+---
+
+### Level 2: Integration Tests
+
+**Purpose**: Test end-to-end functionality across components
+
+```bash
+# Run all tests together
+cargo test && cd res/tests && npm test
+```
+
+**What to verify**:
+- ✅ Backend + Frontend integration
+- ✅ All 81 tests (26 backend + 55 frontend) passing
+- ✅ No regressions in existing features
+
+**Success criteria**:
+- All tests pass
+- Test count increases (never decreases)
+
+---
+
+### Level 3: Human Tests
+
+**Purpose**: Verify real-world usability and visual quality
+
+**When to run**:
+- ✅ After implementing new UI features (blocks, categories)
+- ✅ Before committing to version control
+- ✅ Before creating a release
+
+**How to run**:
+```bash
+cargo tauri dev
+```
+
+#### Human Test Checklist
+
+**Phase 3 Verb Blocks Example**:
+
+**1. Visual Verification**:
+- [ ] "動詞" category appears in toolbox
+- [ ] Category is collapsible
+- [ ] Verb blocks have correct color (290 = red)
+- [ ] 4 blocks visible: 分析して、要約して、翻訳して、カスタム
+
+**2. Fixed Verb Blocks**:
+- [ ] Drag "分析して" to workspace → Block appears
+- [ ] Block displays "分析して" label
+- [ ] Block has tooltip "動詞: 分析して"
+- [ ] Repeat for "要約して" and "翻訳して"
+
+**3. Custom Verb Block**:
+- [ ] Drag custom verb block to workspace
+- [ ] Default text is "作成して"
+- [ ] Click text field → Can edit
+- [ ] Change to "削除して" → Text updates
+- [ ] Tooltip shows "カスタム動詞ブロック"
+
+**4. Block Connectivity**:
+- [ ] Verb blocks snap to previous block
+- [ ] Verb blocks accept next block
+- [ ] Connection points are visible
+
+**5. Prompt Generation**:
+- [ ] Create: [Noun: Document] → [Particle: を] → [Verb: 分析して]
+- [ ] Preview shows: "Document (NOUN) を 分析して"
+- [ ] Updates in real-time as blocks are added
+- [ ] Spaces are correct (single space between tokens)
+
+**6. Category Interaction**:
+- [ ] Click "動詞" → Category expands
+- [ ] Click again → Category collapses
+- [ ] Other categories (名詞、助詞、その他) still work
+
+**7. Edge Cases**:
+- [ ] Empty custom verb field → Preview shows space only
+- [ ] Multiple verb blocks in sequence → All generate correctly
+- [ ] Delete verb block → Preview updates correctly
+- [ ] Undo/Redo → Works with verb blocks
+
+**8. Visual Quality**:
+- [ ] Block colors are consistent
+- [ ] Text is readable
+- [ ] No visual glitches
+- [ ] Responsive to window resize
+
+**Success criteria**:
+- All checklist items pass
+- No visual bugs
+- User experience feels natural
+
+---
+
+### Testing Process Flow
+
+**Recommended order**:
+
+```
+Step 1: Implement feature
+  ↓
+Step 2: Add unit tests for feature
+  ↓
+Step 3: Run unit tests (Level 1)
+  ↓ [PASS]
+Step 4: Run integration tests (Level 2)
+  ↓ [PASS]
+Step 5: Run human tests (Level 3)
+  ↓ [PASS]
+Step 6: Commit & push
+```
+
+**If any level fails**:
+- Fix immediately
+- Re-run from failed level
+- Do not proceed to next level until current level passes
+
+---
+
+### Why This Matters
+
+**Problem without human testing**:
+```
+Unit tests pass ✅
+Integration tests pass ✅
+  ↓
+Commit → Push → Deploy
+  ↓
+User opens app: "The new blocks don't appear!"
+  ↓
+Reason: Typo in toolbox configuration (not covered by unit tests)
+```
+
+**Solution with human testing**:
+```
+Unit tests pass ✅
+Integration tests pass ✅
+  ↓
+Human test: "Wait, blocks don't appear in toolbox"
+  ↓
+Fix immediately (5 minutes)
+  ↓
+Re-test → Now works
+  ↓
+Commit → Push → Deploy
+  ↓
+User opens app: Everything works perfectly
+```
+
+**Time saved**: Hours of debugging after deployment → 5 minutes of verification before commit
+
+---
+
 ## Real-World Example: Promps Phase 0-1 Testing
 
 **Context**: After completing Phase 1 (Tauri + Blockly.js GUI), tests were implemented immediately before moving to Phase 2.
