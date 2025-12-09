@@ -1,65 +1,43 @@
 # Promps Project Context
 
-This file automatically loads project context at the start of each Claude Code session.
+This file automatically loads **minimal** project context at the start of each Claude Code session.
+
+**Token Optimization**: Only essential information is loaded by default. Load additional contexts as needed using `@` references.
 
 ---
 
-## Always Load (Core Context)
+## Always Load (Essential Context Only)
 
-### Quick Reference - Current Status & Key Decisions
-@.ai-context/core/QUICK_REFERENCE.md
-
-### Design Philosophy - Architecture & Principles
-@.ai-context/core/DESIGN_PHILOSOPHY.md
-
-### Scale and Architecture - Size Matters
-@.ai-context/core/SCALE_AND_ARCHITECTURE.md
-
-### Project Overview - Directory Structure
-@.ai-context/README.md
+### Essential Information - Current Status & Critical Rules
+@.ai-context/ESSENTIAL.md
 
 ---
 
-## Load When Coding (Development Context)
+## Load When Needed (On-Demand Contexts)
 
-### Development Methodology - AI Collaboration Best Practices
-@.ai-context/development/METHODOLOGY.md
+**For Coding Tasks**:
+- Conventions: `@.ai-context/context/coding/CONVENTIONS.md`
+- Testing Strategy: `@.ai-context/context/coding/TESTING.md`
+- API Stability: `@.ai-context/context/coding/API_STABILITY.md`
 
-### Testing Strategy - TDD Approach
-@.ai-context/development/TESTING_STRATEGY.md
+**For Architecture Tasks**:
+- Project Structure: `@.ai-context/context/architecture/PROJECT_STRUCTURE.md`
+- Tauri Integration: `@.ai-context/context/architecture/TAURI.md`
 
-### Coding Conventions - Standards & Patterns
-@.ai-context/development/CONVENTIONS.md
+**For Workflow Tasks**:
+- Branching Strategy: `@.ai-context/context/workflows/BRANCHING.md`
+- Release Process: `@.ai-context/context/workflows/RELEASE.md`
+- GitHub Projects: `@.ai-context/context/workflows/GITHUB_PROJECTS.md`
+- i18n Management: `@.ai-context/context/workflows/I18N.md`
 
-### API Stability Policy - Conflict Prevention
-@.ai-context/development/API_STABILITY.md
+**For Understanding Methodology** (rarely needed):
+- AI Collaboration: `@.ai-context/knowledge/methodology/AI_COLLABORATION.md`
+- Design Philosophy: `@.ai-context/knowledge/methodology/DESIGN_PHILOSOPHY.md`
+- Scale & Architecture: `@.ai-context/knowledge/methodology/SCALE_ARCHITECTURE.md`
 
----
-
-## Load When Designing (Architecture Context)
-
-### Project Structure - Module Organization
-@.ai-context/architecture/PROJECT_STRUCTURE.md
-
-### Tauri Integration - Desktop App Framework
-@.ai-context/architecture/TAURI_INTEGRATION.md
-
----
-
-## Load When Managing (Workflow Context)
-
-### Branching Strategy - Persistent Feature Branches
-@.ai-context/workflows/BRANCHING_STRATEGY.md
-
-### GitHub Projects - Issue & Feature Tracking
-@.ai-context/workflows/GITHUB_PROJECTS.md
-
-### i18n Management - Localization Strategy
-@.ai-context/workflows/I18N_MANAGEMENT.md
-
-### Release Process - Version & Tag Management
-@.ai-context/workflows/RELEASE_PROCESS.md
+**Insights** (optional reading):
+- `@.ai-context/insights/` - Various architectural and development insights
 
 ---
 
-**Note**: The hierarchical structure allows AI to efficiently access only the information needed for the current task. Core context is always loaded, while specialized contexts are available on demand.
+**Performance Note**: This configuration loads < 100 lines at session startup (vs. ~4,000+ lines previously). This reduces initial token usage from ~9% to ~2-3%.
