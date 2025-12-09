@@ -1,5 +1,8 @@
 # Tauri開発環境について
 
+**Keywords**: Tauri, タウリ, desktop app, デスクトップアプリ, Rust, WebView, ウェブビュー, frontend, backend, フロントエンド, バックエンド, IPC, inter-process communication, プロセス間通信, cargo tauri dev, development mode, 開発モード, build, ビルド, bundle, バンドル
+**Related**: @PROJECT_STRUCTURE.md, @CONVENTIONS.md, @RELEASE.md
+
 ## 重要な注意事項
 
 ### アプリの種類

@@ -2,6 +2,8 @@
 
 **Last Updated**: 2025-11-24
 **Purpose**: Document proven development practices and AI collaboration strategies
+**Keywords**: AI collaboration, AI開発, methodology, 開発手法, best practices, ベストプラクティス, development workflow, 開発ワークフロー, prompt engineering, プロンプトエンジニアリング, iterative development, 反復開発, AI assistant, AI補助, pair programming, ペアプログラミング, battle-tested, 実証済み
+**Related**: @DESIGN_PHILOSOPHY.md, @TESTING.md, @CONVENTIONS.md
 
 ---
 

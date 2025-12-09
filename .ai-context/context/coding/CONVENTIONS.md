@@ -2,6 +2,8 @@
 
 **Purpose**: Coding standards and patterns for AI assistants to follow.
 **Last Updated**: 2025-12-05
+**Keywords**: coding conventions, コーディング規約, code style, コードスタイル, best practices, ベストプラクティス, patterns, パターン, naming conventions, 命名規則, code standards, コーディング標準, DRY, KISS, clean code, クリーンコード, refactoring, リファクタリング, code review, コードレビュー
+**Related**: @API_STABILITY.md, @TESTING.md, @PROJECT_STRUCTURE.md
 
 ---
 

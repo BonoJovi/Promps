@@ -1,5 +1,8 @@
 # GitHub Projects 使用ガイドライン
 
+**Keywords**: GitHub Projects, project management, プロジェクト管理, issue tracking, イシュー管理, features, bugs, バグ管理, task management, タスク管理, workflow, ワークフロー, kanban, カンバン
+**Related**: @RELEASE.md, @BRANCHING.md
+
 ## プロジェクト概要
 - **プロジェクトURL**: https://github.com/users/BonoJovi/projects/5
 - **リポジトリ**: KakeiBonByRust

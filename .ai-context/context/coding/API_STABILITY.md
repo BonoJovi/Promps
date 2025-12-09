@@ -2,6 +2,8 @@
 
 **Last Updated**: 2025-12-08
 **Purpose**: Rules for preventing merge conflicts through API stability
+**Keywords**: API stability, API安定性, immutable API, 不変API, backward compatibility, 後方互換性, breaking changes, 破壊的変更, Phase 0, core layer, コアレイヤー, function signature, 関数シグネチャ, versioning, バージョニング, deprecation, 非推奨, additive changes, 追加のみ, no modification, 変更禁止
+**Related**: @BRANCHING.md, @CONVENTIONS.md, @TESTING.md
 
 ---
 

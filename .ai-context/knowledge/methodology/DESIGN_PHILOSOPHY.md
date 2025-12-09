@@ -2,6 +2,8 @@
 
 **Last Updated**: 2025-12-08
 **Purpose**: Core design decisions and implementation roadmap for AI context preservation
+**Keywords**: design philosophy, 設計思想, design decisions, 設計判断, implementation strategy, 実装戦略, DSL, domain specific language, ドメイン特化言語, natural language, 自然言語, prompt generation, プロンプト生成, visual programming, ビジュアルプログラミング, Blockly, layered architecture, レイヤードアーキテクチャ
+**Related**: @SCALE_ARCHITECTURE.md, @AI_COLLABORATION.md, @PROJECT_STRUCTURE.md
 
 ---
 

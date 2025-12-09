@@ -2,6 +2,8 @@
 
 **Purpose**: This document helps AI assistants quickly understand the project structure without reading every file.
 **Last Updated**: 2024-10-26
+**Keywords**: project structure, プロジェクト構造, architecture, アーキテクチャ, directory structure, ディレクトリ構造, file organization, ファイル構成, modules, モジュール, components, コンポーネント, src, res, folder structure, フォルダ構造, codebase layout, コードベース構成
+**Related**: @TAURI.md, @CONVENTIONS.md, @API_STABILITY.md
 
 ---
 

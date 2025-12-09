@@ -2,6 +2,8 @@
 
 **Last Updated**: 2025-12-08
 **Purpose**: Persistent Feature Branch strategy for layered architecture
+**Keywords**: branching, branch strategy, ブランチ戦略, persistent branches, 永続ブランチ, feature branch, フィーチャーブランチ, git workflow, ワークフロー, merge, マージ, no-delete, 削除禁止, layered architecture, レイヤードアーキテクチャ, phase branches, フェーズブランチ, dev branch, integration branch, 統合ブランチ, module-like, モジュール的
+**Related**: @RELEASE.md, @API_STABILITY.md, @CONVENTIONS.md
 
 ---
 

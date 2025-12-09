@@ -2,6 +2,8 @@
 
 **Last Updated**: 2025-11-26
 **Author**: BonoJovi (KakeiBon開発者)
+**Keywords**: cognitive augmentation, 認知拡張, AI collaboration, AI協働, Douglas Engelbart, intelligence amplification, 知性拡張, human-AI synergy, 人間とAIの協調, augmented intelligence, 拡張知能, productivity, 生産性, cognitive offload, 認知負荷軽減
+**Related**: @AI_COLLABORATION.md, @DESIGN_PHILOSOPHY.md
 
 ---
 

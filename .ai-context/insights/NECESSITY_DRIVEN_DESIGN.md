@@ -2,6 +2,8 @@
 
 **Last Updated**: 2025-11-26
 **Author**: BonoJovi (KakeiBon開発者)
+**Keywords**: necessity-driven design, 必然性駆動設計, design principles, 設計原則, pragmatic design, 実用的設計, YAGNI, simplicity, シンプルさ, essential complexity, 本質的複雑性, technical debt, 技術的負債, over-engineering, オーバーエンジニアリング
+**Related**: @SCALE_ARCHITECTURE.md, @DESIGN_PHILOSOPHY.md
 
 ---
 

@@ -2,6 +2,8 @@
 
 **Last Updated**: 2025-11-25
 **Purpose**: Testing strategies for AI-assisted development
+**Keywords**: testing, tests, テスト, test-driven, TDD, テスト駆動, unit tests, ユニットテスト, integration tests, 統合テスト, cargo test, npm test, test coverage, カバレッジ, backend tests, frontend tests, バックエンドテスト, フロントエンドテスト, test strategy, テスト戦略, quality assurance, QA, 品質保証
+**Related**: @RELEASE.md, @CONVENTIONS.md, @API_STABILITY.md
 
 ---
 

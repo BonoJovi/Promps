@@ -2,6 +2,8 @@
 
 **Last Updated**: 2025-11-26
 **Author**: BonoJovi (KakeiBon開発者)
+**Keywords**: refactoring failure, リファクタリング失敗, refactoring pitfalls, リファクタリングの落とし穴, code refactoring, コードリファクタリング, premature optimization, 早すぎる最適化, pattern-driven, パターン駆動, necessity-driven, 必然性駆動, technical debt, 技術的負債, code quality, コード品質
+**Related**: @NECESSITY_DRIVEN_DESIGN.md, @SCALE_ARCHITECTURE.md, @CONVENTIONS.md
 
 ---
 

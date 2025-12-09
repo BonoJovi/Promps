@@ -2,6 +2,8 @@
 
 **Last Updated**: 2025-11-26
 **Author**: BonoJovi (KakeiBon開発者)
+**Keywords**: parallel prediction, 並列予測, token prediction, トークン予測, AI performance, AI性能, cognitive insights, 認知的示唆, thinking process, 思考プロセス, chunking, チャンキング, pattern recognition, パターン認識, breakthrough, ブレークスルー
+**Related**: @AI_COGNITIVE_AUGMENTATION.md, @AI_COLLABORATION.md
 
 ---
 

@@ -2,6 +2,8 @@
 
 **Last Updated**: 2025-12-06
 **Purpose**: Step-by-step release procedure for Promps project
+**Keywords**: release, deploy, deployment, publish, リリース, デプロイ, 公開, version bump, バージョンアップ, tagging, git tag, タグ, GitHub Actions, workflow, ワークフロー, CI/CD, automated build, 自動ビルド, draft release, ドラフトリリース, artifacts, binaries, バイナリ, publish release, rollback, ロールバック, version numbering, バージョン管理
+**Related**: @BRANCHING.md, @TESTING.md, @GITHUB_PROJECTS.md, @CONVENTIONS.md
 
 ---
 

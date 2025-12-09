@@ -2,6 +2,8 @@
 
 **Last Updated**: 2025-11-26
 **Author**: BonoJovi (KakeiBon開発者)
+**Keywords**: software as organism, ソフトウェアを生命体として, software philosophy, ソフトウェア哲学, organic growth, 有機的成長, evolution, 進化, living system, 生命システム, adaptation, 適応, emergent behavior, 創発的挙動, holistic view, 全体的視点
+**Related**: @DESIGN_PHILOSOPHY.md, @NECESSITY_DRIVEN_DESIGN.md
 
 ---
 

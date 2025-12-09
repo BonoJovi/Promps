@@ -58,6 +58,43 @@
 
 ---
 
+## Keyword Search System (NEW)
+
+**Purpose**: All context files now include searchable keywords for better discoverability.
+
+### How to Use Keywords
+
+Each file has a **Keywords** section in the frontmatter:
+
+```markdown
+**Keywords**: release, deploy, リリース, GitHub Actions, CI/CD, ...
+**Related**: @BRANCHING.md, @TESTING.md
+```
+
+### Searching for Context
+
+**By topic (English/Japanese)**:
+- Release process: `release`, `deploy`, `リリース`, `デプロイ`
+- Branching: `branch`, `merge`, `ブランチ`, `マージ`, `persistent`
+- Testing: `test`, `テスト`, `cargo test`, `TDD`
+- API stability: `API`, `immutable`, `不変`, `breaking changes`
+
+**By technology**:
+- `Tauri`, `Rust`, `Blockly`, `WebView`
+- `GitHub Actions`, `CI/CD`, `workflow`
+
+**By workflow**:
+- `git`, `commit`, `tag`, `push`, `pull request`
+- `version bump`, `バージョンアップ`
+
+### Related Files Cross-Reference
+
+Each file includes **Related** links to related context files using `@` notation:
+- `@RELEASE.md` → Cross-reference to Release Process
+- `@BRANCHING.md` → Cross-reference to Branching Strategy
+
+---
+
 ## Usage Guidelines for AI
 
 ### Session Startup (Automatic)

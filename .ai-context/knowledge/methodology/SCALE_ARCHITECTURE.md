@@ -2,6 +2,8 @@
 
 **Last Updated**: 2025-12-08
 **Purpose**: Relationship between project scale and architectural pattern selection
+**Keywords**: scale, スケール, architecture, アーキテクチャ, architectural patterns, アーキテクチャパターン, scalability, スケーラビリティ, complexity, 複雑性, simplicity, シンプルさ, YAGNI, pragmatic, 実用的, over-engineering, オーバーエンジニアリング, right-sizing, 適切なサイズ
+**Related**: @DESIGN_PHILOSOPHY.md, @API_STABILITY.md, @PROJECT_STRUCTURE.md
 
 ---
 

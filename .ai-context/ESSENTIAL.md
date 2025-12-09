@@ -2,6 +2,8 @@
 
 **Last Updated**: 2025-12-09
 **Purpose**: Minimal context for session startup (token optimization)
+**Keywords**: essential, quick start, overview, status, current state, 現在の状態, エッセンシャル, 概要, project status, version, tests, テスト, critical rules, 重要なルール, quick reference, クイックリファレンス, entry point, starting point
+**Related**: @README.md, @context/coding/API_STABILITY.md, @context/workflows/BRANCHING.md, @context/coding/TESTING.md
 
 ---
 
