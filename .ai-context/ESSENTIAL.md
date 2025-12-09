@@ -7,9 +7,9 @@
 
 ## Current Status
 
-**Phase**: Phase 2 Complete (v0.0.2) → Phase 3 Next (Verb blocks)
-**Tests**: 68 tests at 100% passing
-**Branch**: dev (integration branch)
+**Phase**: Phase 3-前半 In Progress (Verb blocks prototype)
+**Tests**: 81 tests at 100% passing (Backend 26 + Frontend 55)
+**Branch**: feature/phase-3 (working on verb blocks)
 
 ---
 

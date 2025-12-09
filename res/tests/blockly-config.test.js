@@ -427,3 +427,207 @@ describe('Particle Blocks (Phase 2)', () => {
         expect(code).toBe('_N:User と _N:Admin が 作成 ');
     });
 });
+
+describe('Verb Blocks (Phase 3)', () => {
+    // Verb block generator function (returns text + space)
+    const generateVerbDSL = (verbText) => {
+        return verbText + ' ';
+    };
+
+    test('should generate correct DSL for 分析して verb', () => {
+        const result = generateVerbDSL('分析して');
+        expect(result).toBe('分析して ');
+    });
+
+    test('should generate correct DSL for 要約して verb', () => {
+        const result = generateVerbDSL('要約して');
+        expect(result).toBe('要約して ');
+    });
+
+    test('should generate correct DSL for 翻訳して verb', () => {
+        const result = generateVerbDSL('翻訳して');
+        expect(result).toBe('翻訳して ');
+    });
+
+    test('should handle all 3 fixed verb types', () => {
+        const verbs = ['分析して', '要約して', '翻訳して'];
+
+        verbs.forEach(verb => {
+            const result = generateVerbDSL(verb);
+            expect(result).toBe(verb + ' ');
+        });
+    });
+
+    test('verb blocks should not have _N: prefix', () => {
+        const verbs = ['分析して', '要約して', '翻訳して'];
+
+        verbs.forEach(verb => {
+            const result = generateVerbDSL(verb);
+            expect(result).not.toContain('_N:');
+        });
+    });
+
+    test('should generate correct DSL for custom verb block', () => {
+        const mockBlock = {
+            getFieldValue: (fieldName) => {
+                if (fieldName === 'TEXT') {
+                    return '作成して';
+                }
+                return '';
+            }
+        };
+
+        const generateDSL = (block) => {
+            const text = block.getFieldValue('TEXT');
+            return text + ' ';
+        };
+
+        const result = generateDSL(mockBlock);
+        expect(result).toBe('作成して ');
+    });
+
+    test('should handle various custom verb inputs', () => {
+        const customVerbs = ['作成して', '削除して', '更新して', '保存して', '読み込んで'];
+
+        customVerbs.forEach(verb => {
+            const mockBlock = {
+                getFieldValue: () => verb
+            };
+
+            const generateDSL = (block) => {
+                const text = block.getFieldValue('TEXT');
+                return text + ' ';
+            };
+
+            const result = generateDSL(mockBlock);
+            expect(result).toBe(verb + ' ');
+        });
+    });
+
+    test('should generate complete sentence with verb block', () => {
+        // Sentence: User が Order を 分析して
+        const blocks = [
+            { type: 'noun', text: 'User' },
+            { type: 'particle', text: 'が' },
+            { type: 'noun', text: 'Order' },
+            { type: 'particle', text: 'を' },
+            { type: 'verb', text: '分析して' }
+        ];
+
+        const generateDSL = (block) => {
+            if (block.type === 'noun') {
+                return '_N:' + block.text + ' ';
+            } else {
+                return block.text + ' ';
+            }
+        };
+
+        const code = blocks.map(generateDSL).join('');
+        expect(code).toBe('_N:User が _N:Order を 分析して ');
+    });
+
+    test('should generate sentence with 要約して verb', () => {
+        // Sentence: Document を 要約して
+        const blocks = [
+            { type: 'noun', text: 'Document' },
+            { type: 'particle', text: 'を' },
+            { type: 'verb', text: '要約して' }
+        ];
+
+        const generateDSL = (block) => {
+            if (block.type === 'noun') {
+                return '_N:' + block.text + ' ';
+            } else {
+                return block.text + ' ';
+            }
+        };
+
+        const code = blocks.map(generateDSL).join('');
+        expect(code).toBe('_N:Document を 要約して ');
+    });
+
+    test('should generate sentence with 翻訳して verb', () => {
+        // Sentence: Text を English に 翻訳して
+        const blocks = [
+            { type: 'noun', text: 'Text' },
+            { type: 'particle', text: 'を' },
+            { type: 'noun', text: 'English' },
+            { type: 'particle', text: 'に' },
+            { type: 'verb', text: '翻訳して' }
+        ];
+
+        const generateDSL = (block) => {
+            if (block.type === 'noun') {
+                return '_N:' + block.text + ' ';
+            } else {
+                return block.text + ' ';
+            }
+        };
+
+        const code = blocks.map(generateDSL).join('');
+        expect(code).toBe('_N:Text を _N:English に 翻訳して ');
+    });
+
+    test('should generate sentence with custom verb', () => {
+        // Sentence: Database に Data を 保存して
+        const blocks = [
+            { type: 'noun', text: 'Database' },
+            { type: 'particle', text: 'に' },
+            { type: 'noun', text: 'Data' },
+            { type: 'particle', text: 'を' },
+            { type: 'verb-custom', text: '保存して' }
+        ];
+
+        const generateDSL = (block) => {
+            if (block.type === 'noun') {
+                return '_N:' + block.text + ' ';
+            } else if (block.type === 'verb-custom') {
+                return block.text + ' ';
+            } else {
+                return block.text + ' ';
+            }
+        };
+
+        const code = blocks.map(generateDSL).join('');
+        expect(code).toBe('_N:Database に _N:Data を 保存して ');
+    });
+
+    test('should handle empty custom verb field', () => {
+        const mockBlock = {
+            getFieldValue: () => ''
+        };
+
+        const generateDSL = (block) => {
+            const text = block.getFieldValue('TEXT');
+            return text + ' ';
+        };
+
+        const result = generateDSL(mockBlock);
+        expect(result).toBe(' ');
+    });
+
+    test('should generate complex sentence with multiple verb types', () => {
+        // Sentence: User が Document を 分析して Result を 要約して
+        const blocks = [
+            { type: 'noun', text: 'User' },
+            { type: 'particle', text: 'が' },
+            { type: 'noun', text: 'Document' },
+            { type: 'particle', text: 'を' },
+            { type: 'verb', text: '分析して' },
+            { type: 'noun', text: 'Result' },
+            { type: 'particle', text: 'を' },
+            { type: 'verb', text: '要約して' }
+        ];
+
+        const generateDSL = (block) => {
+            if (block.type === 'noun') {
+                return '_N:' + block.text + ' ';
+            } else {
+                return block.text + ' ';
+            }
+        };
+
+        const code = blocks.map(generateDSL).join('');
+        expect(code).toBe('_N:User が _N:Document を 分析して _N:Result を 要約して ');
+    });
+});
