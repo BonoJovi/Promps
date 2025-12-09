@@ -6,7 +6,7 @@
 > **AIプロンプト作成のためのビジュアルブロックベースツール**
 
 [![Tech Preview](https://img.shields.io/badge/Status-Tech%20Preview-orange)](https://github.com/BonoJovi/Promps/releases)
-[![Version](https://img.shields.io/badge/Version-0.0.2-blue)](https://github.com/BonoJovi/Promps/releases/tag/v0.0.2)
+[![Version](https://img.shields.io/badge/Version-0.0.3--1-blue)](https://github.com/BonoJovi/Promps/releases/tag/v0.0.3-1)
 [![Rust](https://img.shields.io/badge/Rust-1.70+-orange.svg)](https://www.rust-lang.org/)
 [![Tauri](https://img.shields.io/badge/Tauri-v2-blue.svg)](https://tauri.app/)
 [![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
@@ -24,39 +24,51 @@
 
 ### Prompsユーザの皆さんへ
 
-いつもPrompsに関心を寄せていただき、誠にありがとうございます。  
+いつもPrompsに関心を寄せていただき、誠にありがとうございます。
 プロジェクト発案者のBonoJovi(Yoshihiro NAKAHARA)です。
 
-**Ver.0.0.2 テックプレビュー版をリリースいたしました！**
+**Ver.0.0.3-1 (プロトタイプ版) をリリースいたしました！**
 
-Ver.0.0.1からVer.0.0.2への更新では、**助詞ブロック機能**を追加しました。これにより、「が」「を」「に」「で」「と」「へ」「から」「まで」「より」の9種類の助詞ブロックが使えるようになり、より自然な日本語のプロンプトを視覚的に構築できるようになりました。
+今回のアップデートでは、**動詞ブロック機能（プロトタイプ）** を追加しました。固定動詞ブロック（「分析して」「要約して」「翻訳して」）とカスタム動詞ブロック（自由入力）が使えるようになり、より具体的なプロンプトを構築できるようになりました。
 
-また、ブロックパレットに**折りたたみ可能なカテゴリUI**を実装し、「名詞」「助詞」「その他」のカテゴリごとにブロックを整理しました。これにより、多数のブロックから目的のものを素早く見つけられるようになりました。
+このプロトタイプ版は、**ユーザーの皆さんからのフィードバック収集**を目的としています。
+
+**📢 あなたの意見を聞かせてください！**
+- どんな動詞ブロックがあると便利ですか？
+- 動詞をどのようにカテゴリ分けすると使いやすいですか？
+  - 例: 「分析系」「変換系」「操作系」など
+- [Issues](https://github.com/BonoJovi/Promps/issues) または [Discussions](https://github.com/BonoJovi/Promps/discussions) でご意見をお寄せください！
 
 Prompsはまだテックプレビュー段階ですが、基本的なプロンプト構築機能は動作しており、テストしていただける状態です。現段階では文法検証機能やプロジェクトの保存/読込機能はまだ実装されていませんが、今後のリリースで追加予定です。
 
 **テスターを募集しています！** あなたのフィードバックがPrompsの未来を形作ります。動作確認、バグ報告、機能リクエストなど、どんな形でも構いませんので、ぜひご協力ください。
 
-**2025-12-06 (JST) Written by Yoshihiro NAKAHARA**
+**2025-12-09 (JST) Written by Yoshihiro NAKAHARA**
 
 ---
 
 ### To Promps Users
 
-Thank you for your continued interest in Promps.  
+Thank you for your continued interest in Promps.
 I'm BonoJovi (Yoshihiro NAKAHARA), the project initiator.
 
-**We have released Ver.0.0.2 Tech Preview!**
+**We have released Ver.0.0.3-1 (Prototype)!**
 
-The update from Ver.0.0.1 to Ver.0.0.2 introduces **Particle Blocks** functionality. This adds 9 types of Japanese particle blocks (が、を、に、で、と、へ、から、まで、より), enabling you to visually construct more natural Japanese prompts.
+This update introduces **Verb Blocks (Prototype)** functionality. You can now use fixed verb blocks ("analyze", "summarize", "translate") and a custom verb block (free text input) to construct more specific prompts.
 
-Additionally, we've implemented a **collapsible category UI** in the block palette, organizing blocks into "Noun", "Particle", and "Other" categories. This makes it easier to quickly find the blocks you need from the growing collection.
+This prototype release aims to **collect feedback from users**.
+
+**📢 We want to hear from you!**
+- What verb blocks would be useful for you?
+- How should we categorize verbs for better usability?
+  - Example: "Analysis", "Conversion", "Operations", etc.
+- Share your ideas on [Issues](https://github.com/BonoJovi/Promps/issues) or [Discussions](https://github.com/BonoJovi/Promps/discussions)!
 
 Promps is still in Tech Preview stage, but the basic prompt building functionality is working and ready for testing. While grammar validation and project save/load features are not yet implemented, they are planned for future releases.
 
 **We're looking for testers!** Your feedback will shape the future of Promps. Whether it's testing functionality, reporting bugs, or requesting features, any form of contribution is welcome.
 
-**2025-12-06 (JST) Written by Yoshihiro NAKAHARA**
+**2025-12-09 (JST) Written by Yoshihiro NAKAHARA**
 
 </div>
 
@@ -64,13 +76,15 @@ Promps is still in Tech Preview stage, but the basic prompt building functionali
 
 ## ⚠️ Tech Preview Notice / テックプレビュー版について
 
-**This is a Technology Preview release (v0.0.2)** - an early version to gather feedback and test the concept.  
-**これはテクノロジープレビュー版(v0.0.2)です** - フィードバック収集とコンセプト検証のための初期バージョンです。
+**This is a Technology Preview release (v0.0.3-1)** - a prototype version to gather feedback on verb blocks.
+**これはテクノロジープレビュー版(v0.0.3-1)です** - 動詞ブロックのフィードバック収集を目的としたプロトタイプ版です。
 
 **What this means: / これが意味すること：**
 - ✅ Core functionality works and is ready for testing / コア機能は動作し、テスト可能な状態です
-- ✅ **NEW in v0.0.2:** Particle blocks (9 types) added / **v0.0.2の新機能:** 助詞ブロック(9種類)を追加
-- ✅ **NEW in v0.0.2:** Collapsible category UI / **v0.0.2の新機能:** 折りたたみ可能なカテゴリUI
+- ✅ **NEW in v0.0.3-1:** Verb blocks (3 fixed + custom input) / **v0.0.3-1の新機能:** 動詞ブロック（固定3種＋カスタム入力）
+- ✅ Particle blocks (9 types) / 助詞ブロック（9種類）
+- ✅ Collapsible category UI / 折りたたみ可能なカテゴリUI
+- 💬 **We need your feedback on verb blocks!** / **動詞ブロックへのフィードバックを募集中！**
 - ⚠️ No grammar validation yet / 文法検証機能はまだありません
 - ⚠️ No project save/load yet / プロジェクト保存/読込機能はまだありません
 - 🐛 Bugs are expected - please report them! / バグは想定内です - ぜひ報告してください！
@@ -85,7 +99,7 @@ Promps is still in Tech Preview stage, but the basic prompt building functionali
 ### 1. Download & Install / ダウンロード & インストール
 
 **Download the latest release: / 最新リリースをダウンロード：**
-- 📥 [Download v0.0.2](https://github.com/BonoJovi/Promps/releases/tag/v0.0.2)
+- 📥 [Download v0.0.3-proto](https://github.com/BonoJovi/Promps/releases/tag/v0.0.3-proto)
 
 **Available for: / 対応プラットフォーム：**
 - 🐧 Linux (AppImage, deb, rpm)
