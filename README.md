@@ -6,11 +6,7 @@
 > **AIプロンプト作成のためのビジュアルブロックベースツール**
 
 [![Tech Preview](https://img.shields.io/badge/Status-Tech%20Preview-orange)](https://github.com/BonoJovi/Promps/releases)
-<<<<<<< HEAD
-[![Version](https://img.shields.io/badge/Version-0.0.3--proto-blue)](https://github.com/BonoJovi/Promps/releases/tag/v0.0.3-proto)
-=======
 [![Version](https://img.shields.io/badge/Version-0.0.3--1-blue)](https://github.com/BonoJovi/Promps/releases/tag/v0.0.3-1)
->>>>>>> 1ef6c4b (chore(release): bump version to 0.0.3-1)
 [![Rust](https://img.shields.io/badge/Rust-1.70+-orange.svg)](https://www.rust-lang.org/)
 [![Tauri](https://img.shields.io/badge/Tauri-v2-blue.svg)](https://tauri.app/)
 [![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
@@ -31,11 +27,7 @@
 いつもPrompsに関心を寄せていただき、誠にありがとうございます。
 プロジェクト発案者のBonoJovi(Yoshihiro NAKAHARA)です。
 
-<<<<<<< HEAD
-**Ver.0.0.3-proto (プロトタイプ版) をリリースいたしました！**
-=======
 **Ver.0.0.3-1 (プロトタイプ版) をリリースいたしました！**
->>>>>>> 1ef6c4b (chore(release): bump version to 0.0.3-1)
 
 今回のアップデートでは、**動詞ブロック機能（プロトタイプ）** を追加しました。固定動詞ブロック（「分析して」「要約して」「翻訳して」）とカスタム動詞ブロック（自由入力）が使えるようになり、より具体的なプロンプトを構築できるようになりました。
 
@@ -60,11 +52,7 @@ Prompsはまだテックプレビュー段階ですが、基本的なプロン�
 Thank you for your continued interest in Promps.
 I'm BonoJovi (Yoshihiro NAKAHARA), the project initiator.
 
-<<<<<<< HEAD
-**We have released Ver.0.0.3-proto (Prototype)!**
-=======
 **We have released Ver.0.0.3-1 (Prototype)!**
->>>>>>> 1ef6c4b (chore(release): bump version to 0.0.3-1)
 
 This update introduces **Verb Blocks (Prototype)** functionality. You can now use fixed verb blocks ("analyze", "summarize", "translate") and a custom verb block (free text input) to construct more specific prompts.
 
@@ -88,21 +76,12 @@ Promps is still in Tech Preview stage, but the basic prompt building functionali
 
 ## ⚠️ Tech Preview Notice / テックプレビュー版について
 
-<<<<<<< HEAD
-**This is a Technology Preview release (v0.0.3-proto)** - a prototype version to gather feedback on verb blocks.
-**これはテクノロジープレビュー版(v0.0.3-proto)です** - 動詞ブロックのフィードバック収集を目的としたプロトタイプ版です。
-
-**What this means: / これが意味すること：**
-- ✅ Core functionality works and is ready for testing / コア機能は動作し、テスト可能な状態です
-- ✅ **NEW in v0.0.3-proto:** Verb blocks (3 fixed + custom input) / **v0.0.3-protoの新機能:** 動詞ブロック（固定3種＋カスタム入力）
-=======
 **This is a Technology Preview release (v0.0.3-1)** - a prototype version to gather feedback on verb blocks.
 **これはテクノロジープレビュー版(v0.0.3-1)です** - 動詞ブロックのフィードバック収集を目的としたプロトタイプ版です。
 
 **What this means: / これが意味すること：**
 - ✅ Core functionality works and is ready for testing / コア機能は動作し、テスト可能な状態です
 - ✅ **NEW in v0.0.3-1:** Verb blocks (3 fixed + custom input) / **v0.0.3-1の新機能:** 動詞ブロック（固定3種＋カスタム入力）
->>>>>>> 1ef6c4b (chore(release): bump version to 0.0.3-1)
 - ✅ Particle blocks (9 types) / 助詞ブロック（9種類）
 - ✅ Collapsible category UI / 折りたたみ可能なカテゴリUI
 - 💬 **We need your feedback on verb blocks!** / **動詞ブロックへのフィードバックを募集中！**
@@ -120,7 +99,7 @@ Promps is still in Tech Preview stage, but the basic prompt building functionali
 ### 1. Download & Install / ダウンロード & インストール
 
 **Download the latest release: / 最新リリースをダウンロード：**
-- 📥 [Download v0.0.3-proto](https://github.com/BonoJovi/Promps/releases/tag/v0.0.3-proto)
+- 📥 [Download v0.0.3-1](https://github.com/BonoJovi/Promps/releases/tag/v0.0.3-1)
 
 **Available for: / 対応プラットフォーム：**
 - 🐧 Linux (AppImage, deb, rpm)
@@ -155,10 +134,10 @@ Drag blocks from the left panel to the workspace.
 - **🏷️ Noun Block (名詞)**: For entities like "User", "Order", "Database"
   エンティティ用（「ユーザー」「注文」「データベース」など）
 
-- **✨ Particle Block (助詞) [v0.0.2]**: Japanese particles
+- **✨ Particle Block (助詞)**: Japanese particles
   日本語の助詞（「が」「を」「に」「で」「と」「へ」「から」「まで」「より」）
 
-- **🎬 Verb Block (動詞) [NEW in v0.0.3-preview]**: Common verbs + custom input
+- **🎬 Verb Block (動詞) [NEW in v0.0.3-1]**: Common verbs + custom input
   よく使う動詞（「分析して」「要約して」「翻訳して」）+ カスタム入力
 
 - **📝 Other Block (その他)**: For other words
@@ -199,7 +178,7 @@ Drag blocks from the left panel to the workspace.
 User (NOUN) が Order (NOUN) を 作成
 ```
 
-### Using Verb Blocks (v0.0.3-preview) / 動詞ブロックの使用
+### Using Verb Blocks (v0.0.3-1) / 動詞ブロックの使用
 
 **Blocks: / ブロック：**
 ```
@@ -246,8 +225,8 @@ Text (NOUN) を English (NOUN) に 翻訳して
 - ✅ 9 types of particle blocks (が、を、に、で、と、へ、から、まで、より)
   9種類の助詞ブロック
 
-- ✅ **NEW in v0.0.3-preview:** Verb blocks (3 fixed + custom input)
-  **v0.0.3-preview新機能:** 動詞ブロック（固定3種＋カスタム入力）
+- ✅ **NEW in v0.0.3-1:** Verb blocks (3 fixed + custom input)
+  **v0.0.3-1新機能:** 動詞ブロック（固定3種＋カスタム入力）
 
 - ✅ Collapsible category UI (Noun, Particle, Verb, Other)
   折りたたみ可能なカテゴリUI（名詞、助詞、動詞、その他）
@@ -300,8 +279,8 @@ We welcome **all types of contributions** - not just code!
 
 **No programming experience needed! / プログラミング経験不要！**
 
-**🎉 NEW: v0.0.2 Multi-Platform Binaries Now Available!**  
-**🎉 新着: v0.0.2でマルチプラットフォームバイナリが利用可能に！**
+**🎉 NEW: v0.0.3-1 with Verb Blocks (Prototype)!**
+**🎉 新着: v0.0.3-1 動詞ブロック搭載（プロトタイプ版）！**
 
 **Platform Status: / プラットフォーム状況：**
 - ✅ **Linux**: Verified and tested by developer / 開発者により検証済み・テスト済み
