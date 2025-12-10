@@ -34,22 +34,30 @@ def generate_daily_graph(data):
     if not clones_df.empty:
         clones_df['timestamp'] = pd.to_datetime(clones_df['timestamp'])
 
-    # Determine date range from all data
+    # Determine date range: last 14 days (same as GitHub Traffic)
     all_dates = []
     if not views_df.empty:
         all_dates.extend(views_df['timestamp'].tolist())
     if not clones_df.empty:
         all_dates.extend(clones_df['timestamp'].tolist())
-    
+
     if all_dates:
-        min_date = min(all_dates)
         max_date = max(all_dates)
-        # Add padding: 1 day before and after
-        date_padding = pd.Timedelta(days=1)
-        x_min = min_date - date_padding
-        x_max = max_date + date_padding
+        # Show last 14 days of data
+        min_date = max_date - pd.Timedelta(days=13)  # 14 days including max_date
+
+        # Filter data to last 14 days
+        if not views_df.empty:
+            views_df = views_df[views_df['timestamp'] >= min_date]
+        if not clones_df.empty:
+            clones_df = clones_df[clones_df['timestamp'] >= min_date]
+
+        # Add padding: 1 day before and after for display
+        x_min = min_date - pd.Timedelta(days=1)
+        x_max = max_date + pd.Timedelta(days=1)
     else:
         x_min = x_max = None
+        min_date = max_date = None
 
     # Create figure with reduced height (5.5 instead of 8)
     fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(12, 5.5))
@@ -79,8 +87,15 @@ def generate_daily_graph(data):
         if x_min and x_max:
             ax.set_xlim(x_min, x_max)
         ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
-        ax.xaxis.set_major_locator(mdates.DayLocator(interval=max(1, (max_date - min_date).days // 10) if all_dates else 1))
+        # Show daily ticks for 14-day period
+        ax.xaxis.set_major_locator(mdates.DayLocator(interval=1))
         plt.setp(ax.xaxis.get_majorticklabels(), rotation=45, ha='right')
+
+        # Hide edge labels (leftmost and rightmost date labels)
+        labels = ax.get_xticklabels()
+        if len(labels) > 2:
+            labels[0].set_visible(False)
+            labels[-1].set_visible(False)
 
     plt.tight_layout()
     plt.savefig(OUTPUT_FILE_DAILY, dpi=150, bbox_inches='tight')
@@ -99,29 +114,37 @@ def generate_cumulative_graph(data):
     if not views_df.empty:
         views_df['timestamp'] = pd.to_datetime(views_df['timestamp'])
         views_df = views_df.sort_values('timestamp')
-        views_df['cumulative'] = views_df['count'].cumsum()
 
     if not clones_df.empty:
         clones_df['timestamp'] = pd.to_datetime(clones_df['timestamp'])
         clones_df = clones_df.sort_values('timestamp')
-        clones_df['cumulative'] = clones_df['count'].cumsum()
 
-    # Determine date range from all data
+    # Determine date range: last 14 days (same as GitHub Traffic)
     all_dates = []
     if not views_df.empty:
         all_dates.extend(views_df['timestamp'].tolist())
     if not clones_df.empty:
         all_dates.extend(clones_df['timestamp'].tolist())
-    
+
     if all_dates:
-        min_date = min(all_dates)
         max_date = max(all_dates)
-        # Add padding: 1 day before and after
-        date_padding = pd.Timedelta(days=1)
-        x_min = min_date - date_padding
-        x_max = max_date + date_padding
+        # Show last 14 days of data
+        min_date = max_date - pd.Timedelta(days=13)  # 14 days including max_date
+
+        # Filter data to last 14 days
+        if not views_df.empty:
+            views_df = views_df[views_df['timestamp'] >= min_date]
+            views_df['cumulative'] = views_df['count'].cumsum()
+        if not clones_df.empty:
+            clones_df = clones_df[clones_df['timestamp'] >= min_date]
+            clones_df['cumulative'] = clones_df['count'].cumsum()
+
+        # Add padding: 1 day before and after for display
+        x_min = min_date - pd.Timedelta(days=1)
+        x_max = max_date + pd.Timedelta(days=1)
     else:
         x_min = x_max = None
+        min_date = max_date = None
 
     # Create figure with reduced height
     fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(12, 5.5))
@@ -151,8 +174,15 @@ def generate_cumulative_graph(data):
         if x_min and x_max:
             ax.set_xlim(x_min, x_max)
         ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
-        ax.xaxis.set_major_locator(mdates.DayLocator(interval=max(1, (max_date - min_date).days // 10) if all_dates else 1))
+        # Show daily ticks for 14-day period
+        ax.xaxis.set_major_locator(mdates.DayLocator(interval=1))
         plt.setp(ax.xaxis.get_majorticklabels(), rotation=45, ha='right')
+
+        # Hide edge labels (leftmost and rightmost date labels)
+        labels = ax.get_xticklabels()
+        if len(labels) > 2:
+            labels[0].set_visible(False)
+            labels[-1].set_visible(False)
 
     plt.tight_layout()
     plt.savefig(OUTPUT_FILE_CUMULATIVE, dpi=150, bbox_inches='tight')
