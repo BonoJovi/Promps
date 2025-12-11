@@ -64,23 +64,51 @@ pub fn parse_input(input: &str) -> Vec<PromptPart> {
                 continue;
             }
 
-            // BUG REPRODUCTION: Sentence-level noun detection
-            // This is the OLD buggy behavior where the entire sentence gets one (NOUN) marker
-            // Instead of each _N: token getting its own marker
-            let has_noun = tokens.iter().any(|t| t.starts_with("_N:"));
+            // Phase 0-1 behavior: Token-level noun detection
+            // Each _N: token becomes a separate PromptPart with is_noun=true
+            // This allows multiple nouns in a single sentence to each have (NOUN) markers
+            let mut current_text = String::new();
+            let mut current_is_noun = false;
+            let mut first_in_part = true;
 
-            // Combine all tokens, stripping _N: prefix
-            let combined_text = tokens
-                .iter()
-                .map(|t| t.strip_prefix("_N:").unwrap_or(t))
-                .collect::<Vec<_>>()
-                .join(" ");
+            for token in tokens {
+                match token.strip_prefix("_N:") {
+                    Some(stripped) => {
+                        // Found a noun token - flush current part if any
+                        if !current_text.is_empty() {
+                            parts.push(PromptPart {
+                                is_noun: current_is_noun,
+                                text: current_text.trim().to_string(),
+                            });
+                            current_text.clear();
+                            first_in_part = true;
+                        }
 
-            // Create a single part for the entire sentence
-            parts.push(PromptPart {
-                is_noun: has_noun,
-                text: combined_text,
-            });
+                        // Create a new part for this noun
+                        parts.push(PromptPart {
+                            is_noun: true,
+                            text: stripped.to_string(),
+                        });
+                        current_is_noun = false;
+                    }
+                    None => {
+                        // Regular token - accumulate into current part
+                        if !first_in_part {
+                            current_text.push(' ');
+                        }
+                        current_text.push_str(token);
+                        first_in_part = false;
+                    }
+                }
+            }
+
+            // Flush remaining accumulated text
+            if !current_text.is_empty() {
+                parts.push(PromptPart {
+                    is_noun: current_is_noun,
+                    text: current_text.trim().to_string(),
+                });
+            }
         }
     }
 
