@@ -1,6 +1,6 @@
 # AI Context - Essential Information Only
 
-**Last Updated**: 2025-12-09
+**Last Updated**: 2025-12-15
 **Purpose**: Minimal context for session startup (token optimization)
 **Keywords**: essential, quick start, overview, status, current state, 現在の状態, エッセンシャル, 概要, project status, version, tests, テスト, critical rules, 重要なルール, quick reference, クイックリファレンス, entry point, starting point
 **Related**: @README.md, @context/coding/API_STABILITY.md, @context/workflows/BRANCHING.md, @context/coding/TESTING.md
@@ -62,10 +62,12 @@
 - Branching: `@.ai-context/context/workflows/BRANCHING.md`
 - Release: `@.ai-context/context/workflows/RELEASE.md`
 
-**For Understanding Design Philosophy** (rarely needed):
-- Methodology: `@.ai-context/knowledge/methodology/AI_COLLABORATION.md`
-- Design Philosophy: `@.ai-context/knowledge/methodology/DESIGN_PHILOSOPHY.md`
-- Scale & Architecture: `@.ai-context/knowledge/methodology/SCALE_ARCHITECTURE.md`
+**Shared Context** (via submodule `shared/`):
+- Documentation: `@.ai-context/shared/workflows/DOCUMENTATION_CREATION.md`
+- Developer Profile: `@.ai-context/shared/developer/YOSHIHIRO_NAKAHARA_PROFILE.md`
+- Methodology: `@.ai-context/shared/methodology/AI_COLLABORATION.md`
+- Design Philosophy: `@.ai-context/shared/methodology/DESIGN_PHILOSOPHY.md`
+- Insights: `@.ai-context/shared/insights/`
 
 ---
 

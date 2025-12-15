@@ -1,7 +1,7 @@
 # AI Context Directory - Optimized for Token Efficiency
 
-**Last Updated**: 2025-12-09
-**Purpose**: Hierarchical AI context with lazy loading for optimal token usage
+**Last Updated**: 2025-12-15
+**Purpose**: Hierarchical AI context with lazy loading and shared submodule
 
 ---
 
@@ -9,7 +9,7 @@
 
 **Problem**: Previous structure loaded ~8,400 lines (~9% token budget) at session startup.
 
-**Solution**: 3-tier architecture with lazy loading.
+**Solution**: 3-tier architecture with lazy loading + shared submodule.
 
 **Result**: < 100 lines loaded at startup (~2-3% token budget).
 
@@ -21,77 +21,69 @@
 .ai-context/
 ├── ESSENTIAL.md                    # [Tier 1] Always loaded (< 100 lines)
 │
-├── context/                        # [Tier 2] Load when working on specific tasks
+├── context/                        # [Tier 2] Project-specific context
 │   ├── coding/
 │   │   ├── CONVENTIONS.md          # Coding standards
-│   │   ├── TESTING.md              # Testing strategy (was TESTING_STRATEGY.md)
+│   │   ├── TESTING.md              # Testing strategy
 │   │   └── API_STABILITY.md        # API change policy
 │   │
 │   ├── architecture/
 │   │   ├── PROJECT_STRUCTURE.md    # Module organization
-│   │   └── TAURI.md                # Tauri framework (was TAURI_INTEGRATION.md)
+│   │   └── TAURI.md                # Tauri framework
 │   │
 │   └── workflows/
-│       ├── BRANCHING.md            # Branching strategy (was BRANCHING_STRATEGY.md)
-│       ├── RELEASE.md              # Release process (was RELEASE_PROCESS.md)
-│       ├── GITHUB_PROJECTS.md      # Issue tracking
-│       └── I18N.md                 # i18n management (was I18N_MANAGEMENT.md)
+│       ├── BRANCHING.md            # Branching strategy
+│       ├── RELEASE.md              # Release process
+│       └── I18N.md                 # i18n management
 │
-├── knowledge/                      # [Tier 3] Load when understanding design rationale
+├── shared/                         # [Submodule] Shared across projects
+│   ├── developer/
+│   │   └── YOSHIHIRO_NAKAHARA_PROFILE.md
+│   ├── analytics/
+│   │   └── SEO_Keywords_Tracking.md
 │   ├── methodology/
-│   │   ├── AI_COLLABORATION.md     # AI collaboration patterns (was METHODOLOGY.md)
-│   │   ├── DESIGN_PHILOSOPHY.md    # Core design principles
-│   │   └── SCALE_ARCHITECTURE.md   # Scale considerations (was SCALE_AND_ARCHITECTURE.md)
-│   │
-│   └── archive/
-│       └── QUICK_REFERENCE.md      # Historical reference (replaced by ESSENTIAL.md)
+│   │   ├── AI_COLLABORATION.md
+│   │   ├── DESIGN_PHILOSOPHY.md
+│   │   └── SCALE_ARCHITECTURE.md
+│   ├── insights/
+│   │   └── ... (9 insight documents)
+│   ├── workflows/
+│   │   ├── DOCUMENTATION_CREATION.md
+│   │   └── GITHUB_PROJECTS.md
+│   └── README.md
 │
-├── insights/                       # [Optional] Architectural insights
-│   ├── AI_COGNITIVE_AUGMENTATION.md
-│   ├── NECESSITY_DRIVEN_DESIGN.md
-│   ├── PARALLEL_PREDICTION_INSIGHTS.md
-│   ├── SOFTWARE_AS_ORGANISM.md
-│   └── WHY_REFACTORING_FAILS.md
+├── knowledge/
+│   └── archive/
+│       └── QUICK_REFERENCE.md      # Historical reference
 │
 └── README.md                       # This file
 ```
 
 ---
 
-## Keyword Search System (NEW)
+## Shared Submodule
 
-**Purpose**: All context files now include searchable keywords for better discoverability.
+The `shared/` directory is a Git submodule pointing to:
+**https://github.com/BonoJovi/ai-context-shared**
 
-### How to Use Keywords
+### Why Submodule?
 
-Each file has a **Keywords** section in the frontmatter:
+- **Single source of truth**: Common files managed in one place
+- **Cross-project consistency**: KakeiBonByRust and Promps share the same context
+- **Easy updates**: `git submodule update --remote` syncs all projects
 
-```markdown
-**Keywords**: release, deploy, リリース, GitHub Actions, CI/CD, ...
-**Related**: @BRANCHING.md, @TESTING.md
+### Submodule Commands
+
+```bash
+# Update to latest shared context
+git submodule update --remote
+
+# Clone project with submodules
+git clone --recurse-submodules <repo-url>
+
+# Initialize submodules after clone
+git submodule init && git submodule update
 ```
-
-### Searching for Context
-
-**By topic (English/Japanese)**:
-- Release process: `release`, `deploy`, `リリース`, `デプロイ`
-- Branching: `branch`, `merge`, `ブランチ`, `マージ`, `persistent`
-- Testing: `test`, `テスト`, `cargo test`, `TDD`
-- API stability: `API`, `immutable`, `不変`, `breaking changes`
-
-**By technology**:
-- `Tauri`, `Rust`, `Blockly`, `WebView`
-- `GitHub Actions`, `CI/CD`, `workflow`
-
-**By workflow**:
-- `git`, `commit`, `tag`, `push`, `pull request`
-- `version bump`, `バージョンアップ`
-
-### Related Files Cross-Reference
-
-Each file includes **Related** links to related context files using `@` notation:
-- `@RELEASE.md` → Cross-reference to Release Process
-- `@BRANCHING.md` → Cross-reference to Branching Strategy
 
 ---
 
@@ -117,19 +109,19 @@ Load as needed:
 Load as needed:
 - `@.ai-context/context/workflows/BRANCHING.md` - Git workflow
 - `@.ai-context/context/workflows/RELEASE.md` - Release procedure
-- `@.ai-context/context/workflows/I18N.md` - Localization
+- `@.ai-context/shared/workflows/DOCUMENTATION_CREATION.md` - Doc creation
 
 ### When Understanding "Why"
-Load only if you need to understand design rationale (rare):
-- `@.ai-context/knowledge/methodology/AI_COLLABORATION.md`
-- `@.ai-context/knowledge/methodology/DESIGN_PHILOSOPHY.md`
-- `@.ai-context/knowledge/methodology/SCALE_ARCHITECTURE.md`
+Load from shared (rare):
+- `@.ai-context/shared/methodology/AI_COLLABORATION.md`
+- `@.ai-context/shared/methodology/DESIGN_PHILOSOPHY.md`
+- `@.ai-context/shared/insights/`
 
 ---
 
-## File Size Reference (Tier 2 & 3)
+## File Size Reference
 
-### Tier 2: Context (Load when working)
+### Tier 2: Project-Specific Context
 | File | Approx Lines | Load When |
 |------|-------------|-----------|
 | CONVENTIONS.md | ~870 | Implementing code |
@@ -139,92 +131,33 @@ Load only if you need to understand design rationale (rare):
 | TAURI.md | ~55 | Tauri-specific tasks |
 | BRANCHING.md | ~310 | Git operations |
 | RELEASE.md | ~220 | Creating releases |
-| GITHUB_PROJECTS.md | ~110 | Issue management |
 | I18N.md | ~280 | Localization tasks |
 
-### Tier 3: Knowledge (Rarely load)
+### Shared Context (Submodule)
 | File | Approx Lines | Load When |
 |------|-------------|-----------|
-| AI_COLLABORATION.md | ~1,540 | Understanding methodology |
+| YOSHIHIRO_NAKAHARA_PROFILE.md | ~275 | Career context |
+| SEO_Keywords_Tracking.md | ~230 | SEO strategy |
+| AI_COLLABORATION.md | ~1,690 | Understanding methodology |
 | DESIGN_PHILOSOPHY.md | ~950 | Understanding architecture |
-| SCALE_ARCHITECTURE.md | ~400 | Understanding scalability |
+| DOCUMENTATION_CREATION.md | ~650 | Creating documentation |
 
 ---
 
-## Design Rationale
+## Migration Notes
 
-### Why 3 Tiers?
+### 2025-12-15 - Submodule Migration
+- Created `ai-context-shared` repository
+- Moved common files to shared submodule:
+  - developer/, analytics/, methodology/, insights/
+  - workflows/DOCUMENTATION_CREATION.md, GITHUB_PROJECTS.md
+- Updated all references to use `shared/` path
+- Project-specific files remain in `context/`
 
-**Tier 1 (ESSENTIAL.md)**:
-- Always loaded, must be minimal
-- Contains only what's needed for 90% of tasks
-- < 100 lines target
-
-**Tier 2 (context/)**:
-- Task-specific contexts
-- Loaded on-demand when working on specific areas
-- Moderate size (100-1,000 lines per file)
-
-**Tier 3 (knowledge/)**:
-- Design philosophy and rationale
-- Rarely needed (only when understanding "why")
-- Large files (1,000+ lines)
-
-### Token Usage Comparison
-
-| Configuration | Lines Loaded | Token Usage | Use Case |
-|--------------|-------------|-------------|----------|
-| **Old** (Always Load All) | ~8,400 | ~9% | Every session |
-| **New** (ESSENTIAL only) | < 100 | ~2-3% | Default |
-| **New** (+ 1 context file) | ~200-1,000 | ~3-5% | Working on specific task |
-| **New** (+ 1 knowledge file) | ~1,100-1,600 | ~5-8% | Understanding methodology |
-
----
-
-## Maintenance Policy
-
-### When to Update ESSENTIAL.md
-- Current phase status changes
-- Critical rule changes (rare)
-- File location references change
-
-### When to Update Tier 2 (context/)
-- Coding standards evolve
-- Workflow processes change
-- Architecture changes
-
-### When to Update Tier 3 (knowledge/)
-- Design philosophy evolves
-- Methodology refinements
-- Historical insights
-
-### File Size Guidelines
-- **ESSENTIAL.md**: Keep < 100 lines (strict)
-- **Tier 2 files**: < 1,000 lines preferred, split if larger
-- **Tier 3 files**: No limit (rarely loaded anyway)
-
----
-
-## Migration Notes (2025-12-09)
-
-### What Changed
+### 2025-12-09 - Initial Structure
 - Created 3-tier structure (was 2-tier)
 - Moved ~8,400 lines from "always load" to "load on demand"
-- Renamed files for brevity (removed _STRATEGY, _PROCESS suffixes)
-- Archived QUICK_REFERENCE.md (replaced by ESSENTIAL.md)
-
-### What Stayed the Same
-- File content is unchanged (only moved/renamed)
-- All information is still accessible
-- No information was deleted
-
-### For Existing Sessions
-- Old `@.ai-context/core/QUICK_REFERENCE.md` → Now `@.ai-context/ESSENTIAL.md`
-- Old `@.ai-context/development/` → Now `@.ai-context/context/coding/`
-- Old `@.ai-context/architecture/` → Now `@.ai-context/context/architecture/`
-- Old `@.ai-context/workflows/` → Now `@.ai-context/context/workflows/`
-- Old `@.ai-context/core/DESIGN_PHILOSOPHY.md` → Now `@.ai-context/knowledge/methodology/`
 
 ---
 
-**This structure ensures AI assistants can efficiently access the right information at the right time, with minimal token overhead.**
+**This structure ensures AI assistants can efficiently access the right information at the right time, with minimal token overhead and cross-project consistency.**

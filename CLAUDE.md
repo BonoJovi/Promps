@@ -15,6 +15,8 @@ This file automatically loads **minimal** project context at the start of each C
 
 ## Load When Needed (On-Demand Contexts)
 
+### Project-Specific Context
+
 **For Coding Tasks**:
 - Conventions: `@.ai-context/context/coding/CONVENTIONS.md`
 - Testing Strategy: `@.ai-context/context/coding/TESTING.md`
@@ -27,16 +29,39 @@ This file automatically loads **minimal** project context at the start of each C
 **For Workflow Tasks**:
 - Branching Strategy: `@.ai-context/context/workflows/BRANCHING.md`
 - Release Process: `@.ai-context/context/workflows/RELEASE.md`
-- GitHub Projects: `@.ai-context/context/workflows/GITHUB_PROJECTS.md`
 - i18n Management: `@.ai-context/context/workflows/I18N.md`
 
+### Shared Context (via submodule)
+
 **For Understanding Methodology** (rarely needed):
-- AI Collaboration: `@.ai-context/knowledge/methodology/AI_COLLABORATION.md`
-- Design Philosophy: `@.ai-context/knowledge/methodology/DESIGN_PHILOSOPHY.md`
-- Scale & Architecture: `@.ai-context/knowledge/methodology/SCALE_ARCHITECTURE.md`
+- AI Collaboration: `@.ai-context/shared/methodology/AI_COLLABORATION.md`
+- Design Philosophy: `@.ai-context/shared/methodology/DESIGN_PHILOSOPHY.md`
+- Scale & Architecture: `@.ai-context/shared/methodology/SCALE_ARCHITECTURE.md`
+
+**Common Workflows**:
+- Documentation Creation: `@.ai-context/shared/workflows/DOCUMENTATION_CREATION.md`
+- GitHub Projects: `@.ai-context/shared/workflows/GITHUB_PROJECTS.md`
+
+**Developer Profile** (for career/context reference):
+- `@.ai-context/shared/developer/YOSHIHIRO_NAKAHARA_PROFILE.md`
+
+**Analytics** (SEO tracking across all projects):
+- `@.ai-context/shared/analytics/SEO_Keywords_Tracking.md`
 
 **Insights** (optional reading):
-- `@.ai-context/insights/` - Various architectural and development insights
+- `@.ai-context/shared/insights/` - Various architectural and development insights
+
+---
+
+## Submodule Management
+
+The `shared/` directory is a Git submodule pointing to:
+https://github.com/BonoJovi/ai-context-shared
+
+**Update shared context**:
+```bash
+git submodule update --remote
+```
 
 ---
 
