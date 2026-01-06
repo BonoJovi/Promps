@@ -670,8 +670,17 @@ function onBlocklyChange(event) {
         return;
     }
 
-    // Generate DSL code
-    const code = javascriptGenerator.workspaceToCode(workspace);
+    // Generate DSL code only from connected block chains
+    let code = '';
+    const topBlocks = workspace.getTopBlocks(true);
+
+    for (const block of topBlocks) {
+        // Only process blocks that are part of a chain (have at least one connected block)
+        // A standalone block (no next connection) is ignored
+        if (block.getNextBlock() !== null) {
+            code += javascriptGenerator.blockToCode(block);
+        }
+    }
 
     // Update preview (will be implemented in main.js)
     if (typeof updatePreview === 'function') {
@@ -680,11 +689,22 @@ function onBlocklyChange(event) {
 }
 
 /**
- * Get DSL code from current workspace
+ * Get DSL code from current workspace (only from connected block chains)
  */
 function getWorkspaceCode() {
     if (!workspace) {
         return '';
     }
-    return javascriptGenerator.workspaceToCode(workspace).trim();
+
+    let code = '';
+    const topBlocks = workspace.getTopBlocks(true);
+
+    for (const block of topBlocks) {
+        // Only process blocks that are part of a chain (have at least one connected block)
+        if (block.getNextBlock() !== null) {
+            code += javascriptGenerator.blockToCode(block);
+        }
+    }
+
+    return code.trim();
 }
