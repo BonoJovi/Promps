@@ -449,12 +449,85 @@ describe('Verb Blocks (Phase 3)', () => {
         expect(result).toBe('翻訳して ');
     });
 
-    test('should handle all 3 fixed verb types', () => {
+    test('should handle all 3 original fixed verb types', () => {
         const verbs = ['分析して', '要約して', '翻訳して'];
 
         verbs.forEach(verb => {
             const result = generateVerbDSL(verb);
             expect(result).toBe(verb + ' ');
+        });
+    });
+
+    // Phase 3-2: Additional verb blocks (9 new verbs)
+    test('should generate correct DSL for 作成して verb', () => {
+        const result = generateVerbDSL('作成して');
+        expect(result).toBe('作成して ');
+    });
+
+    test('should generate correct DSL for 生成して verb', () => {
+        const result = generateVerbDSL('生成して');
+        expect(result).toBe('生成して ');
+    });
+
+    test('should generate correct DSL for 変換して verb', () => {
+        const result = generateVerbDSL('変換して');
+        expect(result).toBe('変換して ');
+    });
+
+    test('should generate correct DSL for 削除して verb', () => {
+        const result = generateVerbDSL('削除して');
+        expect(result).toBe('削除して ');
+    });
+
+    test('should generate correct DSL for 更新して verb', () => {
+        const result = generateVerbDSL('更新して');
+        expect(result).toBe('更新して ');
+    });
+
+    test('should generate correct DSL for 抽出して verb', () => {
+        const result = generateVerbDSL('抽出して');
+        expect(result).toBe('抽出して ');
+    });
+
+    test('should generate correct DSL for 説明して verb', () => {
+        const result = generateVerbDSL('説明して');
+        expect(result).toBe('説明して ');
+    });
+
+    test('should generate correct DSL for 解説して verb', () => {
+        const result = generateVerbDSL('解説して');
+        expect(result).toBe('解説して ');
+    });
+
+    test('should generate correct DSL for 教えて verb', () => {
+        const result = generateVerbDSL('教えて');
+        expect(result).toBe('教えて ');
+    });
+
+    test('should handle all 12 fixed verb types (Phase 3 complete)', () => {
+        const verbs = [
+            // 分析系 (Analysis)
+            '分析して', '要約して', '翻訳して',
+            // 変換・生成系 (Conversion/Generation)
+            '作成して', '生成して', '変換して',
+            // 操作系 (Operations)
+            '削除して', '更新して', '抽出して',
+            // 説明系 (Explanation)
+            '説明して', '解説して', '教えて'
+        ];
+
+        verbs.forEach(verb => {
+            const result = generateVerbDSL(verb);
+            expect(result).toBe(verb + ' ');
+        });
+    });
+
+    test('new verb blocks should not have _N: prefix', () => {
+        const newVerbs = ['作成して', '生成して', '変換して', '削除して', '更新して', '抽出して', '説明して', '解説して', '教えて'];
+
+        newVerbs.forEach(verb => {
+            const result = generateVerbDSL(verb);
+            expect(result).not.toContain('_N:');
         });
     });
 
@@ -629,5 +702,222 @@ describe('Verb Blocks (Phase 3)', () => {
 
         const code = blocks.map(generateDSL).join('');
         expect(code).toBe('_N:User が _N:Document を 分析して _N:Result を 要約して ');
+    });
+
+    // Phase 3-2: Sentence tests for new verb categories
+
+    // 変換・生成系 (Conversion/Generation) tests
+    test('should generate sentence with 作成して verb', () => {
+        // Sentence: Report を 作成して
+        const blocks = [
+            { type: 'noun', text: 'Report' },
+            { type: 'particle', text: 'を' },
+            { type: 'verb', text: '作成して' }
+        ];
+
+        const generateDSL = (block) => {
+            if (block.type === 'noun') {
+                return '_N:' + block.text + ' ';
+            } else {
+                return block.text + ' ';
+            }
+        };
+
+        const code = blocks.map(generateDSL).join('');
+        expect(code).toBe('_N:Report を 作成して ');
+    });
+
+    test('should generate sentence with 生成して verb', () => {
+        // Sentence: Template から Document を 生成して
+        const blocks = [
+            { type: 'noun', text: 'Template' },
+            { type: 'particle', text: 'から' },
+            { type: 'noun', text: 'Document' },
+            { type: 'particle', text: 'を' },
+            { type: 'verb', text: '生成して' }
+        ];
+
+        const generateDSL = (block) => {
+            if (block.type === 'noun') {
+                return '_N:' + block.text + ' ';
+            } else {
+                return block.text + ' ';
+            }
+        };
+
+        const code = blocks.map(generateDSL).join('');
+        expect(code).toBe('_N:Template から _N:Document を 生成して ');
+    });
+
+    test('should generate sentence with 変換して verb', () => {
+        // Sentence: Data を JSON に 変換して
+        const blocks = [
+            { type: 'noun', text: 'Data' },
+            { type: 'particle', text: 'を' },
+            { type: 'noun', text: 'JSON' },
+            { type: 'particle', text: 'に' },
+            { type: 'verb', text: '変換して' }
+        ];
+
+        const generateDSL = (block) => {
+            if (block.type === 'noun') {
+                return '_N:' + block.text + ' ';
+            } else {
+                return block.text + ' ';
+            }
+        };
+
+        const code = blocks.map(generateDSL).join('');
+        expect(code).toBe('_N:Data を _N:JSON に 変換して ');
+    });
+
+    // 操作系 (Operations) tests
+    test('should generate sentence with 削除して verb', () => {
+        // Sentence: File を 削除して
+        const blocks = [
+            { type: 'noun', text: 'File' },
+            { type: 'particle', text: 'を' },
+            { type: 'verb', text: '削除して' }
+        ];
+
+        const generateDSL = (block) => {
+            if (block.type === 'noun') {
+                return '_N:' + block.text + ' ';
+            } else {
+                return block.text + ' ';
+            }
+        };
+
+        const code = blocks.map(generateDSL).join('');
+        expect(code).toBe('_N:File を 削除して ');
+    });
+
+    test('should generate sentence with 更新して verb', () => {
+        // Sentence: Database を 更新して
+        const blocks = [
+            { type: 'noun', text: 'Database' },
+            { type: 'particle', text: 'を' },
+            { type: 'verb', text: '更新して' }
+        ];
+
+        const generateDSL = (block) => {
+            if (block.type === 'noun') {
+                return '_N:' + block.text + ' ';
+            } else {
+                return block.text + ' ';
+            }
+        };
+
+        const code = blocks.map(generateDSL).join('');
+        expect(code).toBe('_N:Database を 更新して ');
+    });
+
+    test('should generate sentence with 抽出して verb', () => {
+        // Sentence: Document から Keyword を 抽出して
+        const blocks = [
+            { type: 'noun', text: 'Document' },
+            { type: 'particle', text: 'から' },
+            { type: 'noun', text: 'Keyword' },
+            { type: 'particle', text: 'を' },
+            { type: 'verb', text: '抽出して' }
+        ];
+
+        const generateDSL = (block) => {
+            if (block.type === 'noun') {
+                return '_N:' + block.text + ' ';
+            } else {
+                return block.text + ' ';
+            }
+        };
+
+        const code = blocks.map(generateDSL).join('');
+        expect(code).toBe('_N:Document から _N:Keyword を 抽出して ');
+    });
+
+    // 説明系 (Explanation) tests
+    test('should generate sentence with 説明して verb', () => {
+        // Sentence: Concept を 説明して
+        const blocks = [
+            { type: 'noun', text: 'Concept' },
+            { type: 'particle', text: 'を' },
+            { type: 'verb', text: '説明して' }
+        ];
+
+        const generateDSL = (block) => {
+            if (block.type === 'noun') {
+                return '_N:' + block.text + ' ';
+            } else {
+                return block.text + ' ';
+            }
+        };
+
+        const code = blocks.map(generateDSL).join('');
+        expect(code).toBe('_N:Concept を 説明して ');
+    });
+
+    test('should generate sentence with 解説して verb', () => {
+        // Sentence: Algorithm を 解説して
+        const blocks = [
+            { type: 'noun', text: 'Algorithm' },
+            { type: 'particle', text: 'を' },
+            { type: 'verb', text: '解説して' }
+        ];
+
+        const generateDSL = (block) => {
+            if (block.type === 'noun') {
+                return '_N:' + block.text + ' ';
+            } else {
+                return block.text + ' ';
+            }
+        };
+
+        const code = blocks.map(generateDSL).join('');
+        expect(code).toBe('_N:Algorithm を 解説して ');
+    });
+
+    test('should generate sentence with 教えて verb', () => {
+        // Sentence: Method を 教えて
+        const blocks = [
+            { type: 'noun', text: 'Method' },
+            { type: 'particle', text: 'を' },
+            { type: 'verb', text: '教えて' }
+        ];
+
+        const generateDSL = (block) => {
+            if (block.type === 'noun') {
+                return '_N:' + block.text + ' ';
+            } else {
+                return block.text + ' ';
+            }
+        };
+
+        const code = blocks.map(generateDSL).join('');
+        expect(code).toBe('_N:Method を 教えて ');
+    });
+
+    // Complex sentence with new verbs
+    test('should generate complex sentence with 抽出して and 変換して verbs', () => {
+        // Sentence: Document から Data を 抽出して JSON に 変換して
+        const blocks = [
+            { type: 'noun', text: 'Document' },
+            { type: 'particle', text: 'から' },
+            { type: 'noun', text: 'Data' },
+            { type: 'particle', text: 'を' },
+            { type: 'verb', text: '抽出して' },
+            { type: 'noun', text: 'JSON' },
+            { type: 'particle', text: 'に' },
+            { type: 'verb', text: '変換して' }
+        ];
+
+        const generateDSL = (block) => {
+            if (block.type === 'noun') {
+                return '_N:' + block.text + ' ';
+            } else {
+                return block.text + ' ';
+            }
+        };
+
+        const code = blocks.map(generateDSL).join('');
+        expect(code).toBe('_N:Document から _N:Data を 抽出して _N:JSON に 変換して ');
     });
 });

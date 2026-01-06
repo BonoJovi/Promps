@@ -1,6 +1,6 @@
 # AI Context - Essential Information Only
 
-**Last Updated**: 2025-12-15
+**Last Updated**: 2026-01-07
 **Purpose**: Minimal context for session startup (token optimization)
 **Keywords**: essential, quick start, overview, status, current state, 現在の状態, エッセンシャル, 概要, project status, version, tests, テスト, critical rules, 重要なルール, quick reference, クイックリファレンス, entry point, starting point
 **Related**: @README.md, @context/coding/API_STABILITY.md, @context/workflows/BRANCHING.md, @context/coding/TESTING.md
@@ -11,7 +11,7 @@
 
 **Version**: v0.0.3-1 (Verb blocks prototype release)
 **Phase**: Phase 3-前半 Complete (Verb blocks prototype)
-**Tests**: 81 tests at 100% passing (Backend 26 + Frontend 55)
+**Tests**: 102 tests at 100% passing (Backend 26 + Frontend 76)
 **Branch**: dev (integration branch)
 
 ---
@@ -29,7 +29,7 @@
 - Details: `@.ai-context/context/workflows/BRANCHING.md`
 
 ### 3. Testing Policy
-- **All tests must pass before merge** (81 tests currently)
+- **All tests must pass before merge** (102 tests currently)
 - Implement tests immediately after feature completion
 - Details: `@.ai-context/context/coding/TESTING.md`
 
@@ -43,7 +43,7 @@
 
 **Tests**:
 - Backend: `src/lib.rs` (13 tests), `src/commands.rs` (13 tests)
-- Frontend: `res/tests/` (55 tests)
+- Frontend: `res/tests/` (76 tests)
 
 ---
 

@@ -305,6 +305,172 @@ javascriptGenerator.forBlock['promps_verb_custom'] = function(block, generator) 
     return text + ' ';
 };
 
+// ============================================================================
+// Additional Verb Blocks (追加動詞ブロック) - Phase 3-2
+// ============================================================================
+
+/**
+ * Fixed Verb: 作成して (create)
+ */
+Blockly.Blocks['promps_verb_create'] = {
+    init: function() {
+        this.appendDummyInput()
+            .appendField(new Blockly.FieldLabel("作成して"));
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setColour(290);
+        this.setTooltip("動詞: 作成して");
+        this.setHelpUrl("");
+    }
+};
+javascriptGenerator.forBlock['promps_verb_create'] = function(block, generator) {
+    return '作成して ';
+};
+
+/**
+ * Fixed Verb: 生成して (generate)
+ */
+Blockly.Blocks['promps_verb_generate'] = {
+    init: function() {
+        this.appendDummyInput()
+            .appendField(new Blockly.FieldLabel("生成して"));
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setColour(290);
+        this.setTooltip("動詞: 生成して");
+        this.setHelpUrl("");
+    }
+};
+javascriptGenerator.forBlock['promps_verb_generate'] = function(block, generator) {
+    return '生成して ';
+};
+
+/**
+ * Fixed Verb: 変換して (convert)
+ */
+Blockly.Blocks['promps_verb_convert'] = {
+    init: function() {
+        this.appendDummyInput()
+            .appendField(new Blockly.FieldLabel("変換して"));
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setColour(290);
+        this.setTooltip("動詞: 変換して");
+        this.setHelpUrl("");
+    }
+};
+javascriptGenerator.forBlock['promps_verb_convert'] = function(block, generator) {
+    return '変換して ';
+};
+
+/**
+ * Fixed Verb: 削除して (delete)
+ */
+Blockly.Blocks['promps_verb_delete'] = {
+    init: function() {
+        this.appendDummyInput()
+            .appendField(new Blockly.FieldLabel("削除して"));
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setColour(290);
+        this.setTooltip("動詞: 削除して");
+        this.setHelpUrl("");
+    }
+};
+javascriptGenerator.forBlock['promps_verb_delete'] = function(block, generator) {
+    return '削除して ';
+};
+
+/**
+ * Fixed Verb: 更新して (update)
+ */
+Blockly.Blocks['promps_verb_update'] = {
+    init: function() {
+        this.appendDummyInput()
+            .appendField(new Blockly.FieldLabel("更新して"));
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setColour(290);
+        this.setTooltip("動詞: 更新して");
+        this.setHelpUrl("");
+    }
+};
+javascriptGenerator.forBlock['promps_verb_update'] = function(block, generator) {
+    return '更新して ';
+};
+
+/**
+ * Fixed Verb: 抽出して (extract)
+ */
+Blockly.Blocks['promps_verb_extract'] = {
+    init: function() {
+        this.appendDummyInput()
+            .appendField(new Blockly.FieldLabel("抽出して"));
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setColour(290);
+        this.setTooltip("動詞: 抽出して");
+        this.setHelpUrl("");
+    }
+};
+javascriptGenerator.forBlock['promps_verb_extract'] = function(block, generator) {
+    return '抽出して ';
+};
+
+/**
+ * Fixed Verb: 説明して (explain)
+ */
+Blockly.Blocks['promps_verb_explain'] = {
+    init: function() {
+        this.appendDummyInput()
+            .appendField(new Blockly.FieldLabel("説明して"));
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setColour(290);
+        this.setTooltip("動詞: 説明して");
+        this.setHelpUrl("");
+    }
+};
+javascriptGenerator.forBlock['promps_verb_explain'] = function(block, generator) {
+    return '説明して ';
+};
+
+/**
+ * Fixed Verb: 解説して (describe)
+ */
+Blockly.Blocks['promps_verb_describe'] = {
+    init: function() {
+        this.appendDummyInput()
+            .appendField(new Blockly.FieldLabel("解説して"));
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setColour(290);
+        this.setTooltip("動詞: 解説して");
+        this.setHelpUrl("");
+    }
+};
+javascriptGenerator.forBlock['promps_verb_describe'] = function(block, generator) {
+    return '解説して ';
+};
+
+/**
+ * Fixed Verb: 教えて (teach)
+ */
+Blockly.Blocks['promps_verb_teach'] = {
+    init: function() {
+        this.appendDummyInput()
+            .appendField(new Blockly.FieldLabel("教えて"));
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setColour(290);
+        this.setTooltip("動詞: 教えて");
+        this.setHelpUrl("");
+    }
+};
+javascriptGenerator.forBlock['promps_verb_teach'] = function(block, generator) {
+    return '教えて ';
+};
+
 /**
  * Initialize Blockly workspace
  */
@@ -380,6 +546,7 @@ function initBlockly() {
                 "name": "動詞",
                 "colour": "290",
                 "contents": [
+                    // 分析系
                     {
                         "kind": "block",
                         "type": "promps_verb_analyze"
@@ -392,6 +559,46 @@ function initBlockly() {
                         "kind": "block",
                         "type": "promps_verb_translate"
                     },
+                    // 変換・生成系
+                    {
+                        "kind": "block",
+                        "type": "promps_verb_create"
+                    },
+                    {
+                        "kind": "block",
+                        "type": "promps_verb_generate"
+                    },
+                    {
+                        "kind": "block",
+                        "type": "promps_verb_convert"
+                    },
+                    // 操作系
+                    {
+                        "kind": "block",
+                        "type": "promps_verb_delete"
+                    },
+                    {
+                        "kind": "block",
+                        "type": "promps_verb_update"
+                    },
+                    {
+                        "kind": "block",
+                        "type": "promps_verb_extract"
+                    },
+                    // 説明系
+                    {
+                        "kind": "block",
+                        "type": "promps_verb_explain"
+                    },
+                    {
+                        "kind": "block",
+                        "type": "promps_verb_describe"
+                    },
+                    {
+                        "kind": "block",
+                        "type": "promps_verb_teach"
+                    },
+                    // カスタム
                     {
                         "kind": "block",
                         "type": "promps_verb_custom"
