@@ -9,7 +9,7 @@
 
 ## Current Status
 
-**Version**: v0.0.3-1 (Verb blocks prototype release)
+**Version**: v0.0.3-2 (Verb blocks prototype release)
 **Phase**: Phase 3-前半 Complete (Verb blocks prototype)
 **Tests**: 102 tests at 100% passing (Backend 26 + Frontend 76)
 **Branch**: dev (integration branch)
