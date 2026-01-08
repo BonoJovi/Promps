@@ -6,7 +6,7 @@
 > **AIプロンプト作成のためのビジュアルブロックベースツール**
 
 [![Tech Preview](https://img.shields.io/badge/Status-Tech%20Preview-orange)](https://github.com/BonoJovi/Promps/releases)
-[![Version](https://img.shields.io/badge/Version-0.0.3--1-blue)](https://github.com/BonoJovi/Promps/releases/tag/v0.0.3-1)
+[![Version](https://img.shields.io/badge/Version-0.0.3--2-blue)](https://github.com/BonoJovi/Promps/releases/tag/v0.0.3-2)
 [![Rust](https://img.shields.io/badge/Rust-1.70+-orange.svg)](https://www.rust-lang.org/)
 [![Tauri](https://img.shields.io/badge/Tauri-v2-blue.svg)](https://tauri.app/)
 [![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
@@ -27,9 +27,9 @@
 いつもPrompsに関心を寄せていただき、誠にありがとうございます。
 プロジェクト発案者のBonoJovi(Yoshihiro NAKAHARA)です。
 
-**Ver.0.0.3-1 (プロトタイプ版) をリリースいたしました！**
+**Ver.0.0.3-2 (プロトタイプ版) をリリースいたしました！**
 
-今回のアップデートでは、**動詞ブロック機能（プロトタイプ）** を追加しました。固定動詞ブロック（「分析して」「要約して」「翻訳して」）とカスタム動詞ブロック（自由入力）が使えるようになり、より具体的なプロンプトを構築できるようになりました。
+今回のアップデートでは、**動詞ブロックを拡充**しました。従来の3種類（「分析して」「要約して」「翻訳して」）に加え、新たに「比較して」「調べて」「一覧にして」「説明して」「生成して」「評価して」「修正して」「変換して」の8種類を追加し、より多様なプロンプトを構築できるようになりました。また、接続されたブロックチェーンのみを翻訳対象とするバグ修正も行いました。
 
 このプロトタイプ版は、**ユーザーの皆さんからのフィードバック収集**を目的としています。
 
@@ -43,7 +43,7 @@ Prompsはまだテックプレビュー段階ですが、基本的なプロン�
 
 **テスターを募集しています！** あなたのフィードバックがPrompsの未来を形作ります。動作確認、バグ報告、機能リクエストなど、どんな形でも構いませんので、ぜひご協力ください。
 
-**2025-12-09 (JST) Written by Yoshihiro NAKAHARA**
+**2026-01-08 (JST) Written by Yoshihiro NAKAHARA**
 
 ---
 
@@ -52,9 +52,9 @@ Prompsはまだテックプレビュー段階ですが、基本的なプロン�
 Thank you for your continued interest in Promps.
 I'm BonoJovi (Yoshihiro NAKAHARA), the project initiator.
 
-**We have released Ver.0.0.3-1 (Prototype)!**
+**We have released Ver.0.0.3-2 (Prototype)!**
 
-This update introduces **Verb Blocks (Prototype)** functionality. You can now use fixed verb blocks ("analyze", "summarize", "translate") and a custom verb block (free text input) to construct more specific prompts.
+This update **expands the verb blocks** library. In addition to the original 3 verbs ("analyze", "summarize", "translate"), we've added 8 new verbs: "compare", "research", "list", "explain", "generate", "evaluate", "fix", and "convert", enabling you to build more diverse prompts. We also fixed a bug where only connected block chains are now translated.
 
 This prototype release aims to **collect feedback from users**.
 
@@ -68,7 +68,7 @@ Promps is still in Tech Preview stage, but the basic prompt building functionali
 
 **We're looking for testers!** Your feedback will shape the future of Promps. Whether it's testing functionality, reporting bugs, or requesting features, any form of contribution is welcome.
 
-**2025-12-09 (JST) Written by Yoshihiro NAKAHARA**
+**2026-01-08 (JST) Written by Yoshihiro NAKAHARA**
 
 </div>
 
@@ -76,12 +76,12 @@ Promps is still in Tech Preview stage, but the basic prompt building functionali
 
 ## ⚠️ Tech Preview Notice / テックプレビュー版について
 
-**This is a Technology Preview release (v0.0.3-1)** - a prototype version to gather feedback on verb blocks.
-**これはテクノロジープレビュー版(v0.0.3-1)です** - 動詞ブロックのフィードバック収集を目的としたプロトタイプ版です。
+**This is a Technology Preview release (v0.0.3-2)** - a prototype version to gather feedback on verb blocks.
+**これはテクノロジープレビュー版(v0.0.3-2)です** - 動詞ブロックのフィードバック収集を目的としたプロトタイプ版です。
 
 **What this means: / これが意味すること：**
 - ✅ Core functionality works and is ready for testing / コア機能は動作し、テスト可能な状態です
-- ✅ **NEW in v0.0.3-1:** Verb blocks (3 fixed + custom input) / **v0.0.3-1の新機能:** 動詞ブロック（固定3種＋カスタム入力）
+- ✅ **NEW in v0.0.3-2:** Expanded verb blocks (11 types + custom input) / **v0.0.3-2の新機能:** 動詞ブロック拡充（固定11種＋カスタム入力）
 - ✅ Particle blocks (9 types) / 助詞ブロック（9種類）
 - ✅ Collapsible category UI / 折りたたみ可能なカテゴリUI
 - 💬 **We need your feedback on verb blocks!** / **動詞ブロックへのフィードバックを募集中！**
@@ -99,7 +99,7 @@ Promps is still in Tech Preview stage, but the basic prompt building functionali
 ### 1. Download & Install / ダウンロード & インストール
 
 **Download the latest release: / 最新リリースをダウンロード：**
-- 📥 [Download v0.0.3-1](https://github.com/BonoJovi/Promps/releases/tag/v0.0.3-1)
+- 📥 [Download v0.0.3-2](https://github.com/BonoJovi/Promps/releases/tag/v0.0.3-2)
 
 **Available for: / 対応プラットフォーム：**
 - 🐧 Linux (AppImage, deb, rpm)
@@ -137,8 +137,8 @@ Drag blocks from the left panel to the workspace.
 - **✨ Particle Block (助詞)**: Japanese particles
   日本語の助詞（「が」「を」「に」「で」「と」「へ」「から」「まで」「より」）
 
-- **🎬 Verb Block (動詞) [NEW in v0.0.3-1]**: Common verbs + custom input
-  よく使う動詞（「分析して」「要約して」「翻訳して」）+ カスタム入力
+- **🎬 Verb Block (動詞) [Expanded in v0.0.3-2]**: 11 common verbs + custom input
+  よく使う動詞11種（「分析して」「要約して」「翻訳して」「比較して」「調べて」「一覧にして」「説明して」「生成して」「評価して」「修正して」「変換して」）+ カスタム入力
 
 - **📝 Other Block (その他)**: For other words
   その他の単語用
@@ -225,8 +225,8 @@ Text (NOUN) を English (NOUN) に 翻訳して
 - ✅ 9 types of particle blocks (が、を、に、で、と、へ、から、まで、より)
   9種類の助詞ブロック
 
-- ✅ **NEW in v0.0.3-1:** Verb blocks (3 fixed + custom input)
-  **v0.0.3-1新機能:** 動詞ブロック（固定3種＋カスタム入力）
+- ✅ **Expanded in v0.0.3-2:** Verb blocks (11 fixed + custom input)
+  **v0.0.3-2拡充:** 動詞ブロック（固定11種＋カスタム入力）
 
 - ✅ Collapsible category UI (Noun, Particle, Verb, Other)
   折りたたみ可能なカテゴリUI（名詞、助詞、動詞、その他）
@@ -279,8 +279,8 @@ We welcome **all types of contributions** - not just code!
 
 **No programming experience needed! / プログラミング経験不要！**
 
-**🎉 NEW: v0.0.3-1 with Verb Blocks (Prototype)!**
-**🎉 新着: v0.0.3-1 動詞ブロック搭載（プロトタイプ版）！**
+**🎉 NEW: v0.0.3-2 with Expanded Verb Blocks!**
+**🎉 新着: v0.0.3-2 動詞ブロック拡充版！**
 
 **Platform Status: / プラットフォーム状況：**
 - ✅ **Linux**: Verified and tested by developer / 開発者により検証済み・テスト済み
@@ -323,6 +323,24 @@ For code contributions:
 
 ## 🛣️ Release History / リリース履歴
 
+### Version 0.0.3-2 (2026-01-07)
+
+**New Features & Fixes: / 新機能と修正：**
+- ✨ Added 8 new verb blocks: compare, research, list, explain, generate, evaluate, fix, convert
+  新動詞ブロック8種追加: 比較して、調べて、一覧にして、説明して、生成して、評価して、修正して、変換して
+- 🐛 Fixed: Only connected block chains are now translated (was translating all blocks)
+  修正: 接続されたブロックチェーンのみを翻訳対象に（全ブロックが翻訳されていた問題を修正）
+- 🧪 Updated tests: 102 tests (Backend: 26, Frontend: 76, 100% passing)
+  テスト更新: 102テスト（バックエンド: 26, フロントエンド: 76, 100%合格）
+
+### Version 0.0.3-1 (2025-12-09)
+
+**Major Features: / 主要機能：**
+- ✨ Added verb blocks (3 fixed + custom input): analyze, summarize, translate
+  動詞ブロック追加（固定3種＋カスタム入力）: 分析して、要約して、翻訳して
+- 🧪 Prototype release for user feedback collection
+  ユーザーフィードバック収集のためのプロトタイプ版
+
 ### Version 0.0.2 (2025-12-06)
 
 **Major Features: / 主要機能：**
@@ -351,8 +369,8 @@ For code contributions:
 
 **Tests: / テスト：**
 - 🧪 Backend: 26 tests (100% passing)
-- 🧪 Frontend: 55 tests (100% passing)
-- 🧪 **Total: 81 tests** (100% passing)
+- 🧪 Frontend: 76 tests (100% passing)
+- 🧪 **Total: 102 tests** (100% passing)
 - 🧪 Includes: Particle blocks, Verb blocks (Phase 3), Category UI tests
 
 ---
