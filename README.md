@@ -178,7 +178,7 @@ Drag blocks from the left panel to the workspace.
 User (NOUN) が Order (NOUN) を 作成
 ```
 
-### Using Verb Blocks (v0.0.3-1) / 動詞ブロックの使用
+### Using Verb Blocks (v0.0.3-2) / 動詞ブロックの使用
 
 **Blocks: / ブロック：**
 ```
