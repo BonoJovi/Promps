@@ -4,7 +4,7 @@
 
 ---
 
-## 📋 セットアップ手順
+## [List] セットアップ手順
 
 ### ステップ 1: ディスカッション機能を有効化
 
@@ -25,12 +25,12 @@
 
 | カテゴリー名 | 絵文字 | タイプ | 説明 |
 |------------|--------|--------|------|
-| Announcements | 📢 | Announcement | 新バージョンリリース、重要なお知らせ（管理者のみ投稿可） |
-| Ideas | 💡 | Open Discussion | 新機能の提案、改善アイデア |
-| Q&A | 🙏 | Q&A | 使い方の質問、トラブルシューティング |
-| General | 🗣️ | Open Discussion | 雑談、フィードバック、コミュニティ交流 |
-| Development | 🛠️ | Open Discussion | 開発に関する議論、設計判断 |
-| Documentation | 📚 | Open Discussion | ドキュメント改善の提案 |
+| Announcements | [Announce] | Announcement | 新バージョンリリース、重要なお知らせ（管理者のみ投稿可） |
+| Ideas | [Idea] | Open Discussion | 新機能の提案、改善アイデア |
+| Q&A | [Thanks] | Q&A | 使い方の質問、トラブルシューティング |
+| General | [Speech]️ | Open Discussion | 雑談、フィードバック、コミュニティ交流 |
+| Development | [Tools]️ | Open Discussion | 開発に関する議論、設計判断 |
+| Documentation | [Books] | Open Discussion | ドキュメント改善の提案 |
 
 **設定手順:**
 
@@ -55,11 +55,11 @@
 
 ```
 .github/DISCUSSION_TEMPLATE/
-├── ideas.yml           # 💡 Ideas カテゴリー用
-├── question.yml        # 🙏 Q&A カテゴリー用
-├── general.yml         # 🗣️ General カテゴリー用
-├── development.yml     # 🛠️ Development カテゴリー用
-└── documentation.yml   # 📚 Documentation カテゴリー用
+├── ideas.yml           # [Idea] Ideas カテゴリー用
+├── question.yml        # [Thanks] Q&A カテゴリー用
+├── general.yml         # [Speech]️ General カテゴリー用
+├── development.yml     # [Tools]️ Development カテゴリー用
+└── documentation.yml   # [Books] Documentation カテゴリー用
 ```
 
 **テンプレートの適用:**
@@ -78,12 +78,12 @@
 
 カテゴリーは以下の順序で表示されることを推奨：
 
-1. 📢 Announcements
-2. 💡 Ideas
-3. 🙏 Q&A
-4. 🗣️ General
-5. 🛠️ Development
-6. 📚 Documentation
+1. [Announce] Announcements
+2. [Idea] Ideas
+3. [Thanks] Q&A
+4. [Speech]️ General
+5. [Tools]️ Development
+6. [Books] Documentation
 
 **並び替え方法:**
 - Categories設定画面でドラッグ&ドロップ
@@ -96,38 +96,38 @@
 
 1. **General** カテゴリーに「Welcome to Promps Discussions!」投稿を作成
 2. ディスカッションのガイドラインを簡潔に説明
-3. 📌 ピン留めする（投稿の右上メニュー → Pin discussion）
+3. [Pin] ピン留めする（投稿の右上メニュー → Pin discussion）
 
 **ウェルカムメッセージの例:**
 
 ```markdown
-# Welcome to Promps Discussions! 🎉
+# Welcome to Promps Discussions! [Party]
 
 Prompsプロジェクトのディスカッションへようこそ！
 
-## 📂 カテゴリーの使い分け
+## [Folder] カテゴリーの使い分け
 
-- **💡 Ideas**: 新機能の提案や改善アイデア
-- **🙏 Q&A**: 使い方の質問やトラブルシューティング
-- **🗣️ General**: 雑談、フィードバック、使用事例の共有
-- **🛠️ Development**: 開発に関する技術的な議論
-- **📚 Documentation**: ドキュメントの改善提案
+- **[Idea] Ideas**: 新機能の提案や改善アイデア
+- **[Thanks] Q&A**: 使い方の質問やトラブルシューティング
+- **[Speech]️ General**: 雑談、フィードバック、使用事例の共有
+- **[Tools]️ Development**: 開発に関する技術的な議論
+- **[Books] Documentation**: ドキュメントの改善提案
 
 詳しくは [DISCUSSIONS.md](../blob/dev/.github/DISCUSSIONS.md) をご覧ください。
 
-## 🤝 行動規範
+## [Handshake] 行動規範
 
 このコミュニティは [Code of Conduct](../blob/dev/CODE_OF_CONDUCT.md) に従います。
 敬意を持った建設的な議論を心がけましょう。
 
-## 🎉 コントリビューション歓迎！
+## [Party] コントリビューション歓迎！
 
 小さな質問や提案でも大歓迎です。気軽に投稿してください！
 ```
 
 ---
 
-## 🔧 Git操作（このファイルをリポジトリに追加）
+## [Fix] Git操作（このファイルをリポジトリに追加）
 
 作成したファイルをコミット・プッシュします：
 
@@ -170,7 +170,7 @@ git push origin dev
 
 ---
 
-## 📚 関連ドキュメント
+## [Books] 関連ドキュメント
 
 - [DISCUSSIONS.md](DISCUSSIONS.md) - 運用ガイドライン
 - [CONTRIBUTING.md](../CONTRIBUTING.md) - 貢献ガイドライン
@@ -178,7 +178,7 @@ git push origin dev
 
 ---
 
-## 💡 Tips
+## [Idea] Tips
 
 ### ディスカッションからIssueへの変換
 

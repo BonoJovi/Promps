@@ -16,7 +16,7 @@ Currently supported versions with security updates:
 
 If you discover a security vulnerability in Promps, please report it responsibly:
 
-### 🔒 Private Reporting (Preferred)
+### [Lock] Private Reporting (Preferred)
 
 1. **Do NOT** open a public issue on GitHub
 2. **Email us directly**: promps-dev@zundou.org
@@ -83,7 +83,7 @@ The following are generally **not** considered security vulnerabilities:
 
 ---
 
-Thank you for helping keep Promps secure! 🔒
+Thank you for helping keep Promps secure! [Lock]
 
 ---
 
@@ -107,7 +107,7 @@ Thank you for helping keep Promps secure! 🔒
 
 Promps でセキュリティ脆弱性を発見した場合は、責任ある方法で報告してください：
 
-### 🔒 非公開報告（推奨）
+### [Lock] 非公開報告（推奨）
 
 1. GitHub で公開 Issue を**作成しない**でください
 2. **直接メールで連絡**: promps-dev@zundou.org
@@ -174,4 +174,4 @@ Promps でセキュリティ脆弱性を発見した場合は、責任ある方�
 
 ---
 
-Promps のセキュリティ維持にご協力いただきありがとうございます！ 🔒
+Promps のセキュリティ維持にご協力いただきありがとうございます！ [Lock]

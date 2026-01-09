@@ -9,13 +9,13 @@
 - ⚠️ **Limited features** - only Noun and Other block types
 - ⚠️ **No grammar validation** - any block combination is allowed
 - ⚠️ **No project save/load** - sessions are not persistent
-- 🐛 **Bugs are expected** - please report them!
+- [Bug] **Bugs are expected** - please report them!
 
 **We're looking for testers!** Your feedback will directly shape the future of Promps.
 
 ---
 
-## 🎯 What's Included in v0.0.1
+## [Target] What's Included in v0.0.1
 
 ### Features
 - ✅ Visual block-based interface (powered by Blockly.js)
@@ -30,7 +30,7 @@
 
 ---
 
-## 📥 Installation
+## [Download] Installation
 
 ### Download Binaries
 
@@ -51,7 +51,7 @@ cargo tauri build
 
 ---
 
-## 🚀 Quick Start
+## [Rocket] Quick Start
 
 1. **Launch Promps**
 2. **Drag blocks** from the left panel to the workspace
@@ -73,7 +73,7 @@ User (NOUN) が Order (NOUN) を 作成
 
 ---
 
-## 🐛 Known Limitations (Tech Preview)
+## [Bug] Known Limitations (Tech Preview)
 
 - No grammar validation (any block combination is accepted)
 - No project save/load functionality
@@ -85,7 +85,7 @@ These limitations are intentional for the Tech Preview and will be addressed in 
 
 ---
 
-## 🤝 How to Help
+## [Handshake] How to Help
 
 ### We Need Your Feedback!
 
@@ -108,7 +108,7 @@ Help us by testing these scenarios:
 
 ---
 
-## 🛣️ Roadmap
+## [Road]️ Roadmap
 
 Based on this Tech Preview feedback, we plan to implement:
 
@@ -122,7 +122,7 @@ Based on this Tech Preview feedback, we plan to implement:
 
 ---
 
-## 📝 Full Changelog
+## [Note] Full Changelog
 
 ### Added
 - Visual block-based prompt builder interface
@@ -135,7 +135,7 @@ Based on this Tech Preview feedback, we plan to implement:
 
 ---
 
-## 📋 Documentation
+## [List] Documentation
 
 - [README](https://github.com/BonoJovi/Promps/blob/main/README.md)
 - [Contributing Guide](https://github.com/BonoJovi/Promps/blob/main/CONTRIBUTING.md)
@@ -143,18 +143,18 @@ Based on this Tech Preview feedback, we plan to implement:
 
 ---
 
-## 📧 Contact
+## [Email] Contact
 
 - **Issues**: https://github.com/BonoJovi/Promps/issues
 - **Email**: promps-dev@zundou.org
 
 ---
 
-## 🙏 Thank You!
+## [Thanks] Thank You!
 
 Thank you for being an early tester of Promps! Your feedback is invaluable and will directly influence the project's direction.
 
-**This is just the beginning** - let's build something amazing together! 🚀
+**This is just the beginning** - let's build something amazing together! [Rocket]
 
 ---
 
@@ -175,13 +175,13 @@ Thank you for being an early tester of Promps! Your feedback is invaluable and w
 - ⚠️ **機能は限定的** - 名詞ブロックとその他ブロックのみ
 - ⚠️ **文法チェックなし** - どんなブロックの組み合わせも許可
 - ⚠️ **プロジェクト保存/読込なし** - セッションは永続化されません
-- 🐛 **バグは想定内** - 見つけたら報告してください！
+- [Bug] **バグは想定内** - 見つけたら報告してください！
 
 **テスターを募集中！** あなたのフィードバックが Promps の未来を形作ります。
 
 ---
 
-## 🎯 v0.0.1 に含まれるもの
+## [Target] v0.0.1 に含まれるもの
 
 ### 機能
 - ✅ ビジュアルブロックベースインターフェース（Blockly.js 使用）
@@ -196,7 +196,7 @@ Thank you for being an early tester of Promps! Your feedback is invaluable and w
 
 ---
 
-## 📥 インストール
+## [Download] インストール
 
 ### バイナリをダウンロード
 
@@ -217,7 +217,7 @@ cargo tauri build
 
 ---
 
-## 🚀 クイックスタート
+## [Rocket] クイックスタート
 
 1. **Promps を起動**
 2. **左パネルからブロックをドラッグ** してワークスペースに配置
@@ -239,7 +239,7 @@ User (NOUN) が Order (NOUN) を 作成
 
 ---
 
-## 🐛 既知の制限事項（テックプレビュー）
+## [Bug] 既知の制限事項（テックプレビュー）
 
 - 文法チェックなし（どんなブロックの組み合わせも受け入れられます）
 - プロジェクト保存/読込機能なし
@@ -251,7 +251,7 @@ User (NOUN) が Order (NOUN) を 作成
 
 ---
 
-## 🤝 協力方法
+## [Handshake] 協力方法
 
 ### フィードバックをお願いします！
 
@@ -274,7 +274,7 @@ User (NOUN) が Order (NOUN) を 作成
 
 ---
 
-## 🛣️ ロードマップ
+## [Road]️ ロードマップ
 
 このテックプレビューのフィードバックに基づいて実装予定：
 
@@ -288,7 +288,7 @@ User (NOUN) が Order (NOUN) を 作成
 
 ---
 
-## 📝 完全な変更履歴
+## [Note] 完全な変更履歴
 
 ### 追加
 - ビジュアルブロックベースのプロンプトビルダーインターフェース
@@ -301,7 +301,7 @@ User (NOUN) が Order (NOUN) を 作成
 
 ---
 
-## 📋 ドキュメント
+## [List] ドキュメント
 
 - [README](https://github.com/BonoJovi/Promps/blob/main/README.md)
 - [貢献ガイド](https://github.com/BonoJovi/Promps/blob/main/CONTRIBUTING.md)
@@ -309,18 +309,18 @@ User (NOUN) が Order (NOUN) を 作成
 
 ---
 
-## 📧 連絡先
+## [Email] 連絡先
 
 - **Issues**: https://github.com/BonoJovi/Promps/issues
 - **Email**: promps-dev@zundou.org
 
 ---
 
-## 🙏 ありがとうございます！
+## [Thanks] ありがとうございます！
 
 Promps の初期テスターになっていただきありがとうございます！あなたのフィードバックは非常に貴重で、プロジェクトの方向性に直接影響します。
 
-**これは始まりに過ぎません** - 一緒に素晴らしいものを作りましょう！🚀
+**これは始まりに過ぎません** - 一緒に素晴らしいものを作りましょう！[Rocket]
 
 ---
 

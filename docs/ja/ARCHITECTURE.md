@@ -454,11 +454,11 @@ Promps アーキテクチャは**コンパイラパイプライン**を模倣：
 コンパイラフェーズ   Promps フェーズ         ステータス
 ─────────────────────────────────────────────────────────
 字句解析           →  トークンパーシング      ✅ Phase 0
-構文解析           →  AST 構築              🔜 Phase N
-構文検証           →  パターンマッチング     🔜 Phase N
+構文解析           →  AST 構築              [Soon] Phase N
+構文検証           →  パターンマッチング     [Soon] Phase N
 意味分析           → （なし - AI の仕事）    ❌ スコープ外
-型チェック         →  名詞の関係性           🔜 Phase N
-IR 生成            →  正規化された AST       🔜 Phase N+1
+型チェック         →  名詞の関係性           [Soon] Phase N
+IR 生成            →  正規化された AST       [Soon] Phase N+1
 コード生成         →  プロンプト出力         ✅ Phase 0
 ```
 
@@ -845,8 +845,8 @@ let parts = parse_input_checked(input)?;  // 検証エラーを取得
 
 **プラットフォームサポート**:
 - ✅ Linux（開発環境）
-- 🔜 Windows（将来）
-- 🔜 macOS（将来）
+- [Soon] Windows（将来）
+- [Soon] macOS（将来）
 
 **配布**:
 - ソースコード: GitHub リポジトリ

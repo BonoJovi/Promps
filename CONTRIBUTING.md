@@ -16,7 +16,7 @@ Thank you for your interest in contributing to Promps!
 
 ---
 
-## 🧪 We're Looking for Testers!
+## [Test] We're Looking for Testers!
 
 **Promps is in Technology Preview (v0.0.1)** and we're actively seeking testers to help validate the concept and improve the project.
 
@@ -43,7 +43,7 @@ Thank you for your interest in contributing to Promps!
 
 ---
 
-## 🐛 Reporting Bugs
+## [Bug] Reporting Bugs
 
 **Before submitting:**
 - Check [existing issues](https://github.com/BonoJovi/Promps/issues) to avoid duplicates
@@ -62,7 +62,7 @@ Thank you for your interest in contributing to Promps!
 
 ---
 
-## 💡 Suggesting Features
+## [Idea] Suggesting Features
 
 We welcome feature suggestions! Please:
 
@@ -75,7 +75,7 @@ We welcome feature suggestions! Please:
 
 ---
 
-## 🔧 Contributing Code (Future)
+## [Fix] Contributing Code (Future)
 
 **Note:** For v0.0.1, we're focusing on testing and feedback. Code contributions will be welcomed in future versions.
 
@@ -94,7 +94,7 @@ When code contributions are accepted:
 
 ---
 
-## 📝 Documentation
+## [Note] Documentation
 
 Documentation improvements are always welcome:
 - Fix typos or unclear explanations
@@ -103,20 +103,20 @@ Documentation improvements are always welcome:
 
 ---
 
-## 🤝 Code of Conduct
+## [Handshake] Code of Conduct
 
 All contributors must follow our [Code of Conduct](CODE_OF_CONDUCT.md).
 
 ---
 
-## 📧 Contact
+## [Email] Contact
 
 - **Issues**: https://github.com/BonoJovi/Promps/issues
 - **Email**: promps-dev@zundou.org
 
 ---
 
-Thank you for helping make Promps better! 🎉
+Thank you for helping make Promps better! [Party]
 
 ---
 
@@ -140,7 +140,7 @@ Promps への貢献に興味を持っていただき、ありがとうござい�
 
 ---
 
-## 🧪 テスターを募集しています！
+## [Test] テスターを募集しています！
 
 **Promps はテクノロジープレビュー（v0.0.1）** であり、コンセプト検証とプロジェクト改善のためのテスターを積極的に募集しています。
 
@@ -167,7 +167,7 @@ Promps への貢献に興味を持っていただき、ありがとうござい�
 
 ---
 
-## 🐛 バグの報告
+## [Bug] バグの報告
 
 **報告前の確認：**
 - [既存の Issue](https://github.com/BonoJovi/Promps/issues) で重複を確認
@@ -186,7 +186,7 @@ Promps への貢献に興味を持っていただき、ありがとうござい�
 
 ---
 
-## 💡 機能の提案
+## [Idea] 機能の提案
 
 機能提案を歓迎します！以下をお願いします：
 
@@ -199,7 +199,7 @@ Promps への貢献に興味を持っていただき、ありがとうござい�
 
 ---
 
-## 🔧 コードの貢献（将来）
+## [Fix] コードの貢献（将来）
 
 **注意:** v0.0.1 では、テストとフィードバックに焦点を当てています。コード貢献は将来のバージョンで歓迎します。
 
@@ -218,7 +218,7 @@ Promps への貢献に興味を持っていただき、ありがとうござい�
 
 ---
 
-## 📝 ドキュメント
+## [Note] ドキュメント
 
 ドキュメントの改善は常に歓迎します：
 - 誤字や不明瞭な説明の修正
@@ -227,17 +227,17 @@ Promps への貢献に興味を持っていただき、ありがとうござい�
 
 ---
 
-## 🤝 行動規範
+## [Handshake] 行動規範
 
 すべての貢献者は [行動規範](CODE_OF_CONDUCT.md) に従う必要があります。
 
 ---
 
-## 📧 連絡先
+## [Email] 連絡先
 
 - **Issues**: https://github.com/BonoJovi/Promps/issues
 - **Email**: promps-dev@zundou.org
 
 ---
 
-Promps をより良くするためのご協力ありがとうございます！ 🎉
+Promps をより良くするためのご協力ありがとうございます！ [Party]

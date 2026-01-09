@@ -1,6 +1,6 @@
 # Contributors
 
-Thank you to everyone who has contributed to Promps! 🎉
+Thank you to everyone who has contributed to Promps! [Party]
 
 ---
 
@@ -69,14 +69,14 @@ If you've contributed to Promps and would like to be listed here:
 
 ### What Counts as a Contribution?
 
-- 🐛 Reporting bugs
-- 💡 Suggesting features
-- 🧪 Testing and providing feedback
-- 📝 Improving documentation
-- 💻 Contributing code
-- 🌐 Translating to other languages
-- 🎨 Design suggestions
-- 💬 Helping other users
+- [Bug] Reporting bugs
+- [Idea] Suggesting features
+- [Test] Testing and providing feedback
+- [Note] Improving documentation
+- [PC] Contributing code
+- [Globe] Translating to other languages
+- [Art] Design suggestions
+- [Comment] Helping other users
 
 ---
 
@@ -94,7 +94,7 @@ Please see [CONTRIBUTING.md](CONTRIBUTING.md) for information on how to contribu
 
 # コントリビューター
 
-Promps に貢献してくださった皆様、ありがとうございます！🎉
+Promps に貢献してくださった皆様、ありがとうございます！[Party]
 
 ---
 
@@ -163,14 +163,14 @@ Promps に貢献し、このリストに掲載されたい場合：
 
 ### 何が貢献とみなされますか？
 
-- 🐛 バグの報告
-- 💡 機能の提案
-- 🧪 テストとフィードバックの提供
-- 📝 ドキュメントの改善
-- 💻 コードの貢献
-- 🌐 他言語への翻訳
-- 🎨 デザインの提案
-- 💬 他のユーザーへの支援
+- [Bug] バグの報告
+- [Idea] 機能の提案
+- [Test] テストとフィードバックの提供
+- [Note] ドキュメントの改善
+- [PC] コードの貢献
+- [Globe] 他言語への翻訳
+- [Art] デザインの提案
+- [Comment] 他のユーザーへの支援
 
 ---
 

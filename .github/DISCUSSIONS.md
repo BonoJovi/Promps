@@ -4,7 +4,7 @@
 
 ---
 
-## 🎯 ディスカッションの目的
+## [Target] ディスカッションの目的
 
 GitHub Discussionsは、Prompsプロジェクトに関するコミュニティの対話の場です。
 
@@ -16,9 +16,9 @@ GitHub Discussionsは、Prompsプロジェクトに関するコミュニティ�
 
 ---
 
-## 📂 カテゴリーの使い分け
+## [Folder] カテゴリーの使い分け
 
-### 📢 Announcements（お知らせ）
+### [Announce] Announcements（お知らせ）
 **タイプ:** 管理者のみ投稿可能
 
 **用途:**
@@ -30,7 +30,7 @@ GitHub Discussionsは、Prompsプロジェクトに関するコミュニティ�
 
 ---
 
-### 💡 Ideas（アイデア）
+### [Idea] Ideas（アイデア）
 **タイプ:** オープンディスカッション
 
 **用途:**
@@ -55,7 +55,7 @@ GitHub Discussionsは、Prompsプロジェクトに関するコミュニティ�
 
 ---
 
-### 🙏 Q&A（質問と回答）
+### [Thanks] Q&A（質問と回答）
 **タイプ:** Q&A形式
 
 **用途:**
@@ -86,7 +86,7 @@ GitHub Discussionsは、Prompsプロジェクトに関するコミュニティ�
 
 ---
 
-### 🗣️ General（一般）
+### [Speech]️ General（一般）
 **タイプ:** オープンディスカッション
 
 **用途:**
@@ -102,7 +102,7 @@ GitHub Discussionsは、Prompsプロジェクトに関するコミュニティ�
 
 ---
 
-### 🛠️ Development（開発）
+### [Tools]️ Development（開発）
 **タイプ:** オープンディスカッション
 
 **用途:**
@@ -128,7 +128,7 @@ GitHub Discussionsは、Prompsプロジェクトに関するコミュニティ�
 
 ---
 
-### 📚 Documentation（ドキュメント）
+### [Books] Documentation（ドキュメント）
 **タイプ:** オープンディスカッション
 
 **用途:**
@@ -163,7 +163,7 @@ GitHub Discussionsは、Prompsプロジェクトに関するコミュニティ�
 
 ---
 
-## 📋 投稿ガイドライン
+## [List] 投稿ガイドライン
 
 ### 良い投稿の例:
 - ✅ タイトルが内容を的確に表している
@@ -181,21 +181,21 @@ GitHub Discussionsは、Prompsプロジェクトに関するコミュニティ�
 
 ---
 
-## 🤝 行動規範
+## [Handshake] 行動規範
 
 このディスカッションは [Code of Conduct](../CODE_OF_CONDUCT.md) に従います。
 
 **重要な原則:**
-- 🌟 敬意を持った対話
-- 🌟 建設的なフィードバック
-- 🌟 多様性の尊重
-- 🌟 初心者に優しく
+- [Star] 敬意を持った対話
+- [Star] 建設的なフィードバック
+- [Star] 多様性の尊重
+- [Star] 初心者に優しく
 
 違反行為を発見した場合は、モデレーターに報告してください。
 
 ---
 
-## 🏷️ タグ・ラベルの活用
+## [Tag]️ タグ・ラベルの活用
 
 投稿時に適切なラベルを付けると、他のユーザーが見つけやすくなります：
 
@@ -208,7 +208,7 @@ GitHub Discussionsは、Prompsプロジェクトに関するコミュニティ�
 
 ---
 
-## 📞 サポートが必要な場合
+## [Phone] サポートが必要な場合
 
 **質問がある場合:**
 1. まず [Q&A カテゴリー](../../discussions/categories/q-a) を検索
@@ -226,7 +226,7 @@ GitHub Discussionsは、Prompsプロジェクトに関するコミュニティ�
 
 ---
 
-## 🎉 コミュニティへの貢献
+## [Party] コミュニティへの貢献
 
 以下の活動を歓迎します：
 
@@ -240,7 +240,7 @@ GitHub Discussionsは、Prompsプロジェクトに関するコミュニティ�
 
 ---
 
-## 📚 関連ドキュメント
+## [Books] 関連ドキュメント
 
 - [CONTRIBUTING.md](../CONTRIBUTING.md) - 貢献ガイドライン
 - [CODE_OF_CONDUCT.md](../CODE_OF_CONDUCT.md) - 行動規範

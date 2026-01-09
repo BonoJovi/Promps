@@ -6,7 +6,7 @@
 
 ## Phase 1: GUI Integration (Blockly.js)
 
-### 🚨 Critical: Input Validation & Limits
+### [Alert] Critical: Input Validation & Limits
 
 **Status**: Not Implemented  
 **Priority**: HIGH  

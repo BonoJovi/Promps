@@ -10,10 +10,10 @@
 - **Phase 0 (CLI)**: ✅ Complete (100%) - **Critical Foundation**
 - **Phase 1 (GUI)**: ✅ Complete (100%) - 42 tests at 100% passing
 - **Phase 2 (Particle Blocks)**: ✅ Complete (100%) - 68 tests at 100% passing - **v0.0.2**
-- **Phase 3 (Verb Blocks)**: 🔜 Next - Adding verb block types
+- **Phase 3 (Verb Blocks)**: [Soon] Next - Adding verb block types
 - **Phase N (Logic Check)**: ⏳ Main Challenge - 50-100 pattern matching
-- **Phase N+1 (File I/O)**: 📋 Planned
-- **Phase N+2 (Layout)**: 📋 Planned
+- **Phase N+1 (File I/O)**: [List] Planned
+- **Phase N+2 (Layout)**: [List] Planned
 
 **Current Development Status**:
 - **Architecture**: Mostly finalized

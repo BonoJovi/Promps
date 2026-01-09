@@ -460,11 +460,11 @@ Promps architecture mirrors a **compiler pipeline**:
 Compiler Phases       Promps Phases           Status
 ─────────────────────────────────────────────────────────
 Lexical Analysis   →  Token Parsing           ✅ Phase 0
-Syntax Analysis    →  AST Construction        🔜 Phase N
-Syntax Validation  →  Pattern Matching        🔜 Phase N
+Syntax Analysis    →  AST Construction        [Soon] Phase N
+Syntax Validation  →  Pattern Matching        [Soon] Phase N
 Semantic Analysis  →  (None - AI's job)       ❌ Out of scope
-Type Checking      →  Noun Relationships      🔜 Phase N
-IR Generation      →  Normalized AST          🔜 Phase N+1
+Type Checking      →  Noun Relationships      [Soon] Phase N
+IR Generation      →  Normalized AST          [Soon] Phase N+1
 Code Generation    →  Prompt Output           ✅ Phase 0
 ```
 
@@ -884,8 +884,8 @@ Added:
 
 **Platform Support**:
 - ✅ Linux (development environment)
-- 🔜 Windows (future)
-- 🔜 macOS (future)
+- [Soon] Windows (future)
+- [Soon] macOS (future)
 
 **Distribution**:
 - Source code: GitHub repository
