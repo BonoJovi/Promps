@@ -1,62 +1,41 @@
 # AI Context TODO
 
 **Last Updated**: 2026-01-09
-**Status**: In Progress
+**Status**: Completed
 
 ---
 
-## 4バイト絵文字の削除作業
+## 4バイト絵文字の削除作業 ✅ 完了
 
 ### 背景
-Tracpathが4バイトUTF-8文字（拡張絵文字）を正しく処理できないため、全リポジトリのMarkdownファイルから4バイト絵文字を削除する必要がある。
+Tracpathが4バイトUTF-8文字（拡張絵文字）を正しく処理できないため、全リポジトリのMarkdownファイルから4バイト絵文字を削除する必要があった。
 
 **確認済み:**
 - 3バイト絵文字（✅⚠✨❤など、U+2600〜U+27BF）は問題なし
 - 4バイト絵文字（[Art][Rocket][Party]など、U+1F300以降）が文字化けの原因
 
-### 対象リポジトリと修正量
+### 完了した作業 (2026-01-09)
 
-| リポジトリ | ファイル数 | 4バイト絵文字数 |
-|-----------|-----------|----------------|
-| Promps (dev) | 14 | 182 |
-| KakeiBonByRust (main/dev) | 33 | 580 |
-| KakeiBon (Lazarus, main/dev) | 1 | 25 |
-| Baconian (dev) | 3 | 33 |
-| **合計** | **51** | **820** |
+| リポジトリ | ファイル数 | ステータス |
+|-----------|-----------|-----------|
+| Promps (dev) | 15 | ✅ 完了 |
+| KakeiBonByRust (dev) | 33 | ✅ 完了 |
+| ai-context-shared (main) | 3 | ✅ 完了 |
+| Baconian | - | ✅ スキップ（sharedは未追跡）|
 
-### 修正方針
+### 置換ルール
 
-1. **作業ディレクトリ**: リポジトリの親ディレクトリから作業
-   - ディレクトリ移動のミスを防ぐため
-   - 関係ないディレクトリは一時退避
+- 4バイト絵文字 → テキスト代替（[Trophy], [Chart], [Bug]など）
+- 3バイト絵文字（✅⚠✨❤）は維持
 
-2. **置換ルール**:
-   - 4バイト絵文字 → テキスト代替（[OK], [New], [Bug]など）
-   - 3バイト絵文字（✅⚠✨❤）は維持
+### コミット情報
 
-3. **対象ファイル**: `*.md` (node_modules除外)
+```
+docs: Remove 4-byte UTF-8 emojis for Tracpath compatibility
 
-4. **ブランチ**:
-   - Promps: dev
-   - KakeiBonByRust: main, dev
-   - KakeiBon: main, dev
-   - Baconian: dev
-
-### 進捗
-
-- [x] Promps README.md - 4バイト絵文字削除完了
-- [x] Promps README.md - 3バイト絵文字復元完了
-- [ ] Promps - 他のmdファイル（14ファイル、182個）
-- [ ] KakeiBonByRust（33ファイル、580個）
-- [ ] KakeiBon（1ファイル、25個）
-- [ ] Baconian（3ファイル、33個）
-
-### 次のステップ
-
-1. 親ディレクトリに移動
-2. 関係ないディレクトリを一時退避
-3. sedスクリプトで一括置換
-4. 各リポジトリでコミット・プッシュ
+Replace 4-byte emojis (U+1F300+) with text alternatives.
+3-byte emojis (U+2600-27BF) are retained.
+```
 
 ---
 
@@ -65,3 +44,5 @@ Tracpathが4バイトUTF-8文字（拡張絵文字）を正しく処理できな
 - [x] Tracpath文字化け原因特定（4バイト絵文字）
 - [x] 3バイト絵文字の互換性確認（問題なし）
 - [x] 全リポジトリの修正量調査
+- [x] sedスクリプトで一括置換
+- [x] 各リポジトリでコミット・プッシュ
