@@ -1,8 +1,8 @@
-# 🎨 Promps - Visual Prompt Builder
+# Promps - Visual Prompt Builder
 
 <div align="center">
 
-> **A Visual Block-Based Tool for Creating Structured AI Prompts**  
+> **A Visual Block-Based Tool for Creating Structured AI Prompts**
 > **AIプロンプト作成のためのビジュアルブロックベースツール**
 
 [![Tech Preview](https://img.shields.io/badge/Status-Tech%20Preview-orange)](https://github.com/BonoJovi/Promps/releases)
@@ -11,14 +11,14 @@
 [![Tauri](https://img.shields.io/badge/Tauri-v2-blue.svg)](https://tauri.app/)
 [![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 
-**Build prompts by dragging and dropping blocks, just like Scratch!**  
+**Build prompts by dragging and dropping blocks, just like Scratch!**
 **Scratchのようにブロックをドラッグ&ドロップしてプロンプトを作成！**
 
 </div>
 
 ---
 
-## 💌 Message from Developer / 開発者からのメッセージ
+## Message from Developer / 開発者からのメッセージ
 
 <div style="border: 3px solid #4a90e2; padding: 20px; margin: 20px 0; background-color: #f8f9fa; font-size: 1.1em;">
 
@@ -33,7 +33,7 @@
 
 このプロトタイプ版は、**ユーザーの皆さんからのフィードバック収集**を目的としています。
 
-**📢 あなたの意見を聞かせてください！**
+**[Announcement] あなたの意見を聞かせてください！**
 - どんな動詞ブロックがあると便利ですか？
 - 動詞をどのようにカテゴリ分けすると使いやすいですか？
   - 例: 「分析系」「変換系」「操作系」など
@@ -58,7 +58,7 @@ This update **expands the verb blocks** library. In addition to the original 3 v
 
 This prototype release aims to **collect feedback from users**.
 
-**📢 We want to hear from you!**
+**[Announcement] We want to hear from you!**
 - What verb blocks would be useful for you?
 - How should we categorize verbs for better usability?
   - Example: "Analysis", "Conversion", "Operations", etc.
@@ -74,37 +74,37 @@ Promps is still in Tech Preview stage, but the basic prompt building functionali
 
 ---
 
-## ⚠️ Tech Preview Notice / テックプレビュー版について
+## [!] Tech Preview Notice / テックプレビュー版について
 
 **This is a Technology Preview release (v0.0.3-2)** - a prototype version to gather feedback on verb blocks.
 **これはテクノロジープレビュー版(v0.0.3-2)です** - 動詞ブロックのフィードバック収集を目的としたプロトタイプ版です。
 
 **What this means: / これが意味すること：**
-- ✅ Core functionality works and is ready for testing / コア機能は動作し、テスト可能な状態です
-- ✅ **NEW in v0.0.3-2:** Expanded verb blocks (11 types + custom input) / **v0.0.3-2の新機能:** 動詞ブロック拡充（固定11種＋カスタム入力）
-- ✅ Particle blocks (9 types) / 助詞ブロック（9種類）
-- ✅ Collapsible category UI / 折りたたみ可能なカテゴリUI
-- 💬 **We need your feedback on verb blocks!** / **動詞ブロックへのフィードバックを募集中！**
-- ⚠️ No grammar validation yet / 文法検証機能はまだありません
-- ⚠️ No project save/load yet / プロジェクト保存/読込機能はまだありません
-- 🐛 Bugs are expected - please report them! / バグは想定内です - ぜひ報告してください！
+- [OK] Core functionality works and is ready for testing / コア機能は動作し、テスト可能な状態です
+- [OK] **NEW in v0.0.3-2:** Expanded verb blocks (11 types + custom input) / **v0.0.3-2の新機能:** 動詞ブロック拡充（固定11種＋カスタム入力）
+- [OK] Particle blocks (9 types) / 助詞ブロック（9種類）
+- [OK] Collapsible category UI / 折りたたみ可能なカテゴリUI
+- [Feedback] **We need your feedback on verb blocks!** / **動詞ブロックへのフィードバックを募集中！**
+- [!] No grammar validation yet / 文法検証機能はまだありません
+- [!] No project save/load yet / プロジェクト保存/読込機能はまだありません
+- [Bug] Bugs are expected - please report them! / バグは想定内です - ぜひ報告してください！
 
-**We're looking for testers!** Your feedback will shape the future of Promps. See [CONTRIBUTING.md](CONTRIBUTING.md) for how to help.  
+**We're looking for testers!** Your feedback will shape the future of Promps. See [CONTRIBUTING.md](CONTRIBUTING.md) for how to help.
 **テスターを募集しています！** あなたのフィードバックがPrompsの未来を形作ります。協力方法は[CONTRIBUTING.md](CONTRIBUTING.md)をご覧ください。
 
 ---
 
-## 🚀 Quick Start / クイックスタート
+## Quick Start / クイックスタート
 
 ### 1. Download & Install / ダウンロード & インストール
 
 **Download the latest release: / 最新リリースをダウンロード：**
-- 📥 [Download v0.0.3-2](https://github.com/BonoJovi/Promps/releases/tag/v0.0.3-2)
+- [Download v0.0.3-2](https://github.com/BonoJovi/Promps/releases/tag/v0.0.3-2)
 
 **Available for: / 対応プラットフォーム：**
-- 🐧 Linux (AppImage, deb, rpm)
-- 🪟 Windows (exe installer, msi)
-- 🍎 macOS (dmg for Intel and Apple Silicon)
+- Linux (AppImage, deb, rpm)
+- Windows (exe installer, msi)
+- macOS (dmg for Intel and Apple Silicon)
 
 ### 2. Build from Source / ソースからビルド
 
@@ -122,49 +122,49 @@ cargo tauri dev
 
 ---
 
-## 📖 How to Use / 使い方
+## How to Use / 使い方
 
 ### Step 1: Place Blocks / ステップ1: ブロックを配置
 
-Drag blocks from the left panel to the workspace.  
+Drag blocks from the left panel to the workspace.
 左パネルからワークスペースにブロックをドラッグします。
 
 **Available block types: / 利用可能なブロックタイプ：**
 
-- **🏷️ Noun Block (名詞)**: For entities like "User", "Order", "Database"
+- **Noun Block (名詞)**: For entities like "User", "Order", "Database"
   エンティティ用（「ユーザー」「注文」「データベース」など）
 
-- **✨ Particle Block (助詞)**: Japanese particles
+- **Particle Block (助詞)**: Japanese particles
   日本語の助詞（「が」「を」「に」「で」「と」「へ」「から」「まで」「より」）
 
-- **🎬 Verb Block (動詞) [Expanded in v0.0.3-2]**: 11 common verbs + custom input
+- **Verb Block (動詞) [Expanded in v0.0.3-2]**: 11 common verbs + custom input
   よく使う動詞11種（「分析して」「要約して」「翻訳して」「比較して」「調べて」「一覧にして」「説明して」「生成して」「評価して」「修正して」「変換して」）+ カスタム入力
 
-- **📝 Other Block (その他)**: For other words
+- **Other Block (その他)**: For other words
   その他の単語用
 
 ### Step 2: Connect Blocks / ステップ2: ブロックを接続
 
-- Snap blocks together to form sentences  
+- Snap blocks together to form sentences
   ブロックをスナップして文を形成します
-  
-- Blocks connect vertically to create sequences  
+
+- Blocks connect vertically to create sequences
   ブロックは縦方向に接続してシーケンスを作成します
 
 ### Step 3: Generate Prompt / ステップ3: プロンプトを生成
 
-- Your prompt appears in real-time in the preview panel  
+- Your prompt appears in real-time in the preview panel
   プレビューパネルにリアルタイムでプロンプトが表示されます
-  
-- Noun blocks are automatically marked with `(NOUN)` in the output  
+
+- Noun blocks are automatically marked with `(NOUN)` in the output
   名詞ブロックは出力で自動的に`(NOUN)`マークが付きます
-  
-- Copy the generated prompt for use with AI assistants  
+
+- Copy the generated prompt for use with AI assistants
   生成されたプロンプトをコピーしてAIアシスタントで使用できます
 
 ---
 
-## 💡 Example Usage / 使用例
+## Example Usage / 使用例
 
 ### Building a Simple Prompt / シンプルなプロンプトの構築
 
@@ -215,151 +215,151 @@ Text (NOUN) を English (NOUN) に 翻訳して
 
 ---
 
-## 🎯 Features / 機能
+## Features / 機能
 
 ### Current Features / 現在の機能
 
-- ✅ Visual block-based interface (powered by Blockly.js)
+- [OK] Visual block-based interface (powered by Blockly.js)
   ビジュアルブロックベースのインターフェース（Blockly.js搭載）
 
-- ✅ 9 types of particle blocks (が、を、に、で、と、へ、から、まで、より)
+- [OK] 9 types of particle blocks (が、を、に、で、と、へ、から、まで、より)
   9種類の助詞ブロック
 
-- ✅ **Expanded in v0.0.3-2:** Verb blocks (11 fixed + custom input)
+- [OK] **Expanded in v0.0.3-2:** Verb blocks (11 fixed + custom input)
   **v0.0.3-2拡充:** 動詞ブロック（固定11種＋カスタム入力）
 
-- ✅ Collapsible category UI (Noun, Particle, Verb, Other)
+- [OK] Collapsible category UI (Noun, Particle, Verb, Other)
   折りたたみ可能なカテゴリUI（名詞、助詞、動詞、その他）
 
-- ✅ Real-time prompt preview
+- [OK] Real-time prompt preview
   リアルタイムプロンプトプレビュー
 
-- ✅ Automatic noun detection and marking
+- [OK] Automatic noun detection and marking
   自動名詞検出とマーキング
 
-- ✅ Simple drag-and-drop operation
+- [OK] Simple drag-and-drop operation
   シンプルなドラッグ&ドロップ操作
 
-- ✅ Desktop application (Tauri + Rust)
+- [OK] Desktop application (Tauri + Rust)
   デスクトップアプリケーション（Tauri + Rust）
 
-- ✅ Multi-platform support (Linux, Windows, macOS)
+- [OK] Multi-platform support (Linux, Windows, macOS)
   マルチプラットフォーム対応
 
 ### Coming Soon / 近日実装予定
 
-- 🔜 More verb types and adjective blocks
+- [Soon] More verb types and adjective blocks
   より多くの動詞タイプと形容詞ブロック
 
-- 🔜 Grammar validation
+- [Soon] Grammar validation
   文法検証
 
-- 🔜 Project save/load  
+- [Soon] Project save/load
   プロジェクトの保存/読込
 
-- 🔜 Layout customization  
+- [Soon] Layout customization
   レイアウトのカスタマイズ
 
-- 🔜 Example templates  
+- [Soon] Example templates
   サンプルテンプレート
 
 ---
 
-## 🤝 Join Our Community / コミュニティに参加
+## Join Our Community / コミュニティに参加
 
-**Help make Promps better for everyone!**  
+**Help make Promps better for everyone!**
 **Prompsをみんなのためにより良くするお手伝いをしてください！**
 
-We welcome **all types of contributions** - not just code!  
+We welcome **all types of contributions** - not just code!
 **あらゆる形の貢献**を歓迎します—コードだけではありません！
 
 ---
 
-### 🧪 Testers Wanted! / テスター募集！
+### Testers Wanted! / テスター募集！
 
 **No programming experience needed! / プログラミング経験不要！**
 
-**🎉 NEW: v0.0.3-2 with Expanded Verb Blocks!**
-**🎉 新着: v0.0.3-2 動詞ブロック拡充版！**
+**[NEW] v0.0.3-2 with Expanded Verb Blocks!**
+**[新着] v0.0.3-2 動詞ブロック拡充版！**
 
 **Platform Status: / プラットフォーム状況：**
-- ✅ **Linux**: Verified and tested by developer / 開発者により検証済み・テスト済み
-- ⚠️ **Windows**: **Binary available but needs real hardware testing!** / **バイナリは利用可能だが実機テストが必要！**
-- ⚠️ **macOS (Intel & Apple Silicon)**: **Binary available but needs real hardware testing!** / **バイナリは利用可能だが実機テストが必要！**
+- [OK] **Linux**: Verified and tested by developer / 開発者により検証済み・テスト済み
+- [!] **Windows**: **Binary available but needs real hardware testing!** / **バイナリは利用可能だが実機テストが必要！**
+- [!] **macOS (Intel & Apple Silicon)**: **Binary available but needs real hardware testing!** / **バイナリは利用可能だが実機テストが必要！**
 
 **What we need from you: / お願いしたいこと：**
-- 🔍 Download and test the latest release / 最新リリースをダウンロード＆テスト
-- 🐛 Report any bugs or issues you encounter / 遭遇したバグや問題を報告
-- ✅ Confirm if basic features work correctly / 基本機能が正常に動作するか確認
-- 💬 Share your experience (UI/UX feedback welcome!) / 使用感を共有（UI/UXフィードバック歓迎！）
-- 💡 Suggest new features or improvements / 新機能や改善点を提案
+- Download and test the latest release / 最新リリースをダウンロード＆テスト
+- Report any bugs or issues you encounter / 遭遇したバグや問題を報告
+- Confirm if basic features work correctly / 基本機能が正常に動作するか確認
+- Share your experience (UI/UX feedback welcome!) / 使用感を共有（UI/UXフィードバック歓迎！）
+- Suggest new features or improvements / 新機能や改善点を提案
 
 **Download:** [Latest Release](https://github.com/BonoJovi/Promps/releases/latest)
 
 ---
 
-### 💡 Feature Requests & Feedback / 機能リクエスト & フィードバック
+### Feature Requests & Feedback / 機能リクエスト & フィードバック
 
 Have ideas to make Promps better?
 Prompsをより良くするアイデアはありますか？
 
-- 🆕 **[Submit Feature Request](https://github.com/BonoJovi/Promps/issues/new)**
-- 🐛 **[Report a Bug](https://github.com/BonoJovi/Promps/issues/new)**
-- 💬 **[Join Discussions](https://github.com/BonoJovi/Promps/discussions)** - Q&A, Ideas, General chat / 質問、アイデア、雑談
-  - 👋 **[Welcome Post](https://github.com/BonoJovi/Promps/discussions/1)** - Start here! / ここから始めよう！
-  - 📖 **[Discussion Guidelines](.github/DISCUSSIONS.md)** - How to use discussions / ディスカッション利用ガイド
+- [NEW] **[Submit Feature Request](https://github.com/BonoJovi/Promps/issues/new)**
+- [Bug] **[Report a Bug](https://github.com/BonoJovi/Promps/issues/new)**
+- [Chat] **[Join Discussions](https://github.com/BonoJovi/Promps/discussions)** - Q&A, Ideas, General chat / 質問、アイデア、雑談
+  - **[Welcome Post](https://github.com/BonoJovi/Promps/discussions/1)** - Start here! / ここから始めよう！
+  - **[Discussion Guidelines](.github/DISCUSSIONS.md)** - How to use discussions / ディスカッション利用ガイド
 
 ---
 
-### 💻 Developers / 開発者
+### Developers / 開発者
 
-For code contributions:  
+For code contributions:
 コード貢献について：
 
-- 📋 **[Contributing Guide](CONTRIBUTING.md)**
-- 📘 **[Development Documentation](docs/)**
+- **[Contributing Guide](CONTRIBUTING.md)**
+- **[Development Documentation](docs/)**
 
 ---
 
-## 🛣️ Release History / リリース履歴
+## Release History / リリース履歴
 
 ### Version 0.0.3-2 (2026-01-07)
 
 **New Features & Fixes: / 新機能と修正：**
-- ✨ Added 8 new verb blocks: compare, research, list, explain, generate, evaluate, fix, convert
+- [New] Added 8 new verb blocks: compare, research, list, explain, generate, evaluate, fix, convert
   新動詞ブロック8種追加: 比較して、調べて、一覧にして、説明して、生成して、評価して、修正して、変換して
-- 🐛 Fixed: Only connected block chains are now translated (was translating all blocks)
+- [Fix] Fixed: Only connected block chains are now translated (was translating all blocks)
   修正: 接続されたブロックチェーンのみを翻訳対象に（全ブロックが翻訳されていた問題を修正）
-- 🧪 Updated tests: 102 tests (Backend: 26, Frontend: 76, 100% passing)
+- [Test] Updated tests: 102 tests (Backend: 26, Frontend: 76, 100% passing)
   テスト更新: 102テスト（バックエンド: 26, フロントエンド: 76, 100%合格）
 
 ### Version 0.0.3-1 (2025-12-09)
 
 **Major Features: / 主要機能：**
-- ✨ Added verb blocks (3 fixed + custom input): analyze, summarize, translate
+- [New] Added verb blocks (3 fixed + custom input): analyze, summarize, translate
   動詞ブロック追加（固定3種＋カスタム入力）: 分析して、要約して、翻訳して
-- 🧪 Prototype release for user feedback collection
+- [Test] Prototype release for user feedback collection
   ユーザーフィードバック収集のためのプロトタイプ版
 
 ### Version 0.0.2 (2025-12-06)
 
 **Major Features: / 主要機能：**
-- ✨ Added 9 particle blocks (が、を、に、で、と、へ、から、まで、より)
-- ✨ Collapsible category UI in toolbox
-- ✨ Enhanced visual styling for categories
-- 🧪 Added 11 new frontend tests (68 total tests, 100% passing)
+- [New] Added 9 particle blocks (が、を、に、で、と、へ、から、まで、より)
+- [New] Collapsible category UI in toolbox
+- [New] Enhanced visual styling for categories
+- [Test] Added 11 new frontend tests (68 total tests, 100% passing)
 
 ### Version 0.0.1 (2025-11-25)
 
 **Initial Release: / 初回リリース：**
-- ✨ Visual block builder with Blockly.js
-- ✨ Noun and Other block types
-- ✨ Real-time prompt generation
-- ✨ Desktop application framework
+- [New] Visual block builder with Blockly.js
+- [New] Noun and Other block types
+- [New] Real-time prompt generation
+- [New] Desktop application framework
 
 ---
 
-## 📊 Technical Details / 技術詳細
+## Technical Details / 技術詳細
 
 **Tech Stack: / 技術スタック：**
 - **Backend**: Rust (with Tauri framework)
@@ -368,51 +368,51 @@ For code contributions:
 - **Build System**: Cargo + Tauri CLI
 
 **Tests: / テスト：**
-- 🧪 Backend: 26 tests (100% passing)
-- 🧪 Frontend: 76 tests (100% passing)
-- 🧪 **Total: 102 tests** (100% passing)
-- 🧪 Includes: Particle blocks, Verb blocks (Phase 3), Category UI tests
+- Backend: 26 tests (100% passing)
+- Frontend: 76 tests (100% passing)
+- **Total: 102 tests** (100% passing)
+- Includes: Particle blocks, Verb blocks (Phase 3), Category UI tests
 
 ---
 
-## 📝 License / ライセンス
+## License / ライセンス
 
-MIT License - see [LICENSE](LICENSE) file for details  
+MIT License - see [LICENSE](LICENSE) file for details
 MITライセンス - 詳細は[LICENSE](LICENSE)ファイルをご覧ください
 
 Copyright (c) 2025 Yoshihiro NAKAHARA
 
 ---
 
-## 📧 Contact / 連絡先
+## Contact / 連絡先
 
 - **Issues**: https://github.com/BonoJovi/Promps/issues
 - **Email**: promps-dev@zundou.org
 
 ---
 
-**Built with ❤️ for better AI collaboration**  
-**より良いAIコラボレーションのために ❤️ を込めて開発**
+**Built with love for better AI collaboration**
+**より良いAIコラボレーションのために愛を込めて開発**
 
 ---
 
 <!-- STATS_START -->
-## 📊 Repository Statistics
+## Repository Statistics
 
 <div align="center">
 
-### 📈 Daily Traffic
+### Daily Traffic
 
 ![Daily Traffic Stats](docs/stats_graph_daily.png)
 
-### 📊 Cumulative Traffic
+### Cumulative Traffic
 
 ![Cumulative Traffic Stats](docs/stats_graph_cumulative.png)
 
 | Metric | Count |
 |--------|-------|
-| 👁️ **Total Views** | **447** |
-| 📦 **Total Clones** | **599** |
+| **Total Views** | **447** |
+| **Total Clones** | **599** |
 
 *Last Updated: 2026-01-09 01:33 UTC*
 
