@@ -74,7 +74,7 @@ Promps is still in Tech Preview stage, but the basic prompt building functionali
 
 ---
 
-## [!] Tech Preview Notice / テックプレビュー版について
+## ⚠ Tech Preview Notice / テックプレビュー版について
 
 **This is a Technology Preview release (v0.0.3-2)** - a prototype version to gather feedback on verb blocks.
 **これはテクノロジープレビュー版(v0.0.3-2)です** - 動詞ブロックのフィードバック収集を目的としたプロトタイプ版です。
@@ -219,31 +219,31 @@ Text (NOUN) を English (NOUN) に 翻訳して
 
 ### Current Features / 現在の機能
 
-- [OK] Visual block-based interface (powered by Blockly.js)
+- ✅ Visual block-based interface (powered by Blockly.js)
   ビジュアルブロックベースのインターフェース（Blockly.js搭載）
 
-- [OK] 9 types of particle blocks (が、を、に、で、と、へ、から、まで、より)
+- ✅ 9 types of particle blocks (が、を、に、で、と、へ、から、まで、より)
   9種類の助詞ブロック
 
-- [OK] **Expanded in v0.0.3-2:** Verb blocks (11 fixed + custom input)
+- ✅ **Expanded in v0.0.3-2:** Verb blocks (11 fixed + custom input)
   **v0.0.3-2拡充:** 動詞ブロック（固定11種＋カスタム入力）
 
-- [OK] Collapsible category UI (Noun, Particle, Verb, Other)
+- ✅ Collapsible category UI (Noun, Particle, Verb, Other)
   折りたたみ可能なカテゴリUI（名詞、助詞、動詞、その他）
 
-- [OK] Real-time prompt preview
+- ✅ Real-time prompt preview
   リアルタイムプロンプトプレビュー
 
-- [OK] Automatic noun detection and marking
+- ✅ Automatic noun detection and marking
   自動名詞検出とマーキング
 
-- [OK] Simple drag-and-drop operation
+- ✅ Simple drag-and-drop operation
   シンプルなドラッグ&ドロップ操作
 
-- [OK] Desktop application (Tauri + Rust)
+- ✅ Desktop application (Tauri + Rust)
   デスクトップアプリケーション（Tauri + Rust）
 
-- [OK] Multi-platform support (Linux, Windows, macOS)
+- ✅ Multi-platform support (Linux, Windows, macOS)
   マルチプラットフォーム対応
 
 ### Coming Soon / 近日実装予定
@@ -279,13 +279,13 @@ We welcome **all types of contributions** - not just code!
 
 **No programming experience needed! / プログラミング経験不要！**
 
-**[NEW] v0.0.3-2 with Expanded Verb Blocks!**
+**✨ v0.0.3-2 with Expanded Verb Blocks!**
 **[新着] v0.0.3-2 動詞ブロック拡充版！**
 
 **Platform Status: / プラットフォーム状況：**
-- [OK] **Linux**: Verified and tested by developer / 開発者により検証済み・テスト済み
-- [!] **Windows**: **Binary available but needs real hardware testing!** / **バイナリは利用可能だが実機テストが必要！**
-- [!] **macOS (Intel & Apple Silicon)**: **Binary available but needs real hardware testing!** / **バイナリは利用可能だが実機テストが必要！**
+- ✅ **Linux**: Verified and tested by developer / 開発者により検証済み・テスト済み
+- ⚠ **Windows**: **Binary available but needs real hardware testing!** / **バイナリは利用可能だが実機テストが必要！**
+- ⚠ **macOS (Intel & Apple Silicon)**: **Binary available but needs real hardware testing!** / **バイナリは利用可能だが実機テストが必要！**
 
 **What we need from you: / お願いしたいこと：**
 - Download and test the latest release / 最新リリースをダウンロード＆テスト
@@ -303,7 +303,7 @@ We welcome **all types of contributions** - not just code!
 Have ideas to make Promps better?
 Prompsをより良くするアイデアはありますか？
 
-- [NEW] **[Submit Feature Request](https://github.com/BonoJovi/Promps/issues/new)**
+- ✨ **[Submit Feature Request](https://github.com/BonoJovi/Promps/issues/new)**
 - [Bug] **[Report a Bug](https://github.com/BonoJovi/Promps/issues/new)**
 - [Chat] **[Join Discussions](https://github.com/BonoJovi/Promps/discussions)** - Q&A, Ideas, General chat / 質問、アイデア、雑談
   - **[Welcome Post](https://github.com/BonoJovi/Promps/discussions/1)** - Start here! / ここから始めよう！
@@ -326,7 +326,7 @@ For code contributions:
 ### Version 0.0.3-2 (2026-01-07)
 
 **New Features & Fixes: / 新機能と修正：**
-- [New] Added 8 new verb blocks: compare, research, list, explain, generate, evaluate, fix, convert
+- ✨ Added 8 new verb blocks: compare, research, list, explain, generate, evaluate, fix, convert
   新動詞ブロック8種追加: 比較して、調べて、一覧にして、説明して、生成して、評価して、修正して、変換して
 - [Fix] Fixed: Only connected block chains are now translated (was translating all blocks)
   修正: 接続されたブロックチェーンのみを翻訳対象に（全ブロックが翻訳されていた問題を修正）
@@ -336,7 +336,7 @@ For code contributions:
 ### Version 0.0.3-1 (2025-12-09)
 
 **Major Features: / 主要機能：**
-- [New] Added verb blocks (3 fixed + custom input): analyze, summarize, translate
+- ✨ Added verb blocks (3 fixed + custom input): analyze, summarize, translate
   動詞ブロック追加（固定3種＋カスタム入力）: 分析して、要約して、翻訳して
 - [Test] Prototype release for user feedback collection
   ユーザーフィードバック収集のためのプロトタイプ版
@@ -344,18 +344,18 @@ For code contributions:
 ### Version 0.0.2 (2025-12-06)
 
 **Major Features: / 主要機能：**
-- [New] Added 9 particle blocks (が、を、に、で、と、へ、から、まで、より)
-- [New] Collapsible category UI in toolbox
-- [New] Enhanced visual styling for categories
+- ✨ Added 9 particle blocks (が、を、に、で、と、へ、から、まで、より)
+- ✨ Collapsible category UI in toolbox
+- ✨ Enhanced visual styling for categories
 - [Test] Added 11 new frontend tests (68 total tests, 100% passing)
 
 ### Version 0.0.1 (2025-11-25)
 
 **Initial Release: / 初回リリース：**
-- [New] Visual block builder with Blockly.js
-- [New] Noun and Other block types
-- [New] Real-time prompt generation
-- [New] Desktop application framework
+- ✨ Visual block builder with Blockly.js
+- ✨ Noun and Other block types
+- ✨ Real-time prompt generation
+- ✨ Desktop application framework
 
 ---
 
@@ -391,8 +391,8 @@ Copyright (c) 2025 Yoshihiro NAKAHARA
 
 ---
 
-**Built with love for better AI collaboration**
-**より良いAIコラボレーションのために愛を込めて開発**
+**Built with ❤ for better AI collaboration**
+**より良いAIコラボレーションのために ❤ を込めて開発**
 
 ---
 
