@@ -80,13 +80,13 @@ Promps is still in Tech Preview stage, but the basic prompt building functionali
 **これはテクノロジープレビュー版(v0.0.3-2)です** - 動詞ブロックのフィードバック収集を目的としたプロトタイプ版です。
 
 **What this means: / これが意味すること：**
-- [OK] Core functionality works and is ready for testing / コア機能は動作し、テスト可能な状態です
-- [OK] **NEW in v0.0.3-2:** Expanded verb blocks (11 types + custom input) / **v0.0.3-2の新機能:** 動詞ブロック拡充（固定11種＋カスタム入力）
-- [OK] Particle blocks (9 types) / 助詞ブロック（9種類）
-- [OK] Collapsible category UI / 折りたたみ可能なカテゴリUI
-- [Feedback] **We need your feedback on verb blocks!** / **動詞ブロックへのフィードバックを募集中！**
-- [!] No grammar validation yet / 文法検証機能はまだありません
-- [!] No project save/load yet / プロジェクト保存/読込機能はまだありません
+- ✅ Core functionality works and is ready for testing / コア機能は動作し、テスト可能な状態です
+- ✅ **NEW in v0.0.3-2:** Expanded verb blocks (11 types + custom input) / **v0.0.3-2の新機能:** 動詞ブロック拡充（固定11種＋カスタム入力）
+- ✅ Particle blocks (9 types) / 助詞ブロック（9種類）
+- ✅ Collapsible category UI / 折りたたみ可能なカテゴリUI
+- ✨ **We need your feedback on verb blocks!** / **動詞ブロックへのフィードバックを募集中！**
+- ⚠ No grammar validation yet / 文法検証機能はまだありません
+- ⚠ No project save/load yet / プロジェクト保存/読込機能はまだありません
 - [Bug] Bugs are expected - please report them! / バグは想定内です - ぜひ報告してください！
 
 **We're looking for testers!** Your feedback will shape the future of Promps. See [CONTRIBUTING.md](CONTRIBUTING.md) for how to help.
