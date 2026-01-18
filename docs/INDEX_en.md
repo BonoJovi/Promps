@@ -1,7 +1,7 @@
 # Promps Documentation
 
-**Version**: Phase 0
-**Last Updated**: 2025-11-25
+**Version**: v0.0.3-2 (Phase 3-First Half)
+**Last Updated**: 2026-01-19 (JST)
 
 ---
 
@@ -25,7 +25,7 @@ This directory contains technical documentation for **Promps Phase 0**, the foun
 ### For Developers
 
 **Core Functionality**:
-- **[CORE_FEATURES.md](./CORE_FEATURES.md)** - Comprehensive feature documentation
+- **[CORE_FEATURES.md](./developer/en/guides/CORE_FEATURES.md)** - Comprehensive feature documentation
   - Data structures (`PromptPart`)
   - Parsing engine details
   - Prompt generation algorithm
@@ -34,7 +34,7 @@ This directory contains technical documentation for **Promps Phase 0**, the foun
   - Usage examples
 
 **API Documentation**:
-- **[API_REFERENCE.md](./API_REFERENCE.md)** - Complete API reference
+- **[API_REFERENCE.md](./developer/en/api/API_REFERENCE.md)** - Complete API reference
   - Public functions (`parse_input`, `generate_prompt`)
   - Tauri commands
   - Data types
@@ -43,7 +43,7 @@ This directory contains technical documentation for **Promps Phase 0**, the foun
   - Migration guides
 
 **Architecture**:
-- **[ARCHITECTURE.md](./ARCHITECTURE.md)** - System architecture
+- **[ARCHITECTURE.md](./design/ARCHITECTURE_en.md)** - System architecture
   - High-level design
   - Module structure
   - Data flow
@@ -228,8 +228,8 @@ Documentation is updated:
 ### Process
 
 1. Identify documentation gap or outdated content
-2. Create/update document in `docs/` directory
-3. Update this README.md index if new document added
+2. Create/update document in appropriate `docs/` subdirectory
+3. Update this INDEX_en.md if new document added
 4. Review for clarity and accuracy
 5. Commit with descriptive message (e.g., "docs: add BLOCKLY_INTEGRATION.md")
 
@@ -303,6 +303,6 @@ For questions or suggestions, please open an issue on GitHub or contact us via e
 
 ---
 
-**Document Version**: 1.0
-**Last Updated**: 2025-11-25
-**Next Review**: Before Phase 1 release
+**Document Version**: 1.1
+**Last Updated**: 2026-01-19 (JST)
+**Next Review**: Before Phase 4 release

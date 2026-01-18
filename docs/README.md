@@ -1,28 +1,65 @@
 # Promps Documentation
 
-**Version**: Phase 0
-**Last Updated**: 2025-11-25
+**Version**: v0.0.3-2 (Phase 3-First Half)
+**Last Updated**: 2026-01-19 (JST)
 
 ---
 
 ## Language / 言語
 
-- **[English](./en/README.md)** - English documentation
-- **[日本語](./ja/README.md)** - 日本語ドキュメント
+- **[English](./INDEX_en.md)** - English documentation index
+- **[日本語](./INDEX_ja.md)** - 日本語ドキュメント目次
 
 ---
 
-## Quick Links
+## Directory Structure / ディレクトリ構成
+
+```
+docs/
+├── INDEX_ja.md          # 日本語目次
+├── INDEX_en.md          # English index
+├── design/              # Design documents / 設計ドキュメント
+│   ├── ARCHITECTURE.md
+│   └── ARCHITECTURE_en.md
+├── developer/           # Developer documentation / 開発者向け
+│   ├── ja/
+│   │   ├── api/         # API reference
+│   │   ├── contributor/ # Contributor guides
+│   │   ├── design/      # Design details
+│   │   ├── guides/      # Development guides
+│   │   └── setup/       # Setup guides
+│   └── en/
+│       ├── api/
+│       ├── design/
+│       └── guides/
+├── user/                # User documentation / ユーザー向け
+│   ├── ja/
+│   └── en/
+├── testing/             # Test documentation / テストドキュメント
+│   ├── ja/
+│   └── en/
+├── security/            # Security documentation / セキュリティ
+└── etc/                 # Miscellaneous / その他
+```
+
+---
+
+## Quick Links / クイックリンク
 
 ### English
-- [Core Features](./en/CORE_FEATURES.md) - Phase 0 feature documentation
-- [API Reference](./en/API_REFERENCE.md) - Complete API reference
-- [Architecture](./en/ARCHITECTURE.md) - System architecture
+- [Core Features](./developer/en/guides/CORE_FEATURES.md) - Feature documentation
+- [API Reference](./developer/en/api/API_REFERENCE.md) - Complete API reference
+- [Architecture](./design/ARCHITECTURE_en.md) - System architecture
 
 ### 日本語
-- [コア機能](./ja/CORE_FEATURES.md) - Phase 0 機能ドキュメント
-- [API リファレンス](./ja/API_REFERENCE.md) - 完全な API 仕様書
-- [アーキテクチャ](./ja/ARCHITECTURE.md) - システムアーキテクチャ
+- [コア機能](./developer/ja/guides/CORE_FEATURES.md) - 機能ドキュメント
+- [API リファレンス](./developer/ja/api/API_REFERENCE.md) - 完全な API 仕様書
+- [アーキテクチャ](./design/ARCHITECTURE.md) - システムアーキテクチャ
+- [ユーザーガイド](./user/ja/USER_GUIDE.md) - 使い方ガイド
+
+### Contributor / コントリビューター向け
+- [API Stability](./developer/ja/contributor/API_STABILITY.md) - API 安定性ポリシー
+- [Branching Strategy](./developer/ja/contributor/BRANCHING_STRATEGY.md) - ブランチ戦略
 
 ---
 
@@ -42,4 +79,4 @@
 
 ---
 
-**Built with ❤️ using data-driven thinking and AI collaboration**
+**Built with [Heart] using data-driven thinking and AI collaboration**

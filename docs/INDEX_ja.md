@@ -1,7 +1,7 @@
 # Promps ドキュメント
 
-**バージョン**: Phase 0
-**最終更新**: 2025-11-25
+**バージョン**: v0.0.3-2 (Phase 3-前半)
+**最終更新**: 2026-01-19 (JST)
 
 ---
 
@@ -25,7 +25,7 @@
 ### 開発者向け
 
 **コア機能**:
-- **[CORE_FEATURES.md](./CORE_FEATURES.md)** - 包括的な機能ドキュメント
+- **[CORE_FEATURES.md](./developer/ja/guides/CORE_FEATURES.md)** - 包括的な機能ドキュメント
   - データ構造（`PromptPart`）
   - パーシングエンジンの詳細
   - プロンプト生成アルゴリズム
@@ -34,7 +34,7 @@
   - 使用例
 
 **API ドキュメント**:
-- **[API_REFERENCE.md](./API_REFERENCE.md)** - 完全な API リファレンス
+- **[API_REFERENCE.md](./developer/ja/api/API_REFERENCE.md)** - 完全な API リファレンス
   - 公開関数（`parse_input`、`generate_prompt`）
   - Tauri コマンド
   - データ型
@@ -43,7 +43,7 @@
   - マイグレーションガイド
 
 **アーキテクチャ**:
-- **[ARCHITECTURE.md](./ARCHITECTURE.md)** - システムアーキテクチャ
+- **[ARCHITECTURE.md](./design/ARCHITECTURE.md)** - システムアーキテクチャ
   - 高レベル設計
   - モジュール構造
   - データフロー
@@ -228,8 +228,8 @@
 ### プロセス
 
 1. ドキュメントのギャップや古いコンテンツを特定
-2. `docs/ja/` ディレクトリでドキュメントを作成/更新
-3. 新しいドキュメントを追加した場合、この README.md インデックスを更新
+2. `docs/` ディレクトリの適切な場所でドキュメントを作成/更新
+3. 新しいドキュメントを追加した場合、この INDEX_ja.md を更新
 4. 明確さと正確さをレビュー
 5. 説明的なメッセージでコミット（例: "docs(ja): BLOCKLY_INTEGRATION.md を追加"）
 
@@ -248,10 +248,10 @@
 **コマンドライン**:
 ```bash
 # ターミナルで表示（基本）
-cat docs/ja/CORE_FEATURES.md
+cat docs/CORE_FEATURES.md
 
 # フォーマット付きで表示（インストールされている場合）
-glow docs/ja/CORE_FEATURES.md
+glow docs/CORE_FEATURES.md
 ```
 
 ### ドキュメントの検索
@@ -259,15 +259,15 @@ glow docs/ja/CORE_FEATURES.md
 **grep**（コマンドライン）:
 ```bash
 # 全ドキュメントで "PromptPart" を検索
-grep -r "PromptPart" docs/ja/
+grep -r "PromptPart" docs/
 
 # 前後 3 行のコンテキスト付きで検索
-grep -C 3 "parse_input" docs/ja/API_REFERENCE.md
+grep -C 3 "parse_input" docs/API_REFERENCE.md
 ```
 
 **VSCode**（GUI）:
 - Ctrl+Shift+F（ワークスペース内検索）
-- フィルター: `docs/ja/**/*.md`
+- フィルター: `docs/**/*.md`
 
 ---
 
@@ -303,6 +303,6 @@ Copyright (c) 2025 Yoshihiro NAKAHARA
 
 ---
 
-**ドキュメントバージョン**: 1.0
-**最終更新**: 2025-11-25
-**次回レビュー**: Phase 1 リリース前
+**ドキュメントバージョン**: 1.1
+**最終更新**: 2026-01-19 (JST)
+**次回レビュー**: Phase 4 リリース前
