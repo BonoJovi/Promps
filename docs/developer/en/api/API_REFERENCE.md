@@ -1,7 +1,7 @@
 # Promps API Reference
 
-**Version**: Phase 0
-**Last Updated**: 2025-11-25
+**Version**: v0.0.3-2 (Phase 3-2)
+**Last Updated**: 2026-01-19 (JST)
 **Target**: Developers integrating with Promps core library
 
 ---
@@ -559,14 +559,27 @@ let mut parts = Vec::new();
 
 ## Testing
 
-### Unit Test Examples
+### Test Overview
 
-**Test Module**: `src/lib.rs` (lines 124-229)
+**Total Tests**: 102 (Backend 26 + Frontend 76)
 
 **Running Tests**:
 ```bash
+# Backend tests (Rust)
 cargo test
+
+# Frontend tests (Jest)
+cd res/tests && npm test
+
+# All tests
+cargo test && cd res/tests && npm test
 ```
+
+---
+
+### Backend Test Examples
+
+**Test Modules**: `src/lib.rs` (13 tests), `src/commands.rs` (13 tests)
 
 **Example Test**:
 ```rust
@@ -581,6 +594,34 @@ fn test_parse_input() {
     assert_eq!(parts[1].is_noun, false);
     assert_eq!(parts[1].text, "データベースのテーブル構造を視覚的に定義する機能です");
 }
+```
+
+---
+
+### Frontend Test Examples
+
+**Test Modules**: `res/tests/blockly-config.test.js` (61 tests), `res/tests/main.test.js` (15 tests)
+
+**Test Categories**:
+- **Noun Blocks**: Fixed noun blocks, custom noun blocks
+- **Particle Blocks**: 9 particle types (が, を, に, で, と, は, も, から, まで)
+- **Verb Blocks**: Fixed verb blocks, custom verb blocks
+- **Newline Blocks**: Line break blocks
+- **Toolbox**: Category configuration
+
+**Example Test**:
+```javascript
+describe('Verb Blocks', () => {
+  test('verb_analyze block should be defined', () => {
+    expect(Blockly.Blocks['verb_analyze']).toBeDefined();
+  });
+
+  test('verb_custom block should generate correct DSL', () => {
+    const block = createMockBlock('verb_custom', { VERB_TEXT: '削除して' });
+    const code = javascriptGenerator.forBlock['verb_custom'](block);
+    expect(code).toBe('削除して');
+  });
+});
 ```
 
 ---
@@ -609,22 +650,44 @@ fn test_full_workflow() {
 
 ---
 
-## Migration Guide (Future)
+## Migration Guide
 
-### From Phase 0 to Phase 1 (GUI)
+### Phase 0 → Phase 1 (GUI) ✅ COMPLETED
 
-**No API Changes Expected**:
-- Core library (`src/lib.rs`) remains stable
-- Tauri commands may be extended but not changed
-- Existing code will continue to work
+**No API Changes**:
+- Core library (`src/lib.rs`) unchanged
+- Tauri commands extended but existing APIs maintained
+- 100% backward compatible
 
-**New Features (Additive)**:
-- Visual block builder (frontend only)
-- Automatic `_N:` annotation (frontend only)
+**Added Features**:
+- Blockly.js visual block builder
+- Noun blocks (fixed + custom)
+- Real-time preview
 
 ---
 
-### From Phase 0 to Phase N (Logic Check)
+### Phase 1 → Phase 2 (Particle Blocks) ✅ COMPLETED
+
+**No API Changes**: 100% backward compatible
+
+**Added Features**:
+- 9 particle block types (が, を, に, で, と, は, も, から, まで)
+- "Particle" category added to toolbox
+
+---
+
+### Phase 2 → Phase 3 (Verb Blocks) ✅ COMPLETED
+
+**No API Changes**: 100% backward compatible
+
+**Added Features**:
+- 3 fixed verb blocks (分析して, 要約して, 翻訳して)
+- Custom verb block
+- "Verb" category added to toolbox
+
+---
+
+### Phase 3 → Phase N (Logic Check) FUTURE
 
 **Breaking Changes Expected**:
 - Error handling: Functions will return `Result<T, PrompError>`
@@ -645,11 +708,13 @@ let parts = parse_input(input).unwrap_or_default();  // Use default on error
 
 ## Versioning
 
-**Current Version**: Phase 0 (0.1.0)
+**Current Version**: v0.0.3-2 (Phase 3-2)
 
 **Semantic Versioning**:
-- Phase 0: `0.1.x` (Core library)
-- Phase 1: `0.2.x` (GUI integration)
+- Phase 0: `0.0.1` (Core library) ✅ COMPLETED
+- Phase 1: `0.0.2` (GUI integration) ✅ COMPLETED
+- Phase 2: `0.0.3` (Particle blocks) ✅ COMPLETED
+- Phase 3: `0.0.3-2` (Verb blocks) ✅ COMPLETED
 - Phase N: `1.0.x` (Logic check - first stable release)
 
 **Compatibility Promise**:
@@ -685,6 +750,6 @@ Noun  Particle Noun Particle Verb   Description
 
 ---
 
-**Document Version**: 1.0
-**Last Updated**: 2025-11-25
-**Next Review**: Before Phase 1 release
+**Document Version**: 2.0
+**Last Updated**: 2026-01-19 (JST)
+**Next Review**: Before Phase 4 release

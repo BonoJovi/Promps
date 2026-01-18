@@ -2,15 +2,15 @@
 
 このドキュメントは、JavaScriptで実装されたフロントエンドテストの完全なインデックスです。
 
-**最終更新**: 2025-12-06
-**総テスト数**: 42件
+**最終更新**: 2026-01-19 (JST)
+**総テスト数**: 76件
 
 ---
 
 ## 目次
 
-- [blockly-config.test.js](#blockly-configtestjs) - 30件
-- [main.test.js](#maintestjs) - 12件
+- [blockly-config.test.js](#blockly-configtestjs) - 61件
+- [main.test.js](#maintestjs) - 15件
 
 ---
 
@@ -19,18 +19,21 @@
 Blockly.jsのブロック定義とDSL生成ロジックのテスト。
 
 **ファイル**: `res/tests/blockly-config.test.js`
-**テスト数**: 30件
+**テスト数**: 61件
 
 ### テストスイート構成
 
-| スイート名 | テスト数 | 説明 | 実装ファイル | 行番号 |
-|-----------|---------|------|------------|--------|
-| Promps Noun Block | 5件 | 名詞ブロックの定義とDSL生成 | blockly-config.test.js | 23-115 |
-| Workspace Code Generation | 2件 | ワークスペース全体のコード生成 | blockly-config.test.js | 117-139 |
-| Promps Other Block | 5件 | その他ブロックの定義とDSL生成 | blockly-config.test.js | 141-231 |
-| Mixed Block Types | 2件 | 複数ブロックタイプの組み合わせ | blockly-config.test.js | 233-277 |
-| Blockly Change Event Handling | 2件 | イベントハンドリング | blockly-config.test.js | 279-291 |
-| Particle Blocks (Phase 2) | 14件 | 助詞ブロックの動作確認 | blockly-config.test.js | 293-429 |
+| スイート名 | テスト数 | 説明 | 実装ファイル |
+|-----------|---------|------|------------|
+| Promps Noun Block | 5件 | 名詞ブロックの定義とDSL生成 | blockly-config.test.js |
+| Workspace Code Generation | 2件 | ワークスペース全体のコード生成 | blockly-config.test.js |
+| Promps Other Block | 5件 | その他ブロックの定義とDSL生成 | blockly-config.test.js |
+| Mixed Block Types | 2件 | 複数ブロックタイプの組み合わせ | blockly-config.test.js |
+| Blockly Change Event Handling | 2件 | イベントハンドリング | blockly-config.test.js |
+| Particle Blocks (Phase 2) | 14件 | 助詞ブロックの動作確認 | blockly-config.test.js |
+| Verb Blocks (Phase 3) 🆕 | 12件 | 動詞ブロックの動作確認 | blockly-config.test.js |
+| Newline Blocks (Phase 3) 🆕 | 4件 | 改行ブロックの動作確認 | blockly-config.test.js |
+| Toolbox Configuration 🆕 | 15件 | ツールボックス構成テスト | blockly-config.test.js |
 
 ---
 
@@ -142,15 +145,16 @@ Phase 2で追加された助詞ブロックのテスト。
 UI操作とプレビュー更新のテスト。
 
 **ファイル**: `res/tests/main.test.js`
-**テスト数**: 12件
+**テスト数**: 15件
 
 ### テストスイート構成
 
-| スイート名 | テスト数 | 説明 | 実装ファイル | 行番号 |
-|-----------|---------|------|------------|--------|
-| updatePreview function | 5件 | プレビュー更新機能 | main.test.js | 30-78 |
-| Preview pane updates | 4件 | プレビューパネルの表示 | main.test.js | 80-129 |
-| Error handling | 3件 | エラーハンドリング | main.test.js | 131-166 |
+| スイート名 | テスト数 | 説明 | 実装ファイル |
+|-----------|---------|------|------------|
+| updatePreview function | 5件 | プレビュー更新機能 | main.test.js |
+| Preview pane updates | 4件 | プレビューパネルの表示 | main.test.js |
+| Error handling | 3件 | エラーハンドリング | main.test.js |
+| Event handling 🆕 | 3件 | イベントハンドリング | main.test.js |
 
 ---
 

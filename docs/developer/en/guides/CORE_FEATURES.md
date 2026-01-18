@@ -1,8 +1,8 @@
 # Promps Phase 0 Core Features Documentation
 
-**Version**: Phase 0
-**Last Updated**: 2025-11-25
-**Status**: Implementation Complete ✅
+**Version**: v0.0.3-2 (Phase 3-2)
+**Last Updated**: 2026-01-19 (JST)
+**Status**: Phase 0 Core Complete ✅ / Phase 1-3 GUI Complete ✅
 
 ---
 
@@ -615,9 +615,36 @@ println!("{}", prompt);
 
 ---
 
-## Future Enhancements (Phase N+)
+## Phase Evolution
 
-### Phase N: Logic Check (AST-based Validation)
+### Phase 1: GUI Integration (Blockly.js) ✅ COMPLETED
+
+**Implemented Features**:
+- Blockly.js visual block editor
+- Noun blocks (fixed + custom)
+- Real-time preview
+- Tauri desktop application
+
+---
+
+### Phase 2: Particle Blocks ✅ COMPLETED
+
+**Implemented Features**:
+- 9 particle block types (が, を, に, で, と, は, も, から, まで)
+- "Particle" category in toolbox
+
+---
+
+### Phase 3: Verb Blocks ✅ COMPLETED
+
+**Implemented Features**:
+- 3 fixed verb blocks (分析して, 要約して, 翻訳して)
+- Custom verb block
+- "Verb" category in toolbox
+
+---
+
+### Phase N: Logic Check (AST-based Validation) FUTURE
 
 **Planned Features**:
 - Pattern matching (50-100 grammatical patterns)
@@ -676,6 +703,6 @@ Suggestion: "_N:User が _N:Order を 作成"
 
 ---
 
-**Document Version**: 1.0
-**Phase**: 0 (Implementation Complete)
-**Next Review**: Before Phase 1 implementation starts
+**Document Version**: 2.0
+**Last Updated**: 2026-01-19 (JST)
+**Next Review**: Before Phase 4 release

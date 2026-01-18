@@ -1,14 +1,14 @@
 # Promps Architecture Documentation
 
-**Version**: Phase 0
-**Last Updated**: 2025-11-25
+**Version**: v0.0.3-2 (Phase 3-2)
+**Last Updated**: 2026-01-19 (JST)
 **Audience**: Developers, Contributors, AI Assistants
 
 ---
 
 ## Overview
 
-This document describes the architectural design of Promps Phase 0, including module structure, data flow, design decisions, and evolution path.
+This document describes the architectural design of Promps, including module structure, data flow, design decisions, and evolution path.
 
 **Core Concept**: Promps is a **compiler-like DSL processor** that translates simplified input language into structured prompts for AI consumption.
 
@@ -17,40 +17,42 @@ This document describes the architectural design of Promps Phase 0, including mo
 ## High-Level Architecture
 
 ```
-┌─────────────────────────────────────────────────────────┐
-│                    Promps Phase 0                       │
-├─────────────────────────────────────────────────────────┤
-│                                                         │
-│  ┌───────────────┐      ┌──────────────┐              │
-│  │  Frontend     │      │   Backend    │              │
-│  │  (Tauri UI)   │ IPC  │   (Rust)     │              │
-│  │               │◄────►│              │              │
-│  │  - HTML/CSS   │      │  - Parsing   │              │
-│  │  - JavaScript │      │  - Generation│              │
-│  └───────────────┘      └──────────────┘              │
-│                                                         │
-│         │                       │                      │
-│         │                       ▼                      │
-│         │              ┌─────────────────┐            │
-│         │              │  Core Library   │            │
-│         │              │  (src/lib.rs)   │            │
-│         │              │                 │            │
-│         │              │  - PromptPart   │            │
-│         │              │  - parse_input  │            │
-│         │              │  - generate_    │            │
-│         │              │    prompt       │            │
-│         │              └─────────────────┘            │
-│         │                                              │
-│         ▼                                              │
-│  ┌────────────┐                                       │
-│  │   User     │                                       │
-│  │ Interaction│                                       │
-│  └────────────┘                                       │
-│                                                         │
-└─────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────┐
+│                         Promps                              │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│  ┌─────────────────────┐      ┌──────────────┐            │
+│  │      Frontend       │      │   Backend    │            │
+│  │     (Tauri UI)      │ IPC  │   (Rust)     │            │
+│  │                     │◄────►│              │            │
+│  │  - Blockly.js       │      │  - Parsing   │            │
+│  │  - HTML/CSS/JS      │      │  - Generation│            │
+│  │  - Real-time        │      │              │            │
+│  │    Preview          │      │              │            │
+│  └─────────────────────┘      └──────────────┘            │
+│                                                             │
+│         │                            │                     │
+│         │                            ▼                     │
+│         │                   ┌─────────────────┐           │
+│         │                   │  Core Library   │           │
+│         │                   │  (src/lib.rs)   │           │
+│         │                   │                 │           │
+│         │                   │  - PromptPart   │           │
+│         │                   │  - parse_input  │           │
+│         │                   │  - generate_    │           │
+│         │                   │    prompt       │           │
+│         │                   └─────────────────┘           │
+│         │                                                  │
+│         ▼                                                  │
+│  ┌──────────────────┐                                     │
+│  │       User       │                                     │
+│  │  Block Operations│                                     │
+│  └──────────────────┘                                     │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
 
 Input Flow:
-User Input → Frontend → Tauri IPC → Backend Command → Core Library → Output
+Block Operations → DSL Generation → Tauri IPC → Backend Command → Core Library → Preview Display
 ```
 
 ---
@@ -69,24 +71,23 @@ Promps/
 │       └── mod.rs             # Module declarations
 │
 ├── res/                       # Frontend resources (Tauri)
-│   ├── html/
-│   │   └── index.html         # Main UI
+│   ├── index.html             # Main UI (Blockly.js workspace)
 │   ├── js/
 │   │   ├── main.js            # Frontend logic
-│   │   └── constants.js       # (Future) Constants
-│   └── css/
-│       └── common.css         # (Future) Styling
+│   │   └── blockly-config.js  # Blockly.js block definitions
+│   ├── css/
+│   │   └── styles.css         # Stylesheet
+│   └── tests/                 # Frontend tests
+│       ├── blockly-config.test.js
+│       └── main.test.js
 │
 ├── docs/                      # Documentation
-│   ├── CORE_FEATURES.md       # Phase 0 features
-│   ├── API_REFERENCE.md       # API documentation
-│   └── ARCHITECTURE.md        # This file
-│
-├── .ai-context/               # AI assistant context
-│   ├── PROMPS_DESIGN_PHILOSOPHY.md
-│   ├── DEVELOPMENT_METHODOLOGY.md
-│   ├── CONVENTIONS.md
-│   └── PROJECT_STRUCTURE.md
+│   ├── INDEX_ja.md            # Japanese index
+│   ├── INDEX_en.md            # English index
+│   ├── design/                # Design documents
+│   ├── developer/             # Developer docs
+│   ├── user/                  # User docs
+│   └── testing/               # Test documentation
 │
 ├── Cargo.toml                 # Rust dependencies
 ├── tauri.conf.json            # Tauri configuration
@@ -187,24 +188,36 @@ fn main() {
 
 ---
 
-### 4. Frontend (HTML/JS)
+### 4. Frontend (Blockly.js + HTML/JS)
 
-**Status**: Phase 0 - Minimal implementation (basic Tauri window)
+**Status**: Phase 3-2 - Visual block editor implemented
 
-**Future (Phase 1)**:
-- Blockly.js integration
-- Visual block builder
-- Drag-and-drop interface
+**Implemented Features**:
+- ✅ Blockly.js integration
+- ✅ Visual block builder
+- ✅ Drag-and-drop interface
+- ✅ Real-time prompt preview
+- ✅ Block categories (Noun, Particle, Verb, Other)
+
+**Block Types (Phase 3-2)**:
+- **Noun blocks**: Fixed nouns (User, Order, etc.) + Custom input
+- **Particle blocks**: 9 types (が, を, に, で, と, は, も, から, まで)
+- **Verb blocks**: 3 fixed (分析して, 要約して, 翻訳して) + Custom input
+- **Other blocks**: Newline
 
 **Current Structure**:
 ```
 res/
 ├── html/
-│   └── index.html      # (Future) Main UI
+│   └── index.html        # Main UI with Blockly workspace
 ├── js/
-│   └── main.js         # (Future) Frontend logic
-└── css/
-    └── common.css      # (Future) Styling
+│   ├── main.js           # Frontend logic, event handling
+│   └── blockly-config.js # Block definitions and toolbox
+├── css/
+│   └── common.css        # Styling
+└── tests/
+    ├── blockly-config.test.js  # Block definition tests
+    └── main.test.js            # Frontend logic tests
 ```
 
 ---
@@ -623,6 +636,8 @@ pub const MAX_BLOCKS_HARD_LIMIT: usize = 10_000;  // DoS prevention
 **Coverage**: 100% of public API
 
 **Test Structure**:
+
+**Backend Tests (26 tests)**:
 ```
 src/lib.rs (tests module):
 ├─ test_parse_noun()
@@ -655,7 +670,24 @@ src/commands.rs (tests module):
 └─ test_greet_with_japanese_name()
 ```
 
-**Total Tests**: 26 (13 in lib.rs, 13 in commands.rs)
+**Frontend Tests (76 tests)**:
+```
+res/tests/
+├─ blockly-config.test.js (61 tests)
+│   ├─ Noun Blocks - fixed and custom noun blocks
+│   ├─ Particle Blocks - 9 particle types
+│   ├─ Verb Blocks - fixed and custom verb blocks
+│   ├─ Newline Blocks - line break blocks
+│   └─ Toolbox Configuration - category structure
+│
+└─ main.test.js (15 tests)
+    ├─ Initialization - page load behavior
+    ├─ Event Handling - workspace change events
+    ├─ DSL Generation - text output from blocks
+    └─ Error Handling - edge cases
+```
+
+**Total Tests**: 102 (26 backend + 76 frontend)
 
 **Edge Case Coverage** (added 2025-11-28):
 - Consecutive noun markers (with/without space)
@@ -665,26 +697,45 @@ src/commands.rs (tests module):
 
 **Running Tests**:
 ```bash
+# Backend tests (Rust)
 cargo test              # All tests
 cargo test --lib        # Library tests only
 cargo test commands::   # Command tests only
+
+# Frontend tests (Jest)
+cd res/tests && npm test           # All frontend tests
+cd res/tests && npm test -- blockly-config  # Block tests only
+cd res/tests && npm test -- main   # Main.js tests only
+
+# All tests
+cargo test && cd res/tests && npm test
 ```
 
 ---
 
 ### Integration Testing
 
-**Status**: Phase 0 - Not yet implemented
+**Status**: Phase 3-2 - Frontend tests implemented
 
-**Future Strategy**:
+**Current Structure**:
 ```
-tests/
-├─ integration_test.rs    # Full workflow tests
-├─ cli_test.rs            # CLI application tests
-└─ fixtures/
-    ├─ input1.txt         # Test input files
-    └─ expected1.txt      # Expected output files
+res/tests/
+├─ blockly-config.test.js  # Block definition tests (61 tests)
+├─ main.test.js            # Frontend logic tests (15 tests)
+├─ package.json            # Jest configuration
+└─ node_modules/           # Test dependencies
+
+src/ (backend)
+├─ lib.rs                  # Core logic tests (13 tests)
+└─ commands.rs             # Tauri command tests (13 tests)
 ```
+
+**Test Coverage**:
+- ✅ Block definitions (noun, particle, verb, newline)
+- ✅ Toolbox configuration
+- ✅ DSL generation logic
+- ✅ Event handling
+- ✅ Backend parsing and prompt generation
 
 ---
 
@@ -725,14 +776,17 @@ impl PromptPart {
 
 ## Evolution Path
 
-### Phase 0 → Phase 1 (GUI Integration)
+### Phase 0 → Phase 1 (GUI Integration) ✅ COMPLETED
+
+**Status**: Completed (2025-12)
 
 **Changes**:
 ```
 Added:
 ├─ res/html/index.html        (Blockly.js UI)
 ├─ res/js/blockly-config.js   (Block definitions)
-└─ res/js/ui-helpers.js       (UI utilities)
+├─ res/js/main.js             (Frontend logic)
+└─ res/css/common.css         (Styling)
 
 Modified:
 └─ src/commands.rs            (New Tauri commands for GUI)
@@ -745,7 +799,54 @@ Unchanged:
 
 ---
 
-### Phase 1 → Phase N (Logic Check)
+### Phase 1 → Phase 2 (Particle Blocks) ✅ COMPLETED
+
+**Status**: Completed (2026-01)
+
+**Changes**:
+```
+Added (9 particle types):
+└─ res/js/blockly-config.js
+    ├─ particle_ga (が)
+    ├─ particle_wo (を)
+    ├─ particle_ni (に)
+    ├─ particle_de (で)
+    ├─ particle_to (と)
+    ├─ particle_ha (は)
+    ├─ particle_mo (も)
+    ├─ particle_kara (から)
+    └─ particle_made (まで)
+
+Updated:
+└─ res/tests/blockly-config.test.js (particle block tests)
+```
+
+**Compatibility**: 100% backward compatible
+
+---
+
+### Phase 2 → Phase 3 (Verb Blocks) ✅ COMPLETED
+
+**Status**: Completed (2026-01)
+
+**Changes**:
+```
+Added (3 fixed verbs + custom):
+└─ res/js/blockly-config.js
+    ├─ verb_analyze (分析して)
+    ├─ verb_summarize (要約して)
+    ├─ verb_translate (翻訳して)
+    └─ verb_custom (カスタム動詞)
+
+Updated:
+└─ res/tests/blockly-config.test.js (verb block tests)
+```
+
+**Compatibility**: 100% backward compatible
+
+---
+
+### Phase 3 → Phase N (Logic Check)
 
 **Design Philosophy**: **Layered Architecture - Non-Breaking Extension**
 
@@ -1002,6 +1103,6 @@ tauri-build = { version = "1.5", features = [] }
 
 ---
 
-**Document Version**: 1.0
-**Last Updated**: 2025-11-25
-**Next Review**: Before Phase 1 implementation begins
+**Document Version**: 2.0
+**Last Updated**: 2026-01-19 (JST)
+**Next Review**: Before Phase 4 implementation begins
