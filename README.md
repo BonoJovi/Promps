@@ -6,7 +6,7 @@
 > **AIプロンプト作成のためのビジュアルブロックベースツール**
 
 [![Tech Preview](https://img.shields.io/badge/Status-Tech%20Preview-orange)](https://github.com/BonoJovi/Promps/releases)
-[![Version](https://img.shields.io/badge/Version-0.0.3--2-blue)](https://github.com/BonoJovi/Promps/releases/tag/v0.0.3-2)
+[![Version](https://img.shields.io/badge/Version-0.0.4-blue)](https://github.com/BonoJovi/Promps/releases/tag/v0.0.4)
 [![Rust](https://img.shields.io/badge/Rust-1.70+-orange.svg)](https://www.rust-lang.org/)
 [![Tauri](https://img.shields.io/badge/Tauri-v2-blue.svg)](https://tauri.app/)
 [![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
@@ -27,23 +27,22 @@
 いつもPrompsに関心を寄せていただき、誠にありがとうございます。
 プロジェクト発案者のBonoJovi(Yoshihiro NAKAHARA)です。
 
-**Ver.0.0.3-2 (プロトタイプ版) をリリースいたしました！**
+**Ver.0.0.4 (プロトタイプ版) をリリースいたしました！**
 
-今回のアップデートでは、**動詞ブロックを拡充**しました。従来の3種類（「分析して」「要約して」「翻訳して」）に加え、新たに「比較して」「調べて」「一覧にして」「説明して」「生成して」「評価して」「修正して」「変換して」の8種類を追加し、より多様なプロンプトを構築できるようになりました。また、接続されたブロックチェーンのみを翻訳対象とするバグ修正も行いました。
+今回のアップデートでは、**プロジェクト保存/読込機能**を実装しました。`.promps`形式でプロジェクトを保存・読込できるようになり、作成したブロック配置を保存して後で再開できます。ツールバー（New, Open, Save, Save As）とキーボードショートカット（Ctrl+N/O/S, Ctrl+Shift+S）にも対応しました。
 
 このプロトタイプ版は、**ユーザーの皆さんからのフィードバック収集**を目的としています。
 
 **[Announcement] あなたの意見を聞かせてください！**
-- どんな動詞ブロックがあると便利ですか？
-- 動詞をどのようにカテゴリ分けすると使いやすいですか？
-  - 例: 「分析系」「変換系」「操作系」など
+- 保存/読込機能は使いやすいですか？
+- どんな機能があると便利ですか？
 - [Issues](https://github.com/BonoJovi/Promps/issues) または [Discussions](https://github.com/BonoJovi/Promps/discussions) でご意見をお寄せください！
 
-Prompsはまだテックプレビュー段階ですが、基本的なプロンプト構築機能は動作しており、テストしていただける状態です。現段階では文法検証機能やプロジェクトの保存/読込機能はまだ実装されていませんが、今後のリリースで追加予定です。
+Prompsはまだテックプレビュー段階ですが、基本的なプロンプト構築機能と保存/読込機能が動作しており、テストしていただける状態です。文法検証機能は今後のリリースで追加予定です。
 
 **テスターを募集しています！** あなたのフィードバックがPrompsの未来を形作ります。動作確認、バグ報告、機能リクエストなど、どんな形でも構いませんので、ぜひご協力ください。
 
-**2026-01-08 (JST) Written by Yoshihiro NAKAHARA**
+**2026-01-24 (JST) Written by Yoshihiro NAKAHARA**
 
 ---
 
@@ -52,23 +51,22 @@ Prompsはまだテックプレビュー段階ですが、基本的なプロン�
 Thank you for your continued interest in Promps.
 I'm BonoJovi (Yoshihiro NAKAHARA), the project initiator.
 
-**We have released Ver.0.0.3-2 (Prototype)!**
+**We have released Ver.0.0.4 (Prototype)!**
 
-This update **expands the verb blocks** library. In addition to the original 3 verbs ("analyze", "summarize", "translate"), we've added 8 new verbs: "compare", "research", "list", "explain", "generate", "evaluate", "fix", and "convert", enabling you to build more diverse prompts. We also fixed a bug where only connected block chains are now translated.
+This update implements **project save/load functionality**. You can now save and load projects in `.promps` format, allowing you to save your block arrangements and resume work later. We've also added toolbar buttons (New, Open, Save, Save As) and keyboard shortcuts (Ctrl+N/O/S, Ctrl+Shift+S).
 
 This prototype release aims to **collect feedback from users**.
 
 **[Announcement] We want to hear from you!**
-- What verb blocks would be useful for you?
-- How should we categorize verbs for better usability?
-  - Example: "Analysis", "Conversion", "Operations", etc.
+- Is the save/load feature easy to use?
+- What features would be helpful for you?
 - Share your ideas on [Issues](https://github.com/BonoJovi/Promps/issues) or [Discussions](https://github.com/BonoJovi/Promps/discussions)!
 
-Promps is still in Tech Preview stage, but the basic prompt building functionality is working and ready for testing. While grammar validation and project save/load features are not yet implemented, they are planned for future releases.
+Promps is still in Tech Preview stage, but the basic prompt building functionality and save/load features are working and ready for testing. Grammar validation is planned for future releases.
 
 **We're looking for testers!** Your feedback will shape the future of Promps. Whether it's testing functionality, reporting bugs, or requesting features, any form of contribution is welcome.
 
-**2026-01-08 (JST) Written by Yoshihiro NAKAHARA**
+**2026-01-24 (JST) Written by Yoshihiro NAKAHARA**
 
 </div>
 
@@ -76,17 +74,18 @@ Promps is still in Tech Preview stage, but the basic prompt building functionali
 
 ## ⚠ Tech Preview Notice / テックプレビュー版について
 
-**This is a Technology Preview release (v0.0.3-2)** - a prototype version to gather feedback on verb blocks.
-**これはテクノロジープレビュー版(v0.0.3-2)です** - 動詞ブロックのフィードバック収集を目的としたプロトタイプ版です。
+**This is a Technology Preview release (v0.0.4)** - a prototype version with project persistence.
+**これはテクノロジープレビュー版(v0.0.4)です** - プロジェクト保存/読込機能を搭載したプロトタイプ版です。
 
 **What this means: / これが意味すること：**
 - ✅ Core functionality works and is ready for testing / コア機能は動作し、テスト可能な状態です
-- ✅ **NEW in v0.0.3-2:** Expanded verb blocks (11 types + custom input) / **v0.0.3-2の新機能:** 動詞ブロック拡充（固定11種＋カスタム入力）
+- ✅ **NEW in v0.0.4:** Project save/load (.promps format) / **v0.0.4の新機能:** プロジェクト保存/読込（.promps形式）
+- ✅ **NEW in v0.0.4:** Toolbar & keyboard shortcuts / **v0.0.4の新機能:** ツールバー＆キーボードショートカット
+- ✅ Expanded verb blocks (11 types + custom input) / 動詞ブロック（固定11種＋カスタム入力）
 - ✅ Particle blocks (9 types) / 助詞ブロック（9種類）
 - ✅ Collapsible category UI / 折りたたみ可能なカテゴリUI
-- ✨ **We need your feedback on verb blocks!** / **動詞ブロックへのフィードバックを募集中！**
+- ✨ **We need your feedback!** / **フィードバックを募集中！**
 - ⚠ No grammar validation yet / 文法検証機能はまだありません
-- ⚠ No project save/load yet / プロジェクト保存/読込機能はまだありません
 - [Bug] Bugs are expected - please report them! / バグは想定内です - ぜひ報告してください！
 
 **We're looking for testers!** Your feedback will shape the future of Promps. See [CONTRIBUTING.md](CONTRIBUTING.md) for how to help.
@@ -99,7 +98,7 @@ Promps is still in Tech Preview stage, but the basic prompt building functionali
 ### 1. Download & Install / ダウンロード & インストール
 
 **Download the latest release: / 最新リリースをダウンロード：**
-- [Download v0.0.3-2](https://github.com/BonoJovi/Promps/releases/tag/v0.0.3-2)
+- [Download v0.0.4](https://github.com/BonoJovi/Promps/releases/tag/v0.0.4)
 
 **Available for: / 対応プラットフォーム：**
 - Linux (AppImage, deb, rpm)
@@ -222,11 +221,20 @@ Text (NOUN) を English (NOUN) に 翻訳して
 - ✅ Visual block-based interface (powered by Blockly.js)
   ビジュアルブロックベースのインターフェース（Blockly.js搭載）
 
+- ✅ **NEW in v0.0.4:** Project save/load (.promps format)
+  **v0.0.4新機能:** プロジェクト保存/読込（.promps形式）
+
+- ✅ **NEW in v0.0.4:** Toolbar (New, Open, Save, Save As)
+  **v0.0.4新機能:** ツールバー（New, Open, Save, Save As）
+
+- ✅ **NEW in v0.0.4:** Keyboard shortcuts (Ctrl+N/O/S, Ctrl+Shift+S)
+  **v0.0.4新機能:** キーボードショートカット
+
 - ✅ 9 types of particle blocks (が、を、に、で、と、へ、から、まで、より)
   9種類の助詞ブロック
 
-- ✅ **Expanded in v0.0.3-2:** Verb blocks (11 fixed + custom input)
-  **v0.0.3-2拡充:** 動詞ブロック（固定11種＋カスタム入力）
+- ✅ Verb blocks (11 fixed + custom input)
+  動詞ブロック（固定11種＋カスタム入力）
 
 - ✅ Collapsible category UI (Noun, Particle, Verb, Other)
   折りたたみ可能なカテゴリUI（名詞、助詞、動詞、その他）
@@ -248,14 +256,14 @@ Text (NOUN) を English (NOUN) に 翻訳して
 
 ### Coming Soon / 近日実装予定
 
+- [Soon] Grammar validation (basic)
+  文法検証（基本）
+
+- [Soon] Grammar validation (advanced + suggestions)
+  文法検証（高度＋提案機能）
+
 - [Soon] More verb types and adjective blocks
   より多くの動詞タイプと形容詞ブロック
-
-- [Soon] Grammar validation
-  文法検証
-
-- [Soon] Project save/load
-  プロジェクトの保存/読込
 
 - [Soon] Layout customization
   レイアウトのカスタマイズ
@@ -279,8 +287,8 @@ We welcome **all types of contributions** - not just code!
 
 **No programming experience needed! / プログラミング経験不要！**
 
-**✨ v0.0.3-2 with Expanded Verb Blocks!**
-**[新着] v0.0.3-2 動詞ブロック拡充版！**
+**✨ v0.0.4 with Project Save/Load!**
+**[新着] v0.0.4 プロジェクト保存/読込機能搭載！**
 
 **Platform Status: / プラットフォーム状況：**
 - ✅ **Linux**: Verified and tested by developer / 開発者により検証済み・テスト済み
@@ -322,6 +330,22 @@ For code contributions:
 ---
 
 ## Release History / リリース履歴
+
+### Version 0.0.4 (2026-01-24)
+
+**Major Features: / 主要機能：**
+- ✨ Project save/load functionality (.promps format)
+  プロジェクト保存/読込機能（.promps形式）
+- ✨ Toolbar: New, Open, Save, Save As buttons
+  ツールバー: New, Open, Save, Save As ボタン
+- ✨ Keyboard shortcuts: Ctrl+N (New), Ctrl+O (Open), Ctrl+S (Save), Ctrl+Shift+S (Save As)
+  キーボードショートカット対応
+- ✨ Dirty state detection (unsaved changes indicator)
+  変更検出機能（未保存の変更をタイトルに*で表示）
+- ✨ Tauri v2 dialog/fs plugin integration
+  Tauri v2 プラグイン統合
+- [Test] Updated tests: 168 tests (Backend: 34, Frontend: 134, 100% passing)
+  テスト更新: 168テスト（バックエンド: 34, フロントエンド: 134, 100%合格）
 
 ### Version 0.0.3-2 (2026-01-07)
 
@@ -368,10 +392,10 @@ For code contributions:
 - **Build System**: Cargo + Tauri CLI
 
 **Tests: / テスト：**
-- Backend: 26 tests (100% passing)
-- Frontend: 76 tests (100% passing)
-- **Total: 102 tests** (100% passing)
-- Includes: Particle blocks, Verb blocks (Phase 3), Category UI tests
+- Backend: 34 tests (100% passing)
+- Frontend: 134 tests (100% passing)
+- **Total: 168 tests** (100% passing)
+- Includes: Project persistence, Particle blocks, Verb blocks, Block serialization tests
 
 ---
 
