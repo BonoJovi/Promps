@@ -7,6 +7,7 @@
 
 [![Tech Preview](https://img.shields.io/badge/Status-Tech%20Preview-orange)](https://github.com/BonoJovi/Promps/releases)
 [![Version](https://img.shields.io/badge/Version-0.0.4-blue)](https://github.com/BonoJovi/Promps/releases/tag/v0.0.4)
+[![Tests](https://img.shields.io/badge/Tests-168%20passing-brightgreen)](https://github.com/BonoJovi/Promps)
 [![Rust](https://img.shields.io/badge/Rust-1.70+-orange.svg)](https://www.rust-lang.org/)
 [![Tauri](https://img.shields.io/badge/Tauri-v2-blue.svg)](https://tauri.app/)
 [![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
