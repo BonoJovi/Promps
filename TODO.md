@@ -1,6 +1,6 @@
 # Promps TODO List
 
-**Last Updated**: 2025-11-28
+**Last Updated**: 2026-01-23
 
 ---
 
@@ -40,9 +40,9 @@ function validateBlockCount() {
 }
 ```
 
-**Backend Validation (Security Layer - Phase N)**:
+**Backend Validation (Security Layer - Phase 5)**:
 ```rust
-// File: src/commands.rs (Phase N implementation)
+// File: src/commands.rs (Phase 5 implementation)
 
 pub const MAX_INPUT_LENGTH: usize = 100_000;      // 100,000 characters
 pub const MAX_NOUN_COUNT: usize = 10_000;         // 10,000 nouns
@@ -86,9 +86,9 @@ pub fn generate_prompt_from_text_checked(input: String) -> Result<String, String
 - [ ] **Frontend**: Show warning at 50 blocks
 - [ ] **Frontend**: Prevent exceeding 100 blocks (hard UI limit)
 - [ ] **Frontend**: Display clear error messages
-- [ ] **Backend (Phase N)**: Add `generate_prompt_from_text_checked()` command
-- [ ] **Backend (Phase N)**: Add input length validation (100,000 chars)
-- [ ] **Backend (Phase N)**: Add noun count validation (10,000 nouns)
+- [ ] **Backend (Phase 5)**: Add `generate_prompt_from_text_checked()` command
+- [ ] **Backend (Phase 5)**: Add input length validation (100,000 chars)
+- [ ] **Backend (Phase 5)**: Add noun count validation (10,000 nouns)
 - [ ] **Documentation**: Update Phase 1 docs with limit specifications
 
 #### Rationale
@@ -132,26 +132,7 @@ See: `docs/en/ARCHITECTURE.md#resource-management-philosophy`
 
 ---
 
-## Phase N: Logic Check (AST Validation)
-
-### Grammatical Pattern Validation
-
-- [ ] Define 50-100 valid Japanese sentence patterns
-- [ ] Implement AST-based pattern matching
-- [ ] Add particle validation (が、を、に、で、etc.)
-- [ ] Add noun relationship validation
-- [ ] Implement error reporting with suggestions
-
-### Error Handling
-
-- [ ] Define `PrompError` enum
-- [ ] Update `parse_input()` signature: `Result<Vec<PromptPart>, PrompError>`
-- [ ] Update Tauri commands to return `Result<T, String>`
-- [ ] Add user-friendly error messages (Japanese + English)
-
----
-
-## Phase N+1: Project Persistence
+## Phase 4: Project Persistence (v0.0.4)
 
 ### File I/O
 
@@ -160,6 +141,30 @@ See: `docs/en/ARCHITECTURE.md#resource-management-philosophy`
 - [ ] Add autosave feature
 - [ ] Add recent projects list
 - [ ] Implement project templates
+
+---
+
+## Phase 5: Logic Check 基礎 (v0.0.5)
+
+### Basic Grammatical Validation
+
+- [ ] Define `PrompError` enum
+- [ ] Update `parse_input()` signature: `Result<Vec<PromptPart>, PrompError>`
+- [ ] Update Tauri commands to return `Result<T, String>`
+- [ ] Add user-friendly error messages (Japanese + English)
+- [ ] Implement basic pattern validation
+
+---
+
+## Phase 6: Logic Check 拡張 (v0.0.6)
+
+### Advanced Grammatical Validation
+
+- [ ] Define 50-100 valid Japanese sentence patterns
+- [ ] Implement AST-based pattern matching
+- [ ] Add particle validation (が、を、に、で、etc.)
+- [ ] Add noun relationship validation
+- [ ] Implement error reporting with suggestions
 
 ---
 
@@ -173,7 +178,7 @@ See: `docs/en/ARCHITECTURE.md#resource-management-philosophy`
 - [ ] Create `docs/ja/BLOCKLY_INTEGRATION.md`
 - [ ] Update `README.md` with GUI usage examples
 
-### When Implementing Phase N
+### When Implementing Phase 5/6
 
 - [ ] Create `docs/en/LOGIC_CHECK.md`
 - [ ] Create `docs/ja/LOGIC_CHECK.md`
@@ -191,7 +196,7 @@ See: `docs/en/ARCHITECTURE.md#resource-management-philosophy`
 - [ ] Add UI interaction tests (block placement, deletion)
 - [ ] Add limit validation tests (50, 100 block scenarios)
 
-### Phase N Tests
+### Phase 5/6 Tests
 
 - [ ] Add pattern matching tests (50-100 test cases)
 - [ ] Add error handling tests (invalid patterns)
@@ -208,7 +213,7 @@ See: `docs/en/ARCHITECTURE.md#resource-management-philosophy`
 - [ ] Implement frontend block limit (100 blocks)
 - [ ] Add user warnings (50+ blocks)
 
-### Phase N
+### Phase 5
 
 - [ ] Implement backend validation (`generate_prompt_from_text_checked()`)
 - [ ] Add rate limiting (optional, future consideration)
@@ -232,7 +237,7 @@ See: `docs/en/ARCHITECTURE.md#resource-management-philosophy`
 
 **Multi-layer Defense**:
 1. Frontend: UX optimization (100 block limit)
-2. Backend: DoS prevention (10,000 noun limit, Phase N)
+2. Backend: DoS prevention (10,000 noun limit, Phase 5)
 3. OS: System protection (OOM Killer, swap management)
 
 ---

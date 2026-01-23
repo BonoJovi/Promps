@@ -1,6 +1,6 @@
 # AI Context - Essential Information Only
 
-**Last Updated**: 2026-01-07
+**Last Updated**: 2026-01-23
 **Purpose**: Minimal context for session startup (token optimization)
 **Keywords**: essential, quick start, overview, status, current state, 現在の状態, エッセンシャル, 概要, project status, version, tests, テスト, critical rules, 重要なルール, quick reference, クイックリファレンス, entry point, starting point
 **Related**: @README.md, @context/coding/API_STABILITY.md, @context/workflows/BRANCHING.md, @context/coding/TESTING.md
@@ -9,10 +9,22 @@
 
 ## Current Status
 
-**Version**: v0.0.3-2 (Verb blocks prototype release)
-**Phase**: Phase 3-前半 Complete (Verb blocks prototype)
+**Version**: v0.0.3-2 (Verb blocks complete)
+**Phase**: Phase 3 Complete (Verb blocks - 11 fixed + custom)
 **Tests**: 102 tests at 100% passing (Backend 26 + Frontend 76)
 **Branch**: dev (integration branch)
+
+---
+
+## Roadmap
+
+| Version | Phase | Content | Status |
+|---------|-------|---------|--------|
+| v0.0.3-2 | Phase 3 | Verb blocks | ✅ Complete |
+| v0.0.4 | Phase 4 | Project Persistence (save/load) | Next |
+| v0.0.5 | Phase 5 | Logic Check 基礎 (basic validation) | Planned |
+| v0.0.6 | Phase 6 | Logic Check 拡張 (advanced + suggestions) | Planned |
+| **v1.0.0** | - | **Stable Release** | After v0.0.6 verification |
 
 ---
 

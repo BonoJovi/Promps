@@ -19,11 +19,13 @@ Promps uses **Persistent Feature Branch Strategy** where feature branches are **
 
 ```
 dev (統合ブランチ)
-  ├── feature/phase-0 (永続)
-  ├── feature/phase-1 (永続)
-  ├── feature/phase-2 (永続)
-  ├── feature/phase-3 (永続)
-  └── feature/phase-n (永続)
+  ├── feature/phase-0 (永続) - Core parsing
+  ├── feature/phase-1 (永続) - GUI foundation
+  ├── feature/phase-2 (永続) - Particle blocks
+  ├── feature/phase-3 (永続) - Verb blocks
+  ├── feature/phase-4 (永続) - Project Persistence
+  ├── feature/phase-5 (永続) - Logic Check 基礎
+  └── feature/phase-6 (永続) - Logic Check 拡張
 ```
 
 ---
@@ -40,7 +42,9 @@ dev (統合ブランチ)
 - Phase 1: `res/html/`, `res/js/main.js`, `res/js/blockly-config.js` (GUI foundation)
 - Phase 2: `res/js/blockly-config.js` (particle blocks section)
 - Phase 3: `res/js/blockly-config.js` (verb blocks section)
-- Phase N: `src/modules/validation.rs` (new file)
+- Phase 4: `src/commands.rs`, `res/js/` (project persistence)
+- Phase 5: `src/modules/validation.rs` (basic validation)
+- Phase 6: `src/modules/validation.rs` (advanced validation + suggestions)
 
 ### Rule 3: Merge to dev, Keep Branch Alive
 - After merging to `dev`, push feature branch to remote
@@ -177,9 +181,9 @@ feature/phase-0      # Phase 0 Core
 feature/phase-1      # Phase 1 GUI
 feature/phase-2      # Phase 2 Particle Blocks
 feature/phase-3      # Phase 3 Verb Blocks
-feature/phase-n      # Phase N Logic Check
-feature/phase-n1     # Phase N+1 File I/O
-feature/phase-n2     # Phase N+2 Layout
+feature/phase-4      # Phase 4 Project Persistence
+feature/phase-5      # Phase 5 Logic Check 基礎
+feature/phase-6      # Phase 6 Logic Check 拡張
 
 fix/critical-bug     # Cross-phase critical fixes (deleted after merge)
 docs/update-readme   # Documentation only (deleted after merge)
@@ -254,9 +258,9 @@ on:
 **3. Clear module boundaries**
 - Phase 0: Core parsing
 - Phase 1: GUI foundation
-- Phase 2+: Block types
-- Phase N: Validation
-- Phase N+1: File I/O
+- Phase 2-3: Block types (Particle, Verb)
+- Phase 4: Project Persistence (File I/O)
+- Phase 5-6: Logic Check (Validation)
 
 **4. Minimal implementation**
 - Small codebase

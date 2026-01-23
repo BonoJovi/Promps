@@ -277,11 +277,14 @@ git push origin :refs/tags/vX.Y.Z
 
 **Current stage:** v0.0.x (Tech Preview)
 
-**Examples:**
+**Roadmap:**
 - v0.0.1: Phase 0 + Phase 1 (CLI + GUI foundation)
 - v0.0.2: Phase 2 (Particle blocks)
-- v0.0.3: Phase 3 (Verb blocks) - Planned
-- v1.0.0: Stable release with all planned features
+- v0.0.3-2: Phase 3 (Verb blocks) ✅ Complete
+- v0.0.4: Phase 4 (Project Persistence - save/load)
+- v0.0.5: Phase 5 (Logic Check 基礎 - basic validation)
+- v0.0.6: Phase 6 (Logic Check 拡張 - advanced validation + suggestions)
+- **v1.0.0**: Stable release (after v0.0.6 verification)
 
 ---
 
