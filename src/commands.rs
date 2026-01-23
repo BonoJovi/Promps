@@ -521,14 +521,15 @@ mod tests {
 
     #[test]
     fn test_load_project_invalid_extension() {
-        // Create a temp file to test extension validation
-        let temp_file = "/tmp/promps_test_invalid_ext.txt";
-        fs::write(temp_file, "test content").unwrap();
+        // Create a temp file to test extension validation (cross-platform)
+        let temp_dir = std::env::temp_dir();
+        let temp_file = temp_dir.join("promps_test_invalid_ext.txt");
+        fs::write(&temp_file, "test content").unwrap();
 
-        let result = load_project(temp_file.to_string());
+        let result = load_project(temp_file.to_string_lossy().to_string());
 
         // Clean up
-        let _ = fs::remove_file(temp_file);
+        let _ = fs::remove_file(&temp_file);
 
         assert!(result.is_err());
         assert!(result.unwrap_err().contains("extension"));
