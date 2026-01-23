@@ -666,8 +666,76 @@ function initBlockly() {
  */
 function onBlocklyChange(event) {
     // Ignore UI events
-    if (event.type === Blockly.Events.UI) {
+    if (event.isUiEvent) {
         return;
+    }
+
+    // Only process events from main workspace
+    if (!workspace || event.workspaceId !== workspace.id) {
+        return;
+    }
+
+    let shouldMarkDirty = false;
+
+    // Track newly created blocks (from flyout)
+    // Map: blockId -> timerId (null if no timer yet)
+    if (!window._newlyCreatedBlocks) {
+        window._newlyCreatedBlocks = new Map();
+    }
+
+    // Create event - track as newly created
+    if (event.type === Blockly.Events.BLOCK_CREATE) {
+        window._newlyCreatedBlocks.set(event.blockId, null);
+    }
+
+    // Move event
+    if (event.type === Blockly.Events.BLOCK_MOVE) {
+        if (window._newlyCreatedBlocks.has(event.blockId)) {
+            // Newly created block is being moved - schedule dirty after delay
+            const existingTimer = window._newlyCreatedBlocks.get(event.blockId);
+            if (existingTimer) {
+                clearTimeout(existingTimer);
+            }
+            const timerId = setTimeout(() => {
+                if (window._newlyCreatedBlocks.has(event.blockId)) {
+                    window._newlyCreatedBlocks.delete(event.blockId);
+                    const block = workspace.getBlockById(event.blockId);
+                    if (block && window.projectManager && typeof window.projectManager.markDirty === 'function') {
+                        window.projectManager.markDirty();
+                    }
+                }
+            }, 150);
+            window._newlyCreatedBlocks.set(event.blockId, timerId);
+        } else {
+            // Existing block was moved
+            shouldMarkDirty = true;
+        }
+    }
+
+    // Delete event
+    if (event.type === Blockly.Events.BLOCK_DELETE) {
+        if (window._newlyCreatedBlocks.has(event.blockId)) {
+            // Cancel any pending timer - this was a cancelled drag
+            const timerId = window._newlyCreatedBlocks.get(event.blockId);
+            if (timerId) {
+                clearTimeout(timerId);
+            }
+            window._newlyCreatedBlocks.delete(event.blockId);
+        } else {
+            // Real deletion of existing block
+            shouldMarkDirty = true;
+        }
+    }
+
+    // Field change event - always mark dirty
+    if (event.type === Blockly.Events.BLOCK_CHANGE) {
+        shouldMarkDirty = true;
+    }
+
+    if (shouldMarkDirty) {
+        if (window.projectManager && typeof window.projectManager.markDirty === 'function') {
+            window.projectManager.markDirty();
+        }
     }
 
     // Generate DSL code only from connected block chains

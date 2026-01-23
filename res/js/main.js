@@ -1,5 +1,5 @@
 /**
- * Promps Phase 1 - Main JavaScript
+ * Promps Phase 4 - Main JavaScript
  *
  * This file handles frontend logic and Tauri command invocation.
  */
@@ -58,10 +58,111 @@ async function updatePreview(dslCode) {
 }
 
 /**
+ * Initialize keyboard shortcuts
+ */
+function initKeyboardShortcuts() {
+    document.addEventListener('keydown', async (e) => {
+        // Ctrl+N: New Project
+        if (e.ctrlKey && !e.shiftKey && e.key.toLowerCase() === 'n') {
+            e.preventDefault();
+            if (window.projectManager) {
+                await window.projectManager.newProject();
+            }
+        }
+
+        // Ctrl+O: Open Project
+        if (e.ctrlKey && !e.shiftKey && e.key.toLowerCase() === 'o') {
+            e.preventDefault();
+            if (window.projectManager) {
+                await window.projectManager.loadProject();
+            }
+        }
+
+        // Ctrl+S: Save Project
+        if (e.ctrlKey && !e.shiftKey && e.key.toLowerCase() === 's') {
+            e.preventDefault();
+            if (window.projectManager) {
+                await window.projectManager.saveProject(false);
+            }
+        }
+
+        // Ctrl+Shift+S: Save As
+        if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 's') {
+            e.preventDefault();
+            if (window.projectManager) {
+                await window.projectManager.saveProject(true);
+            }
+        }
+    });
+
+    console.log('Keyboard shortcuts initialized');
+}
+
+/**
+ * Initialize toolbar button event listeners
+ */
+function initToolbarButtons() {
+    // New button
+    const btnNew = document.getElementById('btnNew');
+    if (btnNew) {
+        btnNew.addEventListener('click', async () => {
+            if (window.projectManager) {
+                await window.projectManager.newProject();
+            }
+        });
+    }
+
+    // Open button
+    const btnOpen = document.getElementById('btnOpen');
+    if (btnOpen) {
+        btnOpen.addEventListener('click', async () => {
+            if (window.projectManager) {
+                await window.projectManager.loadProject();
+            }
+        });
+    }
+
+    // Save button
+    const btnSave = document.getElementById('btnSave');
+    if (btnSave) {
+        btnSave.addEventListener('click', async () => {
+            if (window.projectManager) {
+                await window.projectManager.saveProject(false);
+            }
+        });
+    }
+
+    // Save As button
+    const btnSaveAs = document.getElementById('btnSaveAs');
+    if (btnSaveAs) {
+        btnSaveAs.addEventListener('click', async () => {
+            if (window.projectManager) {
+                await window.projectManager.saveProject(true);
+            }
+        });
+    }
+
+    console.log('Toolbar buttons initialized');
+}
+
+/**
+ * Handle beforeunload event (warn about unsaved changes)
+ */
+function initBeforeUnload() {
+    window.addEventListener('beforeunload', (e) => {
+        if (window.projectManager && window.projectManager.hasUnsavedChanges()) {
+            e.preventDefault();
+            e.returnValue = 'You have unsaved changes. Are you sure you want to leave?';
+            return e.returnValue;
+        }
+    });
+}
+
+/**
  * Initialize application
  */
 async function init() {
-    console.log('Promps Phase 1 initialized');
+    console.log('Promps Phase 4 initialized');
 
     // Initialize Tauri API (v2 compatible)
     if (window.__TAURI_INTERNALS__) {
@@ -91,6 +192,20 @@ async function init() {
     } else {
         console.error('initBlockly function not found');
     }
+
+    // Initialize Project Manager
+    if (window.projectManager && typeof window.projectManager.init === 'function') {
+        await window.projectManager.init();
+    }
+
+    // Initialize keyboard shortcuts
+    initKeyboardShortcuts();
+
+    // Initialize toolbar buttons
+    initToolbarButtons();
+
+    // Initialize beforeunload handler
+    initBeforeUnload();
 }
 
 // Initialize when DOM is ready

@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Promps - Visual Prompt Language</title>
-    <link rel="stylesheet" href="/css/common.css">
+    <title>Untitled - Promps</title>
+    <link rel="stylesheet" href="css/common.css">
 
     <!-- Blockly.js -->
     <script src="https://unpkg.com/blockly/blockly.min.js"></script>
@@ -13,8 +13,31 @@
     <div class="app-container">
         <!-- Header -->
         <header class="app-header">
-            <h1>Promps - Phase 1</h1>
-            <p class="subtitle">Visual Prompt Language Generator</p>
+            <div class="header-content">
+                <div class="header-title">
+                    <h1>Promps</h1>
+                    <p class="subtitle">Visual Prompt Language Generator</p>
+                </div>
+                <!-- Toolbar -->
+                <div class="toolbar">
+                    <button id="btnNew" class="toolbar-btn" title="New Project (Ctrl+N)">
+                        <span class="toolbar-icon">+</span>
+                        <span class="toolbar-label">New</span>
+                    </button>
+                    <button id="btnOpen" class="toolbar-btn" title="Open Project (Ctrl+O)">
+                        <span class="toolbar-icon">&#128194;</span>
+                        <span class="toolbar-label">Open</span>
+                    </button>
+                    <button id="btnSave" class="toolbar-btn" title="Save Project (Ctrl+S)">
+                        <span class="toolbar-icon">&#128190;</span>
+                        <span class="toolbar-label">Save</span>
+                    </button>
+                    <button id="btnSaveAs" class="toolbar-btn" title="Save As (Ctrl+Shift+S)">
+                        <span class="toolbar-icon">&#128190;</span>
+                        <span class="toolbar-label">Save As</span>
+                    </button>
+                </div>
+            </div>
         </header>
 
         <!-- Main Content -->
@@ -39,11 +62,12 @@
 
         <!-- Footer -->
         <footer class="app-footer">
-            <p>Promps v0.1.0 - Phase 1 (Tauri Integration)</p>
+            <p>Promps v0.0.4 - Phase 4 (Project Persistence)</p>
         </footer>
     </div>
 
-    <script src="/js/blockly-config.js"></script>
-    <script src="/js/main.js"></script>
+    <script src="js/blockly-config.js"></script>
+    <script src="js/project-manager.js"></script>
+    <script src="js/main.js"></script>
 </body>
 </html>

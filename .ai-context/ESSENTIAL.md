@@ -1,6 +1,6 @@
 # AI Context - Essential Information Only
 
-**Last Updated**: 2026-01-23
+**Last Updated**: 2026-01-24
 **Purpose**: Minimal context for session startup (token optimization)
 **Keywords**: essential, quick start, overview, status, current state, 現在の状態, エッセンシャル, 概要, project status, version, tests, テスト, critical rules, 重要なルール, quick reference, クイックリファレンス, entry point, starting point
 **Related**: @README.md, @context/coding/API_STABILITY.md, @context/workflows/BRANCHING.md, @context/coding/TESTING.md
@@ -9,9 +9,9 @@
 
 ## Current Status
 
-**Version**: v0.0.3-2 (Verb blocks complete)
-**Phase**: Phase 3 Complete (Verb blocks - 11 fixed + custom)
-**Tests**: 102 tests at 100% passing (Backend 26 + Frontend 76)
+**Version**: v0.0.4 (Project Persistence)
+**Phase**: Phase 4 Complete (Save/Load, Dirty State Detection)
+**Tests**: 168 tests at 100% passing (Backend 34 + Frontend 134)
 **Branch**: dev (integration branch)
 
 ---
@@ -21,8 +21,8 @@
 | Version | Phase | Content | Status |
 |---------|-------|---------|--------|
 | v0.0.3-2 | Phase 3 | Verb blocks | ✅ Complete |
-| v0.0.4 | Phase 4 | Project Persistence (save/load) | Next |
-| v0.0.5 | Phase 5 | Logic Check 基礎 (basic validation) | Planned |
+| v0.0.4 | Phase 4 | Project Persistence (save/load) | ✅ Complete |
+| v0.0.5 | Phase 5 | Logic Check 基礎 (basic validation) | Next |
 | v0.0.6 | Phase 6 | Logic Check 拡張 (advanced + suggestions) | Planned |
 | **v1.0.0** | - | **Stable Release** | After v0.0.6 verification |
 
@@ -41,7 +41,7 @@
 - Details: `@.ai-context/context/workflows/BRANCHING.md`
 
 ### 3. Testing Policy
-- **All tests must pass before merge** (102 tests currently)
+- **All tests must pass before merge** (168 tests currently)
 - Implement tests immediately after feature completion
 - Details: `@.ai-context/context/coding/TESTING.md`
 
@@ -51,11 +51,11 @@
 
 **Source Code**:
 - Core: `src/lib.rs`, `src/commands.rs`
-- Frontend: `res/js/main.js`, `res/js/blockly-config.js`
+- Frontend: `res/js/main.js`, `res/js/blockly-config.js`, `res/js/project-manager.js`
 
 **Tests**:
-- Backend: `src/lib.rs` (13 tests), `src/commands.rs` (13 tests)
-- Frontend: `res/tests/` (76 tests)
+- Backend: `src/lib.rs` (13 tests), `src/commands.rs` (21 tests)
+- Frontend: `res/tests/` (134 tests)
 
 ---
 
