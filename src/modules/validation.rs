@@ -598,6 +598,21 @@ pub fn get_pattern_templates() -> Vec<PatternTemplate> {
                 PatternBlock::placeholder("promps_verb_translate", "動詞"),
             ],
         ),
+        // Pattern 7: Object-first pattern (OSV - 目的語先行)
+        PatternTemplate::new(
+            "osv_emphasis",
+            "目的語先行文型（を...が）",
+            "目的語を先に述べて強調する形",
+            "名詞 を 名詞 が 動詞",
+            "ドキュメント を ユーザー が 分析して",
+            vec![
+                PatternBlock::placeholder("promps_noun", "目的語"),
+                PatternBlock::fixed("promps_particle_wo", "を"),
+                PatternBlock::placeholder("promps_noun", "主語"),
+                PatternBlock::fixed("promps_particle_ga", "が"),
+                PatternBlock::placeholder("promps_verb_analyze", "動詞"),
+            ],
+        ),
     ]
 }
 
@@ -1022,7 +1037,7 @@ mod tests {
     fn test_get_pattern_templates_returns_patterns() {
         let patterns = get_pattern_templates();
         assert!(!patterns.is_empty());
-        assert!(patterns.len() >= 6); // We have 6 patterns defined
+        assert!(patterns.len() >= 7); // We have 7 patterns defined
     }
 
     #[test]
@@ -1041,6 +1056,37 @@ mod tests {
 
         assert_eq!(ov.name, "目的語-動詞文型");
         assert_eq!(ov.blocks.len(), 3); // Noun, を, Verb
+    }
+
+    #[test]
+    fn test_pattern_template_osv_emphasis() {
+        let patterns = get_pattern_templates();
+        let osv = patterns.iter().find(|p| p.id == "osv_emphasis").unwrap();
+
+        assert_eq!(osv.name, "目的語先行文型（を...が）");
+        assert_eq!(osv.blocks.len(), 5); // Noun, を, Noun, が, Verb
+        assert_eq!(osv.structure, "名詞 を 名詞 が 動詞");
+    }
+
+    #[test]
+    fn test_analyze_patterns_osv_match() {
+        // "_N:Doc を _N:User が" should match osv_emphasis pattern
+        let results = analyze_patterns("_N:Doc を _N:User が");
+        let osv_match = results.iter().find(|r| r.pattern_id == "osv_emphasis").unwrap();
+
+        // 4 out of 5 tokens match
+        assert!(osv_match.match_score > 0.7);
+        assert!(!osv_match.is_complete);
+    }
+
+    #[test]
+    fn test_analyze_patterns_osv_complete() {
+        // Complete OSV pattern
+        let results = analyze_patterns("_N:Doc を _N:User が 分析して");
+        let osv_match = results.iter().find(|r| r.pattern_id == "osv_emphasis").unwrap();
+
+        assert_eq!(osv_match.match_score, 1.0);
+        assert!(osv_match.is_complete);
     }
 
     #[test]
