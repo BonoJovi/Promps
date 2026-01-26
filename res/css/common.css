@@ -364,6 +364,27 @@ h2 {
     font-size: 0.8125rem;
 }
 
+/* Auto-fix button */
+.validation-fix-btn {
+    margin-left: 0.5rem;
+    padding: 0.125rem 0.5rem;
+    font-size: 0.75rem;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.validation-fix-btn:hover {
+    background-color: #218838;
+}
+
+.validation-fix-btn:active {
+    background-color: #1e7e34;
+}
+
 /* Block error highlight (Blockly SVG) */
 .validation-block-error {
     filter: drop-shadow(0 0 4px #dc3545) drop-shadow(0 0 8px #dc3545);

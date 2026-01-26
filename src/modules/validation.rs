@@ -1,4 +1,4 @@
-/// Promps Phase 5 - Grammar Validation Module
+/// Promps Phase 5-6 - Grammar Validation Module
 ///
 /// This module provides grammar validation for DSL sequences.
 /// It checks for common Japanese grammar patterns and reports errors/warnings.
@@ -102,6 +102,34 @@ pub enum ValidationErrorCode {
     VerbNotAtEnd,
     /// Rule 4: Consecutive nouns without particle
     ConsecutiveNouns,
+    /// Rule 5: Missing subject (no が with verb)
+    MissingSubject,
+    /// Rule 6: Missing object (no を with verb)
+    MissingObject,
+}
+
+/// Auto-fix action type
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum AutoFixActionType {
+    /// Insert a block before the target position
+    InsertBefore,
+    /// Insert a block after the target position
+    InsertAfter,
+}
+
+/// Auto-fix action for automatic error correction
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct AutoFixAction {
+    /// Type of action to perform
+    pub action_type: AutoFixActionType,
+    /// Block type to insert (e.g., "promps_noun", "promps_particle_ga")
+    pub block_type: String,
+    /// Target position (0-indexed token position)
+    pub target_position: usize,
+    /// Label for the fix button
+    pub label: String,
 }
 
 /// A single validation error or warning
@@ -119,6 +147,9 @@ pub struct ValidationError {
     /// Suggested fix (optional)
     #[serde(skip_serializing_if = "Option::is_none")]
     pub suggestion: Option<String>,
+    /// Auto-fix action (optional)
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub autofix: Option<AutoFixAction>,
 }
 
 impl ValidationError {
@@ -136,6 +167,26 @@ impl ValidationError {
             position,
             severity,
             suggestion,
+            autofix: None,
+        }
+    }
+
+    /// Create a new validation error with auto-fix action
+    pub fn with_autofix(
+        code: ValidationErrorCode,
+        message: impl Into<String>,
+        position: usize,
+        severity: Severity,
+        suggestion: Option<String>,
+        autofix: AutoFixAction,
+    ) -> Self {
+        ValidationError {
+            code,
+            message: message.into(),
+            position,
+            severity,
+            suggestion,
+            autofix: Some(autofix),
         }
     }
 }
@@ -203,6 +254,8 @@ impl Default for ValidationResult {
 /// 2. No consecutive particles (Error)
 /// 3. Verb should be at end (Warning)
 /// 4. Consecutive nouns without particle (Warning)
+/// 5. Missing subject - no が with verb (Warning)
+/// 6. Missing object - no を with verb (Warning)
 pub fn validate_sequence(input: &str) -> ValidationResult {
     let mut result = ValidationResult::new();
 
@@ -231,26 +284,38 @@ pub fn validate_sequence(input: &str) -> ValidationResult {
         if token_type == TokenType::Particle {
             match prev_type {
                 None => {
-                    // Particle at beginning
-                    result.add_error(ValidationError::new(
+                    // Particle at beginning - add auto-fix to insert noun
+                    result.add_error(ValidationError::with_autofix(
                         ValidationErrorCode::ParticleWithoutNoun,
                         format!("助詞「{}」の前に名詞がありません", token),
                         i,
                         Severity::Error,
                         Some("名詞ブロックを追加してください".to_string()),
+                        AutoFixAction {
+                            action_type: AutoFixActionType::InsertBefore,
+                            block_type: "promps_noun".to_string(),
+                            target_position: i,
+                            label: "名詞を追加".to_string(),
+                        },
                     ));
                 }
                 Some(TokenType::Noun) => {
                     // OK - particle follows noun
                 }
                 Some(TokenType::Particle) => {
-                    // Rule 2: Consecutive particles
-                    result.add_error(ValidationError::new(
+                    // Rule 2: Consecutive particles - add auto-fix to insert noun
+                    result.add_error(ValidationError::with_autofix(
                         ValidationErrorCode::ConsecutiveParticles,
                         format!("助詞「{}」が連続しています", token),
                         i,
                         Severity::Error,
                         Some("間に名詞や動詞を追加してください".to_string()),
+                        AutoFixAction {
+                            action_type: AutoFixActionType::InsertBefore,
+                            block_type: "promps_noun".to_string(),
+                            target_position: i,
+                            label: "名詞を追加".to_string(),
+                        },
                     ));
                 }
                 Some(_) => {
@@ -263,12 +328,18 @@ pub fn validate_sequence(input: &str) -> ValidationResult {
         // Rule 4: Consecutive nouns without particle (warning)
         if token_type == TokenType::Noun {
             if prev_type == Some(TokenType::Noun) {
-                result.add_error(ValidationError::new(
+                result.add_error(ValidationError::with_autofix(
                     ValidationErrorCode::ConsecutiveNouns,
                     "名詞が連続しています".to_string(),
                     i,
                     Severity::Warning,
                     Some("間に助詞を追加することを検討してください".to_string()),
+                    AutoFixAction {
+                        action_type: AutoFixActionType::InsertBefore,
+                        block_type: "promps_particle_to".to_string(),
+                        target_position: i,
+                        label: "「と」を追加".to_string(),
+                    },
                 ));
             }
         }
@@ -294,6 +365,54 @@ pub fn validate_sequence(input: &str) -> ValidationResult {
                     Some("動詞を文末に移動してください".to_string()),
                 ));
             }
+        }
+    }
+
+    // Check for presence of verb (needed for Rules 5 and 6)
+    let has_verb = classified.iter().any(|(_, _, t)| *t == TokenType::Verb);
+
+    if has_verb {
+        // Find the verb position for error reporting
+        let verb_pos = classified
+            .iter()
+            .find(|(_, _, t)| *t == TokenType::Verb)
+            .map(|(i, _, _)| *i)
+            .unwrap_or(0);
+
+        // Rule 5: Missing subject (no が with verb)
+        let has_ga = tokens.iter().any(|t| *t == "が");
+        if !has_ga {
+            result.add_error(ValidationError::with_autofix(
+                ValidationErrorCode::MissingSubject,
+                "主語がありません（「が」がありません）".to_string(),
+                verb_pos,
+                Severity::Warning,
+                Some("「名詞 が」を追加してください".to_string()),
+                AutoFixAction {
+                    action_type: AutoFixActionType::InsertBefore,
+                    block_type: "promps_particle_ga".to_string(),
+                    target_position: 0,
+                    label: "「が」を追加".to_string(),
+                },
+            ));
+        }
+
+        // Rule 6: Missing object (no を with verb)
+        let has_wo = tokens.iter().any(|t| *t == "を");
+        if !has_wo {
+            result.add_error(ValidationError::with_autofix(
+                ValidationErrorCode::MissingObject,
+                "目的語がありません（「を」がありません）".to_string(),
+                verb_pos,
+                Severity::Warning,
+                Some("「名詞 を」を追加してください".to_string()),
+                AutoFixAction {
+                    action_type: AutoFixActionType::InsertBefore,
+                    block_type: "promps_particle_wo".to_string(),
+                    target_position: verb_pos,
+                    label: "「を」を追加".to_string(),
+                },
+            ));
         }
     }
 
@@ -426,6 +545,50 @@ mod tests {
         assert!(!result.errors.iter().any(|e| e.code == ValidationErrorCode::ConsecutiveNouns));
     }
 
+    // Rule 5: Missing subject
+
+    #[test]
+    fn test_rule5_missing_subject() {
+        let result = validate_sequence("_N:Document を 分析して");
+        assert!(result.warning_count >= 1);
+        assert!(result.errors.iter().any(|e| e.code == ValidationErrorCode::MissingSubject));
+    }
+
+    #[test]
+    fn test_rule5_has_subject_valid() {
+        let result = validate_sequence("_N:User が _N:Document を 分析して");
+        assert!(!result.errors.iter().any(|e| e.code == ValidationErrorCode::MissingSubject));
+    }
+
+    #[test]
+    fn test_rule5_no_verb_no_warning() {
+        // No verb means no subject warning
+        let result = validate_sequence("_N:User _N:Document");
+        assert!(!result.errors.iter().any(|e| e.code == ValidationErrorCode::MissingSubject));
+    }
+
+    // Rule 6: Missing object
+
+    #[test]
+    fn test_rule6_missing_object() {
+        let result = validate_sequence("_N:User が 作成して");
+        assert!(result.warning_count >= 1);
+        assert!(result.errors.iter().any(|e| e.code == ValidationErrorCode::MissingObject));
+    }
+
+    #[test]
+    fn test_rule6_has_object_valid() {
+        let result = validate_sequence("_N:User が _N:Document を 分析して");
+        assert!(!result.errors.iter().any(|e| e.code == ValidationErrorCode::MissingObject));
+    }
+
+    #[test]
+    fn test_rule6_no_verb_no_warning() {
+        // No verb means no object warning
+        let result = validate_sequence("_N:User が _N:Document");
+        assert!(!result.errors.iter().any(|e| e.code == ValidationErrorCode::MissingObject));
+    }
+
     // Integration tests
 
     #[test]
@@ -476,5 +639,53 @@ mod tests {
         let noun = TokenType::Noun;
         let json = serde_json::to_string(&noun).unwrap();
         assert_eq!(json, "\"Noun\"");
+    }
+
+    // Auto-fix tests
+
+    #[test]
+    fn test_autofix_in_particle_without_noun() {
+        let result = validate_sequence("が _N:User");
+        assert!(result.errors[0].autofix.is_some());
+        let autofix = result.errors[0].autofix.as_ref().unwrap();
+        assert_eq!(autofix.block_type, "promps_noun");
+        assert_eq!(autofix.action_type, AutoFixActionType::InsertBefore);
+    }
+
+    #[test]
+    fn test_autofix_in_missing_subject() {
+        let result = validate_sequence("_N:Document を 分析して");
+        let missing_subject = result.errors.iter()
+            .find(|e| e.code == ValidationErrorCode::MissingSubject);
+        assert!(missing_subject.is_some());
+        let autofix = missing_subject.unwrap().autofix.as_ref().unwrap();
+        assert_eq!(autofix.block_type, "promps_particle_ga");
+    }
+
+    #[test]
+    fn test_autofix_in_missing_object() {
+        let result = validate_sequence("_N:User が 作成して");
+        let missing_object = result.errors.iter()
+            .find(|e| e.code == ValidationErrorCode::MissingObject);
+        assert!(missing_object.is_some());
+        let autofix = missing_object.unwrap().autofix.as_ref().unwrap();
+        assert_eq!(autofix.block_type, "promps_particle_wo");
+    }
+
+    #[test]
+    fn test_autofix_in_consecutive_nouns() {
+        let result = validate_sequence("_N:User _N:Order");
+        assert!(result.errors[0].autofix.is_some());
+        let autofix = result.errors[0].autofix.as_ref().unwrap();
+        assert_eq!(autofix.block_type, "promps_particle_to");
+    }
+
+    #[test]
+    fn test_autofix_serialization() {
+        let result = validate_sequence("が _N:User");
+        let json = serde_json::to_string(&result).unwrap();
+        assert!(json.contains("\"autofix\""));
+        assert!(json.contains("\"actionType\":\"insert_before\""));
+        assert!(json.contains("\"blockType\":\"promps_noun\""));
     }
 }

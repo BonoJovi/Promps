@@ -292,6 +292,54 @@ describe('Validation Rules', () => {
         expect(result.warningCount).toBe(1);
         expect(result.errors[0].code).toBe('ConsecutiveNouns');
     });
+
+    test('Rule 5: Missing subject should warn', async () => {
+        mockInvoke.mockResolvedValue({
+            isValid: true,
+            errors: [{
+                code: 'MissingSubject',
+                message: '主語がありません（「が」がありません）',
+                position: 2,
+                severity: 'warning',
+                suggestion: '「名詞 が」を追加してください'
+            }],
+            errorCount: 0,
+            warningCount: 1
+        });
+
+        const invoke = window.__TAURI__.invoke;
+        const result = await invoke('validate_dsl_sequence', {
+            input: '_N:Document を 分析して'
+        });
+
+        expect(result.isValid).toBe(true);
+        expect(result.warningCount).toBe(1);
+        expect(result.errors[0].code).toBe('MissingSubject');
+    });
+
+    test('Rule 6: Missing object should warn', async () => {
+        mockInvoke.mockResolvedValue({
+            isValid: true,
+            errors: [{
+                code: 'MissingObject',
+                message: '目的語がありません（「を」がありません）',
+                position: 2,
+                severity: 'warning',
+                suggestion: '「名詞 を」を追加してください'
+            }],
+            errorCount: 0,
+            warningCount: 1
+        });
+
+        const invoke = window.__TAURI__.invoke;
+        const result = await invoke('validate_dsl_sequence', {
+            input: '_N:User が 作成して'
+        });
+
+        expect(result.isValid).toBe(true);
+        expect(result.warningCount).toBe(1);
+        expect(result.errors[0].code).toBe('MissingObject');
+    });
 });
 
 describe('Block Position Mapping', () => {
@@ -490,6 +538,98 @@ describe('Integration with Preview Update', () => {
 
         expect(validation.isValid).toBe(false);
         expect(validation.errorCount).toBe(1);
+    });
+});
+
+describe('Auto-fix Feature', () => {
+    beforeEach(() => {
+        mockInvoke.mockClear();
+    });
+
+    test('should include autofix action in validation result', async () => {
+        mockInvoke.mockResolvedValue({
+            isValid: false,
+            errors: [{
+                code: 'ParticleWithoutNoun',
+                message: '助詞「が」の前に名詞がありません',
+                position: 0,
+                severity: 'error',
+                suggestion: '名詞ブロックを追加してください',
+                autofix: {
+                    actionType: 'insert_before',
+                    blockType: 'promps_noun',
+                    targetPosition: 0,
+                    label: '名詞を追加'
+                }
+            }],
+            errorCount: 1,
+            warningCount: 0
+        });
+
+        const invoke = window.__TAURI__.invoke;
+        const result = await invoke('validate_dsl_sequence', {
+            input: 'が _N:User'
+        });
+
+        expect(result.errors[0].autofix).toBeDefined();
+        expect(result.errors[0].autofix.actionType).toBe('insert_before');
+        expect(result.errors[0].autofix.blockType).toBe('promps_noun');
+    });
+
+    test('should include autofix for missing subject', async () => {
+        mockInvoke.mockResolvedValue({
+            isValid: true,
+            errors: [{
+                code: 'MissingSubject',
+                message: '主語がありません（「が」がありません）',
+                position: 2,
+                severity: 'warning',
+                suggestion: '「名詞 が」を追加してください',
+                autofix: {
+                    actionType: 'insert_before',
+                    blockType: 'promps_particle_ga',
+                    targetPosition: 0,
+                    label: '「が」を追加'
+                }
+            }],
+            errorCount: 0,
+            warningCount: 1
+        });
+
+        const invoke = window.__TAURI__.invoke;
+        const result = await invoke('validate_dsl_sequence', {
+            input: '_N:Document を 分析して'
+        });
+
+        expect(result.errors[0].autofix.blockType).toBe('promps_particle_ga');
+        expect(result.errors[0].autofix.label).toBe('「が」を追加');
+    });
+
+    test('should include autofix for consecutive nouns', async () => {
+        mockInvoke.mockResolvedValue({
+            isValid: true,
+            errors: [{
+                code: 'ConsecutiveNouns',
+                message: '名詞が連続しています',
+                position: 1,
+                severity: 'warning',
+                autofix: {
+                    actionType: 'insert_before',
+                    blockType: 'promps_particle_to',
+                    targetPosition: 1,
+                    label: '「と」を追加'
+                }
+            }],
+            errorCount: 0,
+            warningCount: 1
+        });
+
+        const invoke = window.__TAURI__.invoke;
+        const result = await invoke('validate_dsl_sequence', {
+            input: '_N:User _N:Order'
+        });
+
+        expect(result.errors[0].autofix.blockType).toBe('promps_particle_to');
     });
 });
 

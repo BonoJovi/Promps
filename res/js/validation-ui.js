@@ -1,8 +1,8 @@
 /**
- * Promps Phase 5 - Validation UI
+ * Promps Phase 5-6 - Validation UI
  *
- * This file handles displaying validation results in the UI
- * and highlighting blocks with errors.
+ * This file handles displaying validation results in the UI,
+ * highlighting blocks with errors, and applying auto-fixes.
  */
 
 /**
@@ -74,8 +74,17 @@ const validationUI = {
             message.textContent = error.message;
             item.appendChild(message);
 
-            // Suggestion (if available)
-            if (error.suggestion) {
+            // Auto-fix button (if available)
+            if (error.autofix) {
+                const fixBtn = document.createElement('button');
+                fixBtn.className = 'validation-fix-btn';
+                fixBtn.textContent = error.autofix.label;
+                fixBtn.addEventListener('click', () => {
+                    this.applyAutoFix(error.autofix);
+                });
+                item.appendChild(fixBtn);
+            } else if (error.suggestion) {
+                // Suggestion text (only if no autofix)
                 const suggestion = document.createElement('span');
                 suggestion.className = 'validation-suggestion';
                 suggestion.textContent = ` → ${error.suggestion}`;
@@ -184,6 +193,117 @@ const validationUI = {
         }
 
         return positions;
+    },
+
+    /**
+     * Apply an auto-fix action
+     * @param {Object} autofix - AutoFixAction from backend
+     */
+    applyAutoFix: function(autofix) {
+        if (!workspace) {
+            console.warn('Workspace not available for auto-fix');
+            return;
+        }
+
+        try {
+            // IMPORTANT: Build block positions BEFORE creating the new block
+            const blockPositions = this.buildBlockPositions();
+            const targetBlockId = blockPositions[autofix.targetPosition];
+
+            // Create the new block
+            const newBlock = workspace.newBlock(autofix.blockType);
+            newBlock.initSvg();
+            newBlock.render();
+
+            if (targetBlockId) {
+                const targetBlock = workspace.getBlockById(targetBlockId);
+                if (targetBlock) {
+                    if (autofix.actionType === 'insert_before') {
+                        this.insertBlockBefore(newBlock, targetBlock);
+                    } else if (autofix.actionType === 'insert_after') {
+                        this.insertBlockAfter(newBlock, targetBlock);
+                    }
+                } else {
+                    // Target block not found, place at workspace origin
+                    this.placeBlockAtOrigin(newBlock);
+                }
+            } else {
+                // No blocks in workspace, place at origin
+                this.placeBlockAtOrigin(newBlock);
+            }
+
+            // Trigger workspace change event to update preview
+            workspace.fireChangeListener(new Blockly.Events.BlockCreate(newBlock));
+
+        } catch (error) {
+            console.error('Failed to apply auto-fix:', error);
+        }
+    },
+
+    /**
+     * Insert a new block before a target block
+     * @param {Blockly.Block} newBlock - Block to insert
+     * @param {Blockly.Block} targetBlock - Block to insert before
+     */
+    insertBlockBefore: function(newBlock, targetBlock) {
+        // Get the previous block (if any)
+        const previousBlock = targetBlock.getPreviousBlock();
+
+        // First, disconnect target from its previous block
+        if (targetBlock.previousConnection && targetBlock.previousConnection.isConnected()) {
+            targetBlock.previousConnection.disconnect();
+        }
+
+        // Position the new block near the target
+        const targetXY = targetBlock.getRelativeToSurfaceXY();
+        newBlock.moveBy(targetXY.x, targetXY.y);
+
+        // Connect new block to target (new block's next -> target's previous)
+        if (newBlock.nextConnection && targetBlock.previousConnection) {
+            newBlock.nextConnection.connect(targetBlock.previousConnection);
+        }
+
+        // Connect previous block to new block (if there was one)
+        if (previousBlock && previousBlock.nextConnection && newBlock.previousConnection) {
+            previousBlock.nextConnection.connect(newBlock.previousConnection);
+        }
+    },
+
+    /**
+     * Insert a new block after a target block
+     * @param {Blockly.Block} newBlock - Block to insert
+     * @param {Blockly.Block} targetBlock - Block to insert after
+     */
+    insertBlockAfter: function(newBlock, targetBlock) {
+        // Get the next block (if any)
+        const nextBlock = targetBlock.getNextBlock();
+
+        // First, disconnect target from its next block
+        if (targetBlock.nextConnection && targetBlock.nextConnection.isConnected()) {
+            targetBlock.nextConnection.disconnect();
+        }
+
+        // Position the new block near the target
+        const targetXY = targetBlock.getRelativeToSurfaceXY();
+        newBlock.moveBy(targetXY.x, targetXY.y + 40);
+
+        // Connect target to new block (target's next -> new block's previous)
+        if (targetBlock.nextConnection && newBlock.previousConnection) {
+            targetBlock.nextConnection.connect(newBlock.previousConnection);
+        }
+
+        // Connect new block to original next block (if there was one)
+        if (nextBlock && newBlock.nextConnection && nextBlock.previousConnection) {
+            newBlock.nextConnection.connect(nextBlock.previousConnection);
+        }
+    },
+
+    /**
+     * Place a block at the workspace origin
+     * @param {Blockly.Block} block - Block to place
+     */
+    placeBlockAtOrigin: function(block) {
+        block.moveBy(50, 50);
     }
 };
 
