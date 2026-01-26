@@ -5,8 +5,8 @@
 > **A Visual Block-Based Tool for Creating Structured AI Prompts**
 > **AIプロンプト作成のためのビジュアルブロックベースツール**
 
-[![Tech Preview](https://img.shields.io/badge/Status-Tech%20Preview-orange)](https://github.com/BonoJovi/Promps/releases)
-[![Version](https://img.shields.io/badge/Version-0.0.6-blue)](https://github.com/BonoJovi/Promps/releases/tag/v0.0.6)
+[![Stable](https://img.shields.io/badge/Status-Stable-brightgreen)](https://github.com/BonoJovi/Promps/releases)
+[![Version](https://img.shields.io/badge/Version-1.0.0-blue)](https://github.com/BonoJovi/Promps/releases/tag/v1.0.0)
 [![Tests](https://img.shields.io/badge/Tests-283%20passing-brightgreen)](https://github.com/BonoJovi/Promps)
 [![Rust](https://img.shields.io/badge/Rust-1.70+-orange.svg)](https://www.rust-lang.org/)
 [![Tauri](https://img.shields.io/badge/Tauri-v2-blue.svg)](https://tauri.app/)
@@ -28,24 +28,21 @@
 いつもPrompsに関心を寄せていただき、誠にありがとうございます。
 プロジェクト発案者のBonoJovi(Yoshihiro NAKAHARA)です。
 
-**Ver.0.0.6 (プレリリース版) をリリースいたしました！**
+**🎉 Ver.1.0.0 (安定版) をリリースいたしました！**
 
-今回のアップデートでは、**文法検証機能**と**パターンテンプレート機能**を実装しました：
+ついに安定版をリリースできる運びとなりました。長らくテックプレビュー版としてお試しいただいていた皆様、ありがとうございました。
 
-🆕 **Phase 5-6 新機能**:
-- **リアルタイム文法検証** - ブロック配置時に即座にエラー・警告を表示
+**主な機能**:
+- **ビジュアルブロック編集** - Scratchのようにドラッグ&ドロップでプロンプト作成
+- **リアルタイム文法検証** - 6つのルールでブロック配置を即座にチェック
 - **自動修正(AutoFix)** - ワンクリックでブロックを自動挿入
 - **7種類のパターンテンプレート** - 日本語文型に沿ったスマート補完
-- **9種類の句読点ブロック** - 「、」「。」「！」「？」など
+- **プロジェクト保存/読込** - .promps形式で作業を保存・再開
 
-これにより、**v1.0.0 安定版リリースの準備が整いました！**
-
-**[Announcement] あなたの意見を聞かせてください！**
-- 文法検証機能は使いやすいですか？
-- パターンテンプレートは役立ちますか？
+**[Announcement] フィードバックをお待ちしています！**
+- 使いやすさはいかがですか？
+- どんな機能があると便利ですか？
 - [Issues](https://github.com/BonoJovi/Promps/issues) または [Discussions](https://github.com/BonoJovi/Promps/discussions) でご意見をお寄せください！
-
-**テスターを募集しています！** v1.0.0リリース前の最終確認にご協力ください。
 
 **2026-01-26 (JST) Written by Yoshihiro NAKAHARA**
 
@@ -56,24 +53,21 @@
 Thank you for your continued interest in Promps.
 I'm BonoJovi (Yoshihiro NAKAHARA), the project initiator.
 
-**We have released Ver.0.0.6 (Pre-release)!**
+**🎉 We have released Ver.1.0.0 (Stable)!**
 
-This update implements **grammar validation** and **pattern template features**:
+We are excited to announce the stable release of Promps. Thank you to everyone who tried the tech preview versions and provided feedback.
 
-🆕 **Phase 5-6 New Features**:
-- **Real-time grammar validation** - Instant error/warning display while placing blocks
+**Key Features**:
+- **Visual block editing** - Create prompts by drag & drop, just like Scratch
+- **Real-time grammar validation** - 6 rules to instantly check block placement
 - **AutoFix** - One-click automatic block insertion
 - **7 pattern templates** - Smart completion following Japanese sentence patterns
-- **9 punctuation blocks** - 「、」「。」「！」「？」and more
-
-With this, **we are ready for v1.0.0 stable release!**
+- **Project save/load** - Save and resume your work in .promps format
 
 **[Announcement] We want to hear from you!**
-- Is the grammar validation feature easy to use?
-- Are the pattern templates helpful?
+- How is the usability?
+- What features would be helpful?
 - Share your ideas on [Issues](https://github.com/BonoJovi/Promps/issues) or [Discussions](https://github.com/BonoJovi/Promps/discussions)!
-
-**We're looking for testers!** Please help us with final verification before v1.0.0 release.
 
 **2026-01-26 (JST) Written by Yoshihiro NAKAHARA**
 
@@ -81,21 +75,21 @@ With this, **we are ready for v1.0.0 stable release!**
 
 ---
 
-## ⚠ Tech Preview Notice / テックプレビュー版について
+## ✅ Stable Release / 安定版リリース
 
-**This is a Pre-release version (v0.0.6)** - feature complete, ready for v1.0.0 verification.
-**これはプレリリース版(v0.0.6)です** - 機能完成、v1.0.0検証準備完了。
+**This is the first Stable release (v1.0.0)** - production ready.
+**これは初の安定版リリース(v1.0.0)です** - 本番利用可能。
 
-**What this means: / これが意味すること：**
-- ✅ Core functionality works and is ready for testing / コア機能は動作し、テスト可能な状態です
-- ✅ **NEW in v0.0.6:** Real-time grammar validation / **v0.0.6の新機能:** リアルタイム文法検証
-- ✅ **NEW in v0.0.6:** AutoFix (one-click block insertion) / **v0.0.6の新機能:** 自動修正機能
-- ✅ **NEW in v0.0.6:** 7 pattern templates / **v0.0.6の新機能:** 7種類のパターンテンプレート
-- ✅ **NEW in v0.0.6:** 9 punctuation blocks / **v0.0.6の新機能:** 9種類の句読点ブロック
+**Available Features: / 利用可能な機能：**
+- ✅ Visual block-based interface / ビジュアルブロックベースインターフェース
+- ✅ Real-time grammar validation (6 rules) / リアルタイム文法検証（6ルール）
+- ✅ AutoFix (one-click block insertion) / 自動修正機能
+- ✅ 7 pattern templates / 7種類のパターンテンプレート
+- ✅ 9 punctuation blocks / 9種類の句読点ブロック
 - ✅ Project save/load (.promps format) / プロジェクト保存/読込（.promps形式）
-- ✅ Expanded verb blocks (11 types + custom input) / 動詞ブロック（固定11種＋カスタム入力）
+- ✅ Verb blocks (11 types + custom input) / 動詞ブロック（固定11種＋カスタム入力）
 - ✅ Particle blocks (9 types) / 助詞ブロック（9種類）
-- ✨ **We need your feedback for v1.0.0!** / **v1.0.0に向けてフィードバックを募集中！**
+- ✨ **Feedback welcome!** / **フィードバック歓迎！**
 
 **We're looking for testers!** Your feedback will shape the future of Promps. See [CONTRIBUTING.md](CONTRIBUTING.md) for how to help.
 **テスターを募集しています！** あなたのフィードバックがPrompsの未来を形作ります。協力方法は[CONTRIBUTING.md](CONTRIBUTING.md)をご覧ください。
@@ -107,7 +101,7 @@ With this, **we are ready for v1.0.0 stable release!**
 ### 1. Download & Install / ダウンロード & インストール
 
 **Download the latest release: / 最新リリースをダウンロード：**
-- [Download v0.0.6](https://github.com/BonoJovi/Promps/releases/tag/v0.0.6)
+- [Download v1.0.0](https://github.com/BonoJovi/Promps/releases/tag/v1.0.0)
 
 **Available for: / 対応プラットフォーム：**
 - Linux (AppImage, deb, rpm)
@@ -304,8 +298,8 @@ We welcome **all types of contributions** - not just code!
 
 **No programming experience needed! / プログラミング経験不要！**
 
-**✨ v0.0.6 with Grammar Validation & Pattern Templates!**
-**[新着] v0.0.6 文法検証＆パターンテンプレート搭載！**
+**✨ v1.0.0 Stable Release with Full Features!**
+**[新着] v1.0.0 安定版リリース！全機能搭載！**
 
 **Platform Status: / プラットフォーム状況：**
 - ✅ **Linux**: Verified and tested by developer / 開発者により検証済み・テスト済み
@@ -347,6 +341,16 @@ For code contributions:
 ---
 
 ## Release History / リリース履歴
+
+### Version 1.0.0 (2026-01-26) 🎉 Stable Release
+
+**First Stable Release: / 初の安定版リリース：**
+- 🎉 All planned features complete / 計画された全機能が完成
+- ✅ 283 tests (100% passing) / 283テスト（100%合格）
+- ✅ Grammar validation + AutoFix / 文法検証＋自動修正
+- ✅ Pattern templates / パターンテンプレート
+- ✅ Punctuation blocks / 句読点ブロック
+- ✅ Project persistence / プロジェクト保存/読込
 
 ### Version 0.0.6 (2026-01-26)
 

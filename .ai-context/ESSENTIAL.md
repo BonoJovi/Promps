@@ -9,8 +9,8 @@
 
 ## Current Status
 
-**Version**: v0.0.6 (Advanced Grammar + Pattern Templates)
-**Phase**: Phase 6 Complete (Advanced Grammar + Pattern Templates + Punctuation)
+**Version**: v1.0.0 (Stable Release)
+**Phase**: All phases complete - First stable release
 **Tests**: 283 tests at 100% passing (Backend 93 + Frontend 190)
 **Branch**: dev (integration branch)
 
@@ -24,7 +24,7 @@
 | v0.0.4 | Phase 4 | Project Persistence (save/load) | ✅ Complete |
 | v0.0.5 | Phase 5 | Logic Check 基礎 (basic validation) | ✅ Complete |
 | v0.0.6 | Phase 6 | Logic Check 拡張 (advanced + patterns + punctuation) | ✅ Complete |
-| **v1.0.0** | - | **Stable Release** | Ready for release |
+| **v1.0.0** | - | **Stable Release** | 🎉 **Released** |
 
 ---
 
