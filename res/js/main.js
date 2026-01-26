@@ -1,5 +1,5 @@
 /**
- * Promps Phase 5 - Main JavaScript
+ * Promps Phase 6 - Main JavaScript
  *
  * This file handles frontend logic and Tauri command invocation.
  */
@@ -81,6 +81,11 @@ async function updatePreview(dslCode) {
             // Build block positions and highlight errors
             const blockPositions = window.validationUI.buildBlockPositions();
             window.validationUI.highlightBlocks(validationResult, blockPositions);
+        }
+
+        // Analyze patterns and show suggestions (Phase 6 Step 3)
+        if (window.patternUI) {
+            await window.patternUI.analyzeCurrent(dslCode);
         }
     } catch (error) {
         previewDiv.innerHTML = `<p style="color: red;">Error: ${error}</p>`;
@@ -192,7 +197,7 @@ function initBeforeUnload() {
  * Initialize application
  */
 async function init() {
-    console.log('Promps Phase 4 initialized');
+    console.log('Promps Phase 6 initialized');
 
     // Initialize Tauri API (v2 compatible)
     if (window.__TAURI_INTERNALS__) {
@@ -236,6 +241,12 @@ async function init() {
 
     // Initialize beforeunload handler
     initBeforeUnload();
+
+    // Load pattern templates (Phase 6 Step 3)
+    if (window.patternUI && typeof window.patternUI.loadPatterns === 'function') {
+        await window.patternUI.loadPatterns();
+        console.log('Pattern templates loaded');
+    }
 }
 
 // Initialize when DOM is ready

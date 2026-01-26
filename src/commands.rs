@@ -8,8 +8,12 @@ use serde::{Deserialize, Serialize};
 use std::fs;
 use std::path::Path;
 
-// Phase 5: Validation module
-use crate::modules::validation::{validate_sequence, ValidationResult};
+// Phase 5-6: Validation module
+use crate::modules::validation::{
+    validate_sequence, ValidationResult,
+    get_pattern_templates, analyze_patterns,
+    PatternTemplate, PatternMatchResult,
+};
 
 /// Generate prompt from DSL input text
 ///
@@ -46,6 +50,31 @@ pub fn greet(name: String) -> String {
 #[tauri::command]
 pub fn validate_dsl_sequence(input: String) -> ValidationResult {
     validate_sequence(&input)
+}
+
+// ============================================================================
+// Phase 6 Step 3: Pattern Templates
+// ============================================================================
+
+/// Get all available pattern templates
+///
+/// # Returns
+/// List of pattern templates for sentence structures
+#[tauri::command]
+pub fn get_patterns() -> Vec<PatternTemplate> {
+    get_pattern_templates()
+}
+
+/// Analyze current input against pattern templates
+///
+/// # Arguments
+/// * `input` - Space-delimited DSL tokens
+///
+/// # Returns
+/// List of pattern match results sorted by match score
+#[tauri::command]
+pub fn analyze_dsl_patterns(input: String) -> Vec<PatternMatchResult> {
+    analyze_patterns(&input)
 }
 
 // ============================================================================

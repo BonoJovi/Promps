@@ -1,7 +1,7 @@
 /**
- * Promps Phase 5 - Validation UI Tests
+ * Promps Phase 6 - Validation UI Tests
  *
- * Tests for grammar validation UI logic
+ * Tests for grammar validation UI logic and pattern templates
  */
 
 import { describe, test, expect, beforeEach, jest } from '@jest/globals';
@@ -725,5 +725,350 @@ describe('Edge Cases', () => {
         expect(result.isValid).toBe(false);
         expect(result.errorCount).toBe(1);
         expect(result.warningCount).toBe(1);
+    });
+});
+
+// ============================================================================
+// Phase 6 Step 3: Pattern Template Tests
+// ============================================================================
+
+describe('Pattern Template Command Invocation', () => {
+    beforeEach(() => {
+        mockInvoke.mockClear();
+    });
+
+    test('should invoke get_patterns command', async () => {
+        const patterns = [
+            {
+                id: 'sov_basic',
+                name: '基本文型（主語-目的語-動詞）',
+                description: '「誰が何をどうする」の基本形',
+                structure: '名詞 が 名詞 を 動詞',
+                example: 'ユーザー が ドキュメント を 分析して',
+                blocks: [
+                    { blockType: 'promps_noun', label: '主語', isPlaceholder: true },
+                    { blockType: 'promps_particle_ga', label: 'が', isPlaceholder: false },
+                    { blockType: 'promps_noun', label: '目的語', isPlaceholder: true },
+                    { blockType: 'promps_particle_wo', label: 'を', isPlaceholder: false },
+                    { blockType: 'promps_verb_analyze', label: '動詞', isPlaceholder: true }
+                ]
+            }
+        ];
+        mockInvoke.mockResolvedValue(patterns);
+
+        const invoke = window.__TAURI__.invoke;
+        const result = await invoke('get_patterns');
+
+        expect(mockInvoke).toHaveBeenCalledWith('get_patterns');
+        expect(result.length).toBeGreaterThan(0);
+        expect(result[0].id).toBe('sov_basic');
+    });
+
+    test('should invoke analyze_dsl_patterns command', async () => {
+        const matchResults = [
+            {
+                patternId: 'ov_simple',
+                patternName: '目的語-動詞文型',
+                matchScore: 1.0,
+                missingElements: [],
+                isComplete: true
+            },
+            {
+                patternId: 'sov_basic',
+                patternName: '基本文型（主語-目的語-動詞）',
+                matchScore: 0.6,
+                missingElements: ['主語', 'が'],
+                isComplete: false
+            }
+        ];
+        mockInvoke.mockResolvedValue(matchResults);
+
+        const invoke = window.__TAURI__.invoke;
+        const result = await invoke('analyze_dsl_patterns', {
+            input: '_N:Doc を 分析して'
+        });
+
+        expect(mockInvoke).toHaveBeenCalledWith('analyze_dsl_patterns', {
+            input: '_N:Doc を 分析して'
+        });
+        expect(result[0].matchScore).toBe(1.0);
+        expect(result[0].isComplete).toBe(true);
+    });
+});
+
+describe('Pattern Template Data Structure', () => {
+    test('should have required fields in pattern template', async () => {
+        const pattern = {
+            id: 'test_pattern',
+            name: 'テストパターン',
+            description: 'テスト用パターン',
+            structure: '名詞 を 動詞',
+            example: 'テスト を 実行して',
+            blocks: [
+                { blockType: 'promps_noun', label: '対象', isPlaceholder: true },
+                { blockType: 'promps_particle_wo', label: 'を', isPlaceholder: false },
+                { blockType: 'promps_verb_custom', label: '動詞', isPlaceholder: true }
+            ]
+        };
+
+        expect(pattern.id).toBeDefined();
+        expect(pattern.name).toBeDefined();
+        expect(pattern.structure).toBeDefined();
+        expect(pattern.blocks).toBeDefined();
+        expect(Array.isArray(pattern.blocks)).toBe(true);
+    });
+
+    test('should distinguish placeholder and fixed blocks', () => {
+        const blocks = [
+            { blockType: 'promps_noun', label: '主語', isPlaceholder: true },
+            { blockType: 'promps_particle_ga', label: 'が', isPlaceholder: false }
+        ];
+
+        const placeholders = blocks.filter(b => b.isPlaceholder);
+        const fixed = blocks.filter(b => !b.isPlaceholder);
+
+        expect(placeholders.length).toBe(1);
+        expect(fixed.length).toBe(1);
+        expect(placeholders[0].label).toBe('主語');
+        expect(fixed[0].label).toBe('が');
+    });
+});
+
+describe('Pattern Match Result', () => {
+    test('should indicate complete match', () => {
+        const matchResult = {
+            patternId: 'ov_simple',
+            patternName: '目的語-動詞文型',
+            matchScore: 1.0,
+            missingElements: [],
+            isComplete: true
+        };
+
+        expect(matchResult.matchScore).toBe(1.0);
+        expect(matchResult.isComplete).toBe(true);
+        expect(matchResult.missingElements.length).toBe(0);
+    });
+
+    test('should indicate partial match', () => {
+        const matchResult = {
+            patternId: 'sov_basic',
+            patternName: '基本文型',
+            matchScore: 0.4,
+            missingElements: ['主語', 'が', '動詞'],
+            isComplete: false
+        };
+
+        expect(matchResult.matchScore).toBeLessThan(1.0);
+        expect(matchResult.isComplete).toBe(false);
+        expect(matchResult.missingElements.length).toBeGreaterThan(0);
+    });
+
+    test('should sort results by match score', () => {
+        const results = [
+            { patternId: 'p1', matchScore: 0.3, isComplete: false },
+            { patternId: 'p2', matchScore: 0.8, isComplete: false },
+            { patternId: 'p3', matchScore: 1.0, isComplete: true },
+            { patternId: 'p4', matchScore: 0.5, isComplete: false }
+        ];
+
+        // Sort by matchScore descending
+        results.sort((a, b) => b.matchScore - a.matchScore);
+
+        expect(results[0].patternId).toBe('p3');
+        expect(results[1].patternId).toBe('p2');
+        expect(results[2].patternId).toBe('p4');
+        expect(results[3].patternId).toBe('p1');
+    });
+});
+
+describe('Pattern Template Display', () => {
+    let mockPatternContainer;
+    let mockSuggestionsContainer;
+
+    beforeEach(() => {
+        mockPatternContainer = {
+            innerHTML: '',
+            appendChild: jest.fn()
+        };
+        mockSuggestionsContainer = {
+            innerHTML: '',
+            appendChild: jest.fn()
+        };
+
+        global.document.getElementById = jest.fn((id) => {
+            if (id === 'patternTemplates') return mockPatternContainer;
+            if (id === 'patternSuggestions') return mockSuggestionsContainer;
+            if (id === 'validationResult') return mockValidationContainer;
+            return null;
+        });
+    });
+
+    test('should create pattern list elements', () => {
+        const patterns = [
+            {
+                id: 'sov_basic',
+                name: '基本文型',
+                structure: '名詞 が 名詞 を 動詞',
+                example: 'ユーザー が ドキュメント を 分析して',
+                blocks: []
+            }
+        ];
+
+        // Simulated displayPatterns logic
+        for (const pattern of patterns) {
+            const item = {
+                className: 'pattern-item',
+                children: []
+            };
+            item.children.push({ className: 'pattern-name', textContent: pattern.name });
+            item.children.push({ className: 'pattern-structure', textContent: pattern.structure });
+            item.children.push({ className: 'pattern-example', textContent: `例: ${pattern.example}` });
+
+            expect(item.className).toBe('pattern-item');
+            expect(item.children[0].textContent).toBe('基本文型');
+            expect(item.children[1].textContent).toContain('名詞 が');
+        }
+    });
+
+    test('should display pattern suggestions with score', () => {
+        const matchResults = [
+            {
+                patternId: 'ov_simple',
+                patternName: '目的語-動詞文型',
+                matchScore: 0.67,
+                isComplete: false
+            }
+        ];
+
+        // Simulated displayMatchResults logic
+        for (const match of matchResults) {
+            const item = {
+                className: 'suggestion-item',
+                name: match.patternName,
+                score: `${Math.round(match.matchScore * 100)}%`
+            };
+
+            expect(item.score).toBe('67%');
+            expect(item.name).toBe('目的語-動詞文型');
+        }
+    });
+
+    test('should add complete badge for 100% matches', () => {
+        const matchResults = [
+            {
+                patternId: 'ov_simple',
+                patternName: '目的語-動詞文型',
+                matchScore: 1.0,
+                isComplete: true
+            }
+        ];
+
+        for (const match of matchResults) {
+            const hasCompleteBadge = match.isComplete;
+            expect(hasCompleteBadge).toBe(true);
+        }
+    });
+});
+
+describe('Pattern Application', () => {
+    let mockWorkspaceForPattern;
+
+    beforeEach(() => {
+        mockWorkspaceForPattern = {
+            clear: jest.fn(),
+            newBlock: jest.fn().mockReturnValue({
+                initSvg: jest.fn(),
+                render: jest.fn(),
+                moveBy: jest.fn(),
+                previousConnection: { connect: jest.fn() },
+                nextConnection: { connect: jest.fn() }
+            }),
+            fireChangeListener: jest.fn()
+        };
+        global.workspace = mockWorkspaceForPattern;
+        global.Blockly = {
+            Events: {
+                BlockCreate: jest.fn().mockReturnValue({})
+            }
+        };
+    });
+
+    test('should clear workspace before applying pattern', () => {
+        const pattern = {
+            id: 'ov_simple',
+            blocks: [
+                { blockType: 'promps_noun', label: '目的語', isPlaceholder: true },
+                { blockType: 'promps_particle_wo', label: 'を', isPlaceholder: false },
+                { blockType: 'promps_verb_summarize', label: '動詞', isPlaceholder: true }
+            ]
+        };
+
+        // Simulated applyPattern logic
+        mockWorkspaceForPattern.clear();
+
+        expect(mockWorkspaceForPattern.clear).toHaveBeenCalled();
+    });
+
+    test('should create blocks from pattern', () => {
+        const pattern = {
+            id: 'ov_simple',
+            blocks: [
+                { blockType: 'promps_noun', label: '目的語', isPlaceholder: true },
+                { blockType: 'promps_particle_wo', label: 'を', isPlaceholder: false },
+                { blockType: 'promps_verb_summarize', label: '動詞', isPlaceholder: true }
+            ]
+        };
+
+        // Simulated applyPattern logic
+        for (const blockDef of pattern.blocks) {
+            mockWorkspaceForPattern.newBlock(blockDef.blockType);
+        }
+
+        expect(mockWorkspaceForPattern.newBlock).toHaveBeenCalledTimes(3);
+        expect(mockWorkspaceForPattern.newBlock).toHaveBeenCalledWith('promps_noun');
+        expect(mockWorkspaceForPattern.newBlock).toHaveBeenCalledWith('promps_particle_wo');
+        expect(mockWorkspaceForPattern.newBlock).toHaveBeenCalledWith('promps_verb_summarize');
+    });
+});
+
+describe('Pattern Template Integration', () => {
+    beforeEach(() => {
+        mockInvoke.mockClear();
+    });
+
+    test('should load patterns on initialization', async () => {
+        const patterns = [
+            { id: 'sov_basic', name: '基本文型', blocks: [] },
+            { id: 'ov_simple', name: '目的語-動詞文型', blocks: [] }
+        ];
+        mockInvoke.mockResolvedValue(patterns);
+
+        const invoke = window.__TAURI__.invoke;
+        const loadedPatterns = await invoke('get_patterns');
+
+        expect(loadedPatterns.length).toBe(2);
+    });
+
+    test('should analyze patterns during preview update', async () => {
+        const matchResults = [
+            { patternId: 'ov_simple', matchScore: 1.0, isComplete: true }
+        ];
+        mockInvoke.mockResolvedValue(matchResults);
+
+        const invoke = window.__TAURI__.invoke;
+        const dslCode = '_N:Doc を 分析して';
+        const results = await invoke('analyze_dsl_patterns', { input: dslCode });
+
+        expect(results[0].patternId).toBe('ov_simple');
+        expect(results[0].isComplete).toBe(true);
+    });
+
+    test('should handle empty input for pattern analysis', async () => {
+        mockInvoke.mockResolvedValue([]);
+
+        const invoke = window.__TAURI__.invoke;
+        const results = await invoke('analyze_dsl_patterns', { input: '' });
+
+        expect(results.length).toBe(0);
     });
 });

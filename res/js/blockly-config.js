@@ -738,16 +738,14 @@ function onBlocklyChange(event) {
         }
     }
 
-    // Generate DSL code only from connected block chains
+    // Generate DSL code from all blocks (including standalone blocks for pattern analysis)
     let code = '';
     const topBlocks = workspace.getTopBlocks(true);
 
     for (const block of topBlocks) {
-        // Only process blocks that are part of a chain (have at least one connected block)
-        // A standalone block (no next connection) is ignored
-        if (block.getNextBlock() !== null) {
-            code += javascriptGenerator.blockToCode(block);
-        }
+        // Process all blocks (including standalone blocks)
+        // This enables pattern suggestions even for single blocks
+        code += javascriptGenerator.blockToCode(block);
     }
 
     // Update preview (will be implemented in main.js)
@@ -757,7 +755,7 @@ function onBlocklyChange(event) {
 }
 
 /**
- * Get DSL code from current workspace (only from connected block chains)
+ * Get DSL code from current workspace (including standalone blocks)
  */
 function getWorkspaceCode() {
     if (!workspace) {
@@ -768,10 +766,8 @@ function getWorkspaceCode() {
     const topBlocks = workspace.getTopBlocks(true);
 
     for (const block of topBlocks) {
-        // Only process blocks that are part of a chain (have at least one connected block)
-        if (block.getNextBlock() !== null) {
-            code += javascriptGenerator.blockToCode(block);
-        }
+        // Process all blocks (including standalone blocks)
+        code += javascriptGenerator.blockToCode(block);
     }
 
     return code.trim();

@@ -307,9 +307,417 @@ const validationUI = {
     }
 };
 
+/**
+ * Pattern Template UI Manager (Phase 6 Step 3)
+ */
+const patternUI = {
+    /**
+     * Display pattern templates in the UI
+     * @param {Array} patterns - Array of PatternTemplate from backend
+     */
+    displayPatterns: function(patterns) {
+        const container = document.getElementById('patternTemplates');
+        if (!container) {
+            console.warn('Pattern templates container not found');
+            return;
+        }
+
+        container.innerHTML = '';
+
+        const header = document.createElement('div');
+        header.className = 'pattern-header';
+        header.innerHTML = '<span class="pattern-icon">📋</span> パターンテンプレート';
+        container.appendChild(header);
+
+        const list = document.createElement('div');
+        list.className = 'pattern-list';
+
+        for (const pattern of patterns) {
+            const item = document.createElement('div');
+            item.className = 'pattern-item';
+
+            const name = document.createElement('div');
+            name.className = 'pattern-name';
+            name.textContent = pattern.name;
+            item.appendChild(name);
+
+            const structure = document.createElement('div');
+            structure.className = 'pattern-structure';
+            structure.textContent = pattern.structure;
+            item.appendChild(structure);
+
+            const example = document.createElement('div');
+            example.className = 'pattern-example';
+            example.textContent = `例: ${pattern.example}`;
+            item.appendChild(example);
+
+            const applyBtn = document.createElement('button');
+            applyBtn.className = 'pattern-apply-btn';
+            applyBtn.textContent = '適用';
+            applyBtn.addEventListener('click', () => {
+                this.applyPattern(pattern);
+            });
+            item.appendChild(applyBtn);
+
+            list.appendChild(item);
+        }
+
+        container.appendChild(list);
+    },
+
+    /**
+     * Display pattern match results (suggestions based on current input)
+     * @param {Array} matchResults - Array of PatternMatchResult from backend
+     */
+    displayMatchResults: function(matchResults) {
+        const container = document.getElementById('patternSuggestions');
+        if (!container) {
+            return; // Suggestions container is optional
+        }
+
+        container.innerHTML = '';
+
+        // Only show patterns with score > 0
+        const relevantPatterns = matchResults.filter(r => r.matchScore > 0);
+
+        if (relevantPatterns.length === 0) {
+            return;
+        }
+
+        // Store match results for later use
+        this.currentMatchResults = matchResults;
+
+        const header = document.createElement('div');
+        header.className = 'suggestion-header';
+        header.innerHTML = '<span class="suggestion-icon">💡</span> おすすめパターン';
+        container.appendChild(header);
+
+        const list = document.createElement('div');
+        list.className = 'suggestion-list';
+
+        // Show top 3 matches
+        for (const match of relevantPatterns.slice(0, 3)) {
+            const item = document.createElement('div');
+            item.className = 'suggestion-item';
+            if (match.isComplete) {
+                item.classList.add('suggestion-complete');
+            }
+
+            const name = document.createElement('span');
+            name.className = 'suggestion-name';
+            name.textContent = match.patternName;
+            item.appendChild(name);
+
+            const score = document.createElement('span');
+            score.className = 'suggestion-score';
+            score.textContent = `${Math.round(match.matchScore * 100)}%`;
+            item.appendChild(score);
+
+            if (match.isComplete) {
+                const badge = document.createElement('span');
+                badge.className = 'suggestion-badge';
+                badge.textContent = '完成';
+                item.appendChild(badge);
+            } else {
+                // Add apply button for incomplete patterns
+                const applyBtn = document.createElement('button');
+                applyBtn.className = 'suggestion-apply-btn';
+                applyBtn.textContent = '適用';
+                applyBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this.applyPatternById(match.patternId);
+                });
+                item.appendChild(applyBtn);
+            }
+
+            list.appendChild(item);
+        }
+
+        container.appendChild(list);
+    },
+
+    /**
+     * Apply pattern by ID - adds missing blocks only (for suggestions)
+     * @param {string} patternId - Pattern ID to apply
+     */
+    applyPatternById: async function(patternId) {
+        try {
+            const invoke = this.getInvoke();
+            if (!invoke) {
+                return;
+            }
+            // Get all patterns and find the one to apply
+            const patterns = await invoke('get_patterns');
+            const pattern = patterns.find(p => p.id === patternId);
+            if (pattern) {
+                this.completePattern(pattern);
+            }
+        } catch (error) {
+            console.warn('Failed to apply pattern:', error);
+        }
+    },
+
+    /**
+     * Complete a pattern by adding missing blocks (keeps existing blocks)
+     * @param {Object} pattern - PatternTemplate object
+     */
+    completePattern: function(pattern) {
+        if (!workspace) {
+            console.warn('Workspace not available for pattern completion');
+            return;
+        }
+
+        try {
+            // Get current blocks in order
+            const topBlocks = workspace.getTopBlocks(true);
+            let currentBlocks = [];
+
+            for (const topBlock of topBlocks) {
+                let block = topBlock;
+                while (block) {
+                    currentBlocks.push(block);
+                    block = block.getNextBlock();
+                }
+            }
+
+            // Get last block in chain (to append new blocks after)
+            let lastBlock = currentBlocks.length > 0 ? currentBlocks[currentBlocks.length - 1] : null;
+
+            // Get current block types with specific particle info
+            const currentTypes = currentBlocks.map(b => this.getBlockSignature(b.type));
+
+            // Get pattern block signatures
+            const patternSignatures = pattern.blocks.map(b => this.getBlockSignature(b.blockType));
+
+            // Find matching position - where do current blocks fit in the pattern?
+            let matchStart = this.findPatternMatch(currentTypes, patternSignatures);
+
+            if (matchStart === -1) {
+                // No match found, just add remaining blocks at end
+                matchStart = 0;
+            }
+
+            // Calculate which blocks are needed before and after current blocks
+            const beforeBlocks = pattern.blocks.slice(0, matchStart);
+            const afterBlocks = pattern.blocks.slice(matchStart + currentBlocks.length);
+
+            // Insert blocks before (at the beginning)
+            let firstBlock = currentBlocks.length > 0 ? currentBlocks[0] : null;
+            for (let i = beforeBlocks.length - 1; i >= 0; i--) {
+                const blockDef = beforeBlocks[i];
+                const newBlock = workspace.newBlock(blockDef.blockType);
+
+                // Set default value if specified
+                if (blockDef.defaultValue) {
+                    const field = newBlock.getField('TEXT');
+                    if (field) {
+                        field.setValue(blockDef.defaultValue);
+                    }
+                }
+
+                newBlock.initSvg();
+                newBlock.render();
+
+                if (firstBlock) {
+                    // Insert before first block
+                    validationUI.insertBlockBefore(newBlock, firstBlock);
+                    firstBlock = newBlock;
+                } else {
+                    newBlock.moveBy(50, 50);
+                    lastBlock = newBlock;
+                }
+            }
+
+            // Add blocks after (at the end)
+            for (const blockDef of afterBlocks) {
+                const newBlock = workspace.newBlock(blockDef.blockType);
+
+                // Set default value if specified
+                if (blockDef.defaultValue) {
+                    const field = newBlock.getField('TEXT');
+                    if (field) {
+                        field.setValue(blockDef.defaultValue);
+                    }
+                }
+
+                newBlock.initSvg();
+                newBlock.render();
+
+                if (lastBlock && lastBlock.nextConnection && newBlock.previousConnection) {
+                    lastBlock.nextConnection.connect(newBlock.previousConnection);
+                } else if (!lastBlock) {
+                    newBlock.moveBy(50, 50);
+                }
+
+                lastBlock = newBlock;
+            }
+
+            // Trigger workspace change to update preview
+            if (lastBlock) {
+                workspace.fireChangeListener(new Blockly.Events.BlockCreate(lastBlock));
+            }
+
+        } catch (error) {
+            console.error('Failed to complete pattern:', error);
+        }
+    },
+
+    /**
+     * Get a signature for a block type (includes specific particle)
+     * @param {string} blockType - Block type string
+     * @returns {string} Signature string
+     */
+    getBlockSignature: function(blockType) {
+        if (blockType.includes('noun')) return 'noun';
+        if (blockType.includes('particle_ga')) return 'particle_ga';
+        if (blockType.includes('particle_wo')) return 'particle_wo';
+        if (blockType.includes('particle_ni')) return 'particle_ni';
+        if (blockType.includes('particle_de')) return 'particle_de';
+        if (blockType.includes('particle_to')) return 'particle_to';
+        if (blockType.includes('particle_he')) return 'particle_he';
+        if (blockType.includes('particle_kara')) return 'particle_kara';
+        if (blockType.includes('particle_made')) return 'particle_made';
+        if (blockType.includes('particle')) return 'particle_other';
+        if (blockType.includes('verb')) return 'verb';
+        return 'other';
+    },
+
+    /**
+     * Find where current blocks match in the pattern
+     * @param {Array} current - Current block signatures
+     * @param {Array} pattern - Pattern block signatures
+     * @returns {number} Start index in pattern, or -1 if no match
+     */
+    findPatternMatch: function(current, pattern) {
+        if (current.length === 0) return 0;
+
+        // Try to find current sequence in pattern
+        for (let start = 0; start <= pattern.length - current.length; start++) {
+            let matches = true;
+            for (let i = 0; i < current.length; i++) {
+                if (current[i] !== pattern[start + i]) {
+                    matches = false;
+                    break;
+                }
+            }
+            if (matches) {
+                return start;
+            }
+        }
+
+        return -1;
+    },
+
+    /**
+     * Apply a pattern template to the workspace
+     * @param {Object} pattern - PatternTemplate object
+     */
+    applyPattern: function(pattern) {
+        if (!workspace) {
+            console.warn('Workspace not available for pattern application');
+            return;
+        }
+
+        try {
+            // Clear workspace
+            workspace.clear();
+
+            let previousBlock = null;
+            let startX = 50;
+            let startY = 50;
+
+            for (const blockDef of pattern.blocks) {
+                // Create the block
+                const newBlock = workspace.newBlock(blockDef.blockType);
+
+                // Set default value if specified
+                if (blockDef.defaultValue) {
+                    const field = newBlock.getField('TEXT');
+                    if (field) {
+                        field.setValue(blockDef.defaultValue);
+                    }
+                }
+
+                newBlock.initSvg();
+                newBlock.render();
+
+                // Position and connect
+                if (previousBlock === null) {
+                    // First block
+                    newBlock.moveBy(startX, startY);
+                } else {
+                    // Connect to previous block
+                    if (previousBlock.nextConnection && newBlock.previousConnection) {
+                        previousBlock.nextConnection.connect(newBlock.previousConnection);
+                    }
+                }
+
+                previousBlock = newBlock;
+            }
+
+            // Trigger workspace change to update preview
+            if (previousBlock) {
+                workspace.fireChangeListener(new Blockly.Events.BlockCreate(previousBlock));
+            }
+
+        } catch (error) {
+            console.error('Failed to apply pattern:', error);
+        }
+    },
+
+    /**
+     * Get Tauri invoke function (compatible with v1 and v2)
+     */
+    getInvoke: function() {
+        if (window.__TAURI_INTERNALS__) {
+            return window.__TAURI_INTERNALS__.invoke;
+        } else if (window.__TAURI__ && window.__TAURI__.core) {
+            return window.__TAURI__.core.invoke;
+        } else if (window.__TAURI__) {
+            return window.__TAURI__.invoke;
+        }
+        return null;
+    },
+
+    /**
+     * Load patterns from backend and display
+     */
+    loadPatterns: async function() {
+        try {
+            const invoke = this.getInvoke();
+            if (!invoke) {
+                console.warn('Tauri API not available for pattern loading');
+                return;
+            }
+            const patterns = await invoke('get_patterns');
+            this.displayPatterns(patterns);
+        } catch (error) {
+            console.warn('Failed to load patterns:', error);
+        }
+    },
+
+    /**
+     * Analyze current input and show suggestions
+     * @param {string} dslInput - Current DSL input
+     */
+    analyzeCurrent: async function(dslInput) {
+        try {
+            const invoke = this.getInvoke();
+            if (!invoke) {
+                return;
+            }
+            const results = await invoke('analyze_dsl_patterns', { input: dslInput });
+            this.displayMatchResults(results);
+        } catch (error) {
+            console.warn('Failed to analyze patterns:', error);
+        }
+    }
+};
+
 // Export for use in main.js
 if (typeof window !== 'undefined') {
     window.validationUI = validationUI;
+    window.patternUI = patternUI;
 }
 
 // Export for testing

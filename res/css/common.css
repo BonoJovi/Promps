@@ -393,3 +393,168 @@ h2 {
 .validation-block-warning {
     filter: drop-shadow(0 0 4px #ffc107) drop-shadow(0 0 8px #ffc107);
 }
+
+/* ============================================================================
+   Phase 6 Step 3: Pattern Templates UI Styles
+   ============================================================================ */
+
+/* Pattern suggestions (dynamic recommendations) */
+.pattern-suggestions {
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    border-radius: 6px;
+    background-color: #e8f4fd;
+    border: 1px solid #b8daff;
+}
+
+.pattern-suggestions:empty {
+    display: none;
+}
+
+.suggestion-header {
+    font-weight: 600;
+    color: #004085;
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+}
+
+.suggestion-icon {
+    margin-right: 0.25rem;
+}
+
+.suggestion-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.suggestion-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.25rem 0.5rem;
+    background-color: white;
+    border-radius: 4px;
+    font-size: 0.8125rem;
+}
+
+.suggestion-item.suggestion-complete {
+    background-color: #d4edda;
+    border: 1px solid #c3e6cb;
+}
+
+.suggestion-name {
+    flex: 1;
+    color: #333;
+}
+
+.suggestion-score {
+    font-weight: 600;
+    color: #007bff;
+}
+
+.suggestion-badge {
+    background-color: #28a745;
+    color: white;
+    padding: 0.125rem 0.375rem;
+    border-radius: 3px;
+    font-size: 0.6875rem;
+    font-weight: 600;
+}
+
+.suggestion-apply-btn {
+    padding: 0.125rem 0.5rem;
+    font-size: 0.6875rem;
+    background-color: #17a2b8;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.suggestion-apply-btn:hover {
+    background-color: #138496;
+}
+
+/* Pattern templates (static list) */
+.pattern-templates {
+    margin-top: 0.75rem;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.pattern-header {
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+    padding-bottom: 0.25rem;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.pattern-icon {
+    margin-right: 0.25rem;
+}
+
+.pattern-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.pattern-item {
+    padding: 0.5rem;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.pattern-item:hover {
+    background-color: #e9ecef;
+    border-color: #ced4da;
+}
+
+.pattern-name {
+    font-weight: 600;
+    font-size: 0.8125rem;
+    color: #2c3e50;
+    margin-bottom: 0.25rem;
+}
+
+.pattern-structure {
+    font-family: 'Courier New', monospace;
+    font-size: 0.75rem;
+    color: #6c757d;
+    background-color: #e9ecef;
+    padding: 0.25rem 0.5rem;
+    border-radius: 3px;
+    margin-bottom: 0.25rem;
+}
+
+.pattern-example {
+    font-size: 0.75rem;
+    color: #868e96;
+    font-style: italic;
+    margin-bottom: 0.375rem;
+}
+
+.pattern-apply-btn {
+    padding: 0.25rem 0.75rem;
+    font-size: 0.75rem;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.pattern-apply-btn:hover {
+    background-color: #2980b9;
+}
+
+.pattern-apply-btn:active {
+    background-color: #1c5985;
+}

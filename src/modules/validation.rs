@@ -420,6 +420,333 @@ pub fn validate_sequence(input: &str) -> ValidationResult {
 }
 
 // ============================================================================
+// Pattern Templates (Phase 6 Step 3)
+// ============================================================================
+
+/// A pattern template for common sentence structures
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct PatternTemplate {
+    /// Unique identifier for the pattern
+    pub id: String,
+    /// Human-readable name (Japanese)
+    pub name: String,
+    /// Description of when to use this pattern
+    pub description: String,
+    /// The pattern structure (e.g., "Noun が Noun を Verb")
+    pub structure: String,
+    /// Example usage
+    pub example: String,
+    /// Block types to insert (in order)
+    pub blocks: Vec<PatternBlock>,
+}
+
+/// A block in a pattern template
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct PatternBlock {
+    /// Block type (e.g., "promps_noun", "promps_particle_ga")
+    pub block_type: String,
+    /// Display label for the slot
+    pub label: String,
+    /// Whether this is a placeholder that user should fill
+    pub is_placeholder: bool,
+    /// Default value for text fields (optional)
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub default_value: Option<String>,
+}
+
+impl PatternTemplate {
+    /// Create a new pattern template
+    pub fn new(
+        id: impl Into<String>,
+        name: impl Into<String>,
+        description: impl Into<String>,
+        structure: impl Into<String>,
+        example: impl Into<String>,
+        blocks: Vec<PatternBlock>,
+    ) -> Self {
+        PatternTemplate {
+            id: id.into(),
+            name: name.into(),
+            description: description.into(),
+            structure: structure.into(),
+            example: example.into(),
+            blocks,
+        }
+    }
+}
+
+impl PatternBlock {
+    /// Create a placeholder block (user should fill)
+    pub fn placeholder(block_type: impl Into<String>, label: impl Into<String>) -> Self {
+        PatternBlock {
+            block_type: block_type.into(),
+            label: label.into(),
+            is_placeholder: true,
+            default_value: None,
+        }
+    }
+
+    /// Create a fixed block (particle)
+    pub fn fixed(block_type: impl Into<String>, label: impl Into<String>) -> Self {
+        PatternBlock {
+            block_type: block_type.into(),
+            label: label.into(),
+            is_placeholder: false,
+            default_value: None,
+        }
+    }
+
+    /// Create a block with a default value (for text input blocks)
+    pub fn with_value(block_type: impl Into<String>, label: impl Into<String>, value: impl Into<String>) -> Self {
+        PatternBlock {
+            block_type: block_type.into(),
+            label: label.into(),
+            is_placeholder: false,
+            default_value: Some(value.into()),
+        }
+    }
+}
+
+/// Get all available pattern templates
+pub fn get_pattern_templates() -> Vec<PatternTemplate> {
+    vec![
+        // Pattern 1: Basic S-O-V (Subject-Object-Verb)
+        PatternTemplate::new(
+            "sov_basic",
+            "基本文型（主語-目的語-動詞）",
+            "「誰が何をどうする」の基本形",
+            "名詞 が 名詞 を 動詞",
+            "ユーザー が ドキュメント を 分析して",
+            vec![
+                PatternBlock::placeholder("promps_noun", "主語"),
+                PatternBlock::fixed("promps_particle_ga", "が"),
+                PatternBlock::placeholder("promps_noun", "目的語"),
+                PatternBlock::fixed("promps_particle_wo", "を"),
+                PatternBlock::placeholder("promps_verb_analyze", "動詞"),
+            ],
+        ),
+        // Pattern 2: Object-Verb (目的語-動詞)
+        PatternTemplate::new(
+            "ov_simple",
+            "目的語-動詞文型",
+            "「何をどうする」のシンプル形",
+            "名詞 を 動詞",
+            "ドキュメント を 要約して",
+            vec![
+                PatternBlock::placeholder("promps_noun", "目的語"),
+                PatternBlock::fixed("promps_particle_wo", "を"),
+                PatternBlock::placeholder("promps_verb_summarize", "動詞"),
+            ],
+        ),
+        // Pattern 3: Topic pattern (について)
+        PatternTemplate::new(
+            "topic_about",
+            "トピック文型（について）",
+            "「〇〇について」でトピックを指定",
+            "名詞 について 動詞",
+            "データ について 分析して",
+            vec![
+                PatternBlock::placeholder("promps_noun", "トピック"),
+                PatternBlock::with_value("promps_other", "について", "について"),
+                PatternBlock::placeholder("promps_verb_analyze", "動詞"),
+            ],
+        ),
+        // Pattern 4: Means/Location pattern (で)
+        PatternTemplate::new(
+            "means_de",
+            "手段・場所文型（で）",
+            "「〇〇で」で手段や場所を指定",
+            "名詞 で 名詞 を 動詞",
+            "日本語 で メール を 翻訳して",
+            vec![
+                PatternBlock::placeholder("promps_noun", "手段/場所"),
+                PatternBlock::fixed("promps_particle_de", "で"),
+                PatternBlock::placeholder("promps_noun", "目的語"),
+                PatternBlock::fixed("promps_particle_wo", "を"),
+                PatternBlock::placeholder("promps_verb_translate", "動詞"),
+            ],
+        ),
+        // Pattern 5: Parallel pattern (と)
+        PatternTemplate::new(
+            "parallel_to",
+            "並列文型（と）",
+            "「AとBを」で複数の対象を指定",
+            "名詞 と 名詞 を 動詞",
+            "データ と 結果 を 保存して",
+            vec![
+                PatternBlock::placeholder("promps_noun", "対象1"),
+                PatternBlock::fixed("promps_particle_to", "と"),
+                PatternBlock::placeholder("promps_noun", "対象2"),
+                PatternBlock::fixed("promps_particle_wo", "を"),
+                PatternBlock::with_value("promps_verb_custom", "動詞", "保存して"),
+            ],
+        ),
+        // Pattern 6: Source-Destination pattern (から...へ/に)
+        PatternTemplate::new(
+            "source_dest",
+            "起点-終点文型（から...に）",
+            "「どこからどこへ」の移動・変換",
+            "名詞 から 名詞 に 動詞",
+            "英語 から 日本語 に 翻訳して",
+            vec![
+                PatternBlock::placeholder("promps_noun", "起点"),
+                PatternBlock::fixed("promps_particle_kara", "から"),
+                PatternBlock::placeholder("promps_noun", "終点"),
+                PatternBlock::fixed("promps_particle_ni", "に"),
+                PatternBlock::placeholder("promps_verb_translate", "動詞"),
+            ],
+        ),
+    ]
+}
+
+/// Result of pattern matching
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct PatternMatchResult {
+    /// Pattern ID
+    pub pattern_id: String,
+    /// Pattern name
+    pub pattern_name: String,
+    /// How well the current input matches (0.0 - 1.0)
+    pub match_score: f64,
+    /// Missing elements to complete the pattern
+    pub missing_elements: Vec<String>,
+    /// Whether the pattern is complete
+    pub is_complete: bool,
+}
+
+/// Analyze current input against all patterns
+pub fn analyze_patterns(input: &str) -> Vec<PatternMatchResult> {
+    let tokens: Vec<&str> = input.split_whitespace().collect();
+    let patterns = get_pattern_templates();
+    let mut results = Vec::new();
+
+    for pattern in patterns {
+        let result = match_pattern(&tokens, &pattern);
+        results.push(result);
+    }
+
+    // Sort by match score (highest first)
+    results.sort_by(|a, b| b.match_score.partial_cmp(&a.match_score).unwrap());
+
+    results
+}
+
+/// Match input tokens against a pattern
+/// Only matches if tokens match from the BEGINNING of the pattern
+fn match_pattern(tokens: &[&str], pattern: &PatternTemplate) -> PatternMatchResult {
+    // Build expected tokens from pattern (with specific particle values)
+    let expected: Vec<ExpectedToken> = pattern
+        .blocks
+        .iter()
+        .map(|b| ExpectedToken::from_block_type(&b.block_type))
+        .collect();
+
+    // Check consecutive match from the beginning
+    let mut consecutive_match_count = 0;
+    let mut missing_elements = Vec::new();
+    let mut had_mismatch = false;
+
+    for (i, exp) in expected.iter().enumerate() {
+        if i < tokens.len() && !had_mismatch {
+            let token = tokens[i];
+            let token_type = TokenType::classify(token);
+
+            // Check if token matches expected
+            let matches = match exp {
+                ExpectedToken::Noun => token_type == TokenType::Noun,
+                ExpectedToken::Particle(p) => token == *p,
+                ExpectedToken::Verb => token_type == TokenType::Verb,
+                ExpectedToken::Other(text) => token == *text,
+            };
+
+            if matches {
+                consecutive_match_count += 1;
+            } else {
+                // Mismatch found - stop counting matches
+                had_mismatch = true;
+                missing_elements.push(format!("位置{}: {} が必要", i + 1, pattern.blocks[i].label));
+            }
+        } else {
+            // Token missing or already had mismatch
+            missing_elements.push(pattern.blocks[i].label.clone());
+        }
+    }
+
+    let total_expected = expected.len();
+
+    // Only give positive score if we have consecutive matches from start
+    // and no mismatches within the token range
+    let match_score = if had_mismatch || consecutive_match_count == 0 {
+        0.0
+    } else {
+        consecutive_match_count as f64 / total_expected as f64
+    };
+
+    PatternMatchResult {
+        pattern_id: pattern.id.clone(),
+        pattern_name: pattern.name.clone(),
+        match_score,
+        missing_elements,
+        is_complete: consecutive_match_count == total_expected && tokens.len() == total_expected,
+    }
+}
+
+/// Expected token for pattern matching
+#[derive(Debug, Clone)]
+enum ExpectedToken {
+    Noun,
+    Particle(&'static str),
+    Verb,
+    Other(&'static str),
+}
+
+impl ExpectedToken {
+    /// Parse block type to expected token
+    fn from_block_type(block_type: &str) -> Self {
+        if block_type.starts_with("promps_noun") {
+            ExpectedToken::Noun
+        } else if block_type.starts_with("promps_particle") {
+            // Extract specific particle from block type
+            let particle = match block_type {
+                "promps_particle_ga" => "が",
+                "promps_particle_wo" => "を",
+                "promps_particle_ni" => "に",
+                "promps_particle_de" => "で",
+                "promps_particle_to" => "と",
+                "promps_particle_he" => "へ",
+                "promps_particle_kara" => "から",
+                "promps_particle_made" => "まで",
+                "promps_particle_yori" => "より",
+                _ => "が", // default
+            };
+            ExpectedToken::Particle(particle)
+        } else if block_type.starts_with("promps_verb") {
+            ExpectedToken::Verb
+        } else if block_type == "promps_other" {
+            ExpectedToken::Other("について")
+        } else {
+            ExpectedToken::Other("")
+        }
+    }
+}
+
+/// Convert block type string to TokenType (for general classification)
+fn block_type_to_token_type(block_type: &str) -> TokenType {
+    if block_type.starts_with("promps_noun") {
+        TokenType::Noun
+    } else if block_type.starts_with("promps_particle") {
+        TokenType::Particle
+    } else if block_type.starts_with("promps_verb") {
+        TokenType::Verb
+    } else {
+        TokenType::Other
+    }
+}
+
+// ============================================================================
 // Tests
 // ============================================================================
 
@@ -687,5 +1014,118 @@ mod tests {
         assert!(json.contains("\"autofix\""));
         assert!(json.contains("\"actionType\":\"insert_before\""));
         assert!(json.contains("\"blockType\":\"promps_noun\""));
+    }
+
+    // Pattern template tests (Phase 6 Step 3)
+
+    #[test]
+    fn test_get_pattern_templates_returns_patterns() {
+        let patterns = get_pattern_templates();
+        assert!(!patterns.is_empty());
+        assert!(patterns.len() >= 6); // We have 6 patterns defined
+    }
+
+    #[test]
+    fn test_pattern_template_sov_basic() {
+        let patterns = get_pattern_templates();
+        let sov = patterns.iter().find(|p| p.id == "sov_basic").unwrap();
+
+        assert_eq!(sov.name, "基本文型（主語-目的語-動詞）");
+        assert_eq!(sov.blocks.len(), 5); // Noun, が, Noun, を, Verb
+    }
+
+    #[test]
+    fn test_pattern_template_ov_simple() {
+        let patterns = get_pattern_templates();
+        let ov = patterns.iter().find(|p| p.id == "ov_simple").unwrap();
+
+        assert_eq!(ov.name, "目的語-動詞文型");
+        assert_eq!(ov.blocks.len(), 3); // Noun, を, Verb
+    }
+
+    #[test]
+    fn test_pattern_block_placeholder() {
+        let block = PatternBlock::placeholder("promps_noun", "主語");
+        assert!(block.is_placeholder);
+        assert_eq!(block.block_type, "promps_noun");
+        assert_eq!(block.label, "主語");
+    }
+
+    #[test]
+    fn test_pattern_block_fixed() {
+        let block = PatternBlock::fixed("promps_particle_ga", "が");
+        assert!(!block.is_placeholder);
+        assert_eq!(block.block_type, "promps_particle_ga");
+        assert_eq!(block.label, "が");
+    }
+
+    #[test]
+    fn test_analyze_patterns_empty_input() {
+        let results = analyze_patterns("");
+        assert!(!results.is_empty());
+        // All patterns should have 0 match score for empty input
+        for result in &results {
+            assert_eq!(result.match_score, 0.0);
+        }
+    }
+
+    #[test]
+    fn test_analyze_patterns_partial_match() {
+        // "_N:Doc を" should partially match ov_simple pattern
+        let results = analyze_patterns("_N:Doc を");
+        let ov_match = results.iter().find(|r| r.pattern_id == "ov_simple").unwrap();
+
+        // 2 out of 3 tokens match
+        assert!(ov_match.match_score > 0.5);
+        assert!(!ov_match.is_complete);
+    }
+
+    #[test]
+    fn test_analyze_patterns_complete_match() {
+        // "_N:Doc を 分析して" should match ov_simple completely
+        let results = analyze_patterns("_N:Doc を 分析して");
+        let ov_match = results.iter().find(|r| r.pattern_id == "ov_simple").unwrap();
+
+        assert_eq!(ov_match.match_score, 1.0);
+        assert!(ov_match.is_complete);
+    }
+
+    #[test]
+    fn test_analyze_patterns_sorted_by_score() {
+        let results = analyze_patterns("_N:Doc を 分析して");
+
+        // Results should be sorted by match_score descending
+        for i in 1..results.len() {
+            assert!(results[i - 1].match_score >= results[i].match_score);
+        }
+    }
+
+    #[test]
+    fn test_block_type_to_token_type() {
+        assert_eq!(block_type_to_token_type("promps_noun"), TokenType::Noun);
+        assert_eq!(block_type_to_token_type("promps_particle_ga"), TokenType::Particle);
+        assert_eq!(block_type_to_token_type("promps_particle_wo"), TokenType::Particle);
+        assert_eq!(block_type_to_token_type("promps_verb_analyze"), TokenType::Verb);
+        assert_eq!(block_type_to_token_type("promps_other"), TokenType::Other);
+    }
+
+    #[test]
+    fn test_pattern_template_serialization() {
+        let patterns = get_pattern_templates();
+        let json = serde_json::to_string(&patterns).unwrap();
+
+        assert!(json.contains("\"id\":\"sov_basic\""));
+        assert!(json.contains("\"name\":"));
+        assert!(json.contains("\"blocks\":"));
+    }
+
+    #[test]
+    fn test_pattern_match_result_serialization() {
+        let results = analyze_patterns("_N:Doc を");
+        let json = serde_json::to_string(&results).unwrap();
+
+        assert!(json.contains("\"patternId\":"));
+        assert!(json.contains("\"matchScore\":"));
+        assert!(json.contains("\"isComplete\":"));
     }
 }
