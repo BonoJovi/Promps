@@ -1,5 +1,5 @@
 /**
- * Promps Phase 4 - Main JavaScript
+ * Promps Phase 5 - Main JavaScript
  *
  * This file handles frontend logic and Tauri command invocation.
  */
@@ -36,6 +36,20 @@ async function generatePrompt(input) {
 }
 
 /**
+ * Validate DSL sequence for grammar errors
+ */
+async function validateDsl(input) {
+    try {
+        const result = await invoke('validate_dsl_sequence', { input });
+        console.log('Validation result:', result);
+        return result;
+    } catch (error) {
+        console.error('Failed to validate DSL:', error);
+        throw error;
+    }
+}
+
+/**
  * Update preview pane with generated prompt
  */
 async function updatePreview(dslCode) {
@@ -43,6 +57,10 @@ async function updatePreview(dslCode) {
 
     if (!dslCode || dslCode.trim() === '') {
         previewDiv.innerHTML = '<p class="placeholder">Generated prompt will appear here.</p>';
+        // Clear validation display
+        if (window.validationUI) {
+            window.validationUI.clear();
+        }
         return;
     }
 
@@ -52,6 +70,18 @@ async function updatePreview(dslCode) {
 
         // Update preview
         previewDiv.textContent = prompt;
+
+        // Validate DSL sequence
+        const validationResult = await validateDsl(dslCode);
+
+        // Display validation result
+        if (window.validationUI) {
+            window.validationUI.displayResult(validationResult);
+
+            // Build block positions and highlight errors
+            const blockPositions = window.validationUI.buildBlockPositions();
+            window.validationUI.highlightBlocks(validationResult, blockPositions);
+        }
     } catch (error) {
         previewDiv.innerHTML = `<p style="color: red;">Error: ${error}</p>`;
     }

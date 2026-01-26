@@ -7,6 +7,7 @@ mod modules;
 use commands::{
     generate_prompt_from_text,
     greet,
+    validate_dsl_sequence,
     save_project,
     load_project,
     create_new_project,
@@ -24,6 +25,7 @@ fn main() {
         .invoke_handler(tauri::generate_handler![
             generate_prompt_from_text,
             greet,
+            validate_dsl_sequence,
             save_project,
             load_project,
             create_new_project,

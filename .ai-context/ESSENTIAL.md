@@ -1,6 +1,6 @@
 # AI Context - Essential Information Only
 
-**Last Updated**: 2026-01-24
+**Last Updated**: 2026-01-26
 **Purpose**: Minimal context for session startup (token optimization)
 **Keywords**: essential, quick start, overview, status, current state, 現在の状態, エッセンシャル, 概要, project status, version, tests, テスト, critical rules, 重要なルール, quick reference, クイックリファレンス, entry point, starting point
 **Related**: @README.md, @context/coding/API_STABILITY.md, @context/workflows/BRANCHING.md, @context/coding/TESTING.md
@@ -9,9 +9,9 @@
 
 ## Current Status
 
-**Version**: v0.0.4 (Project Persistence)
-**Phase**: Phase 4 Complete (Save/Load, Dirty State Detection)
-**Tests**: 168 tests at 100% passing (Backend 34 + Frontend 134)
+**Version**: v0.0.5 (Grammar Validation)
+**Phase**: Phase 5 Complete (Basic Grammar Validation Engine)
+**Tests**: 213 tests at 100% passing (Backend 58 + Frontend 155)
 **Branch**: dev (integration branch)
 
 ---
@@ -22,13 +22,13 @@
 |---------|-------|---------|--------|
 | v0.0.3-2 | Phase 3 | Verb blocks | ✅ Complete |
 | v0.0.4 | Phase 4 | Project Persistence (save/load) | ✅ Complete |
-| v0.0.5 | Phase 5 | Logic Check 基礎 (basic validation) | Next |
-| v0.0.6 | Phase 6 | Logic Check 拡張 (advanced + suggestions) | Planned |
+| v0.0.5 | Phase 5 | Logic Check 基礎 (basic validation) | ✅ Complete |
+| v0.0.6 | Phase 6 | Logic Check 拡張 (advanced + suggestions) | Next |
 | **v1.0.0** | - | **Stable Release** | After v0.0.6 verification |
 
 ---
 
-## Critical Rules (3 Points Only)
+## Critical Rules (4 Points)
 
 ### 1. API Stability
 - **Phase 0 APIs are immutable** - Never modify existing functions/structs
@@ -41,9 +41,14 @@
 - Details: `@.ai-context/context/workflows/BRANCHING.md`
 
 ### 3. Testing Policy
-- **All tests must pass before merge** (168 tests currently)
+- **All tests must pass before merge** (213 tests currently)
 - Implement tests immediately after feature completion
 - Details: `@.ai-context/context/coding/TESTING.md`
+
+### 4. Git Push Policy
+- **Always `git pull` before `git push`**
+- Reason: GitHub Actions updates README.md (access graph)
+- Pushing without pull may cause conflicts
 
 ---
 
@@ -51,11 +56,12 @@
 
 **Source Code**:
 - Core: `src/lib.rs`, `src/commands.rs`
-- Frontend: `res/js/main.js`, `res/js/blockly-config.js`, `res/js/project-manager.js`
+- Validation: `src/modules/validation.rs`
+- Frontend: `res/js/main.js`, `res/js/blockly-config.js`, `res/js/project-manager.js`, `res/js/validation-ui.js`
 
 **Tests**:
-- Backend: `src/lib.rs` (13 tests), `src/commands.rs` (21 tests)
-- Frontend: `res/tests/` (134 tests)
+- Backend: `src/lib.rs` (13 tests), `src/commands.rs` (25 tests), `src/modules/validation.rs` (20 tests)
+- Frontend: `res/tests/` (155 tests)
 
 ---
 
@@ -101,6 +107,7 @@ git checkout -b feature/phase-N
 # ... implement ...
 git commit -m "feat(phase-N): description"
 git checkout dev && git merge --no-ff feature/phase-N
+git pull origin dev  # ← Always pull before push (GitHub Actions updates README)
 git push origin dev
 git push origin feature/phase-N  # ← Keep branch alive
 ```

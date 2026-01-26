@@ -8,6 +8,9 @@ use serde::{Deserialize, Serialize};
 use std::fs;
 use std::path::Path;
 
+// Phase 5: Validation module
+use crate::modules::validation::{validate_sequence, ValidationResult};
+
 /// Generate prompt from DSL input text
 ///
 /// # Arguments
@@ -27,6 +30,22 @@ pub fn generate_prompt_from_text(input: String) -> String {
 #[tauri::command]
 pub fn greet(name: String) -> String {
     format!("Hello, {}! Welcome to Promps.", name)
+}
+
+// ============================================================================
+// Phase 5: Grammar Validation
+// ============================================================================
+
+/// Validate DSL sequence for grammar errors
+///
+/// # Arguments
+/// * `input` - Space-delimited DSL tokens
+///
+/// # Returns
+/// ValidationResult with errors and warnings
+#[tauri::command]
+pub fn validate_dsl_sequence(input: String) -> ValidationResult {
+    validate_sequence(&input)
 }
 
 // ============================================================================
@@ -533,5 +552,41 @@ mod tests {
 
         assert!(result.is_err());
         assert!(result.unwrap_err().contains("extension"));
+    }
+
+    // Phase 5: Grammar Validation Tests
+
+    #[test]
+    fn test_validate_dsl_sequence_valid() {
+        let result = validate_dsl_sequence("_N:User が _N:Document を 分析して".to_string());
+
+        assert!(result.is_valid);
+        assert_eq!(result.error_count, 0);
+        assert_eq!(result.warning_count, 0);
+    }
+
+    #[test]
+    fn test_validate_dsl_sequence_particle_without_noun() {
+        let result = validate_dsl_sequence("が _N:User".to_string());
+
+        assert!(!result.is_valid);
+        assert_eq!(result.error_count, 1);
+        assert!(result.errors[0].message.contains("助詞"));
+    }
+
+    #[test]
+    fn test_validate_dsl_sequence_consecutive_particles() {
+        let result = validate_dsl_sequence("_N:User が を".to_string());
+
+        assert!(!result.is_valid);
+        assert!(result.error_count >= 1);
+    }
+
+    #[test]
+    fn test_validate_dsl_sequence_empty() {
+        let result = validate_dsl_sequence("".to_string());
+
+        assert!(result.is_valid);
+        assert_eq!(result.error_count, 0);
     }
 }

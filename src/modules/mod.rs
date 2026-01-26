@@ -6,7 +6,5 @@
 // Modules will be added incrementally following the principle:
 // "See duplication, fix immediately"
 
-// Future modules (to be added as needed):
-// pub mod validation;
-// pub mod parser;
-// pub mod utils;
+// Phase 5: Grammar Validation
+pub mod validation;
