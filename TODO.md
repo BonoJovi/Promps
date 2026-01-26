@@ -1,6 +1,6 @@
 # Promps TODO List
 
-**Last Updated**: 2026-01-23
+**Last Updated**: 2026-01-26
 
 ---
 
@@ -144,27 +144,27 @@ See: `docs/en/ARCHITECTURE.md#resource-management-philosophy`
 
 ---
 
-## Phase 5: Logic Check 基礎 (v0.0.5)
+## Phase 5: Logic Check 基礎 (v0.0.5) ✅ Complete
 
 ### Basic Grammatical Validation
 
-- [ ] Define `PrompError` enum
-- [ ] Update `parse_input()` signature: `Result<Vec<PromptPart>, PrompError>`
-- [ ] Update Tauri commands to return `Result<T, String>`
-- [ ] Add user-friendly error messages (Japanese + English)
-- [ ] Implement basic pattern validation
+- [x] Implement validation.rs module with TokenType, ValidationResult, ValidationError
+- [x] Implement 4 grammar rules (particle position, consecutive particles, verb position, consecutive nouns)
+- [x] Add validate_dsl_sequence Tauri command
+- [x] Create validation-ui.js for real-time error display
+- [x] Add block highlighting for errors/warnings
 
 ---
 
-## Phase 6: Logic Check 拡張 (v0.0.6)
+## Phase 6: Logic Check 拡張 (v0.0.6) ✅ Complete
 
 ### Advanced Grammatical Validation
 
-- [ ] Define 50-100 valid Japanese sentence patterns
-- [ ] Implement AST-based pattern matching
-- [ ] Add particle validation (が、を、に、で、etc.)
-- [ ] Add noun relationship validation
-- [ ] Implement error reporting with suggestions
+- [x] Add Rule 5-6: Missing subject/object warnings
+- [x] Implement AutoFix with insertBlockBefore/insertBlockAfter
+- [x] Add 7 pattern templates (SOV, OV, Topic, Means, Parallel, Source-Dest, OSV)
+- [x] Implement analyze_patterns() for smart recommendations
+- [x] Add 9 punctuation blocks with 3 punctuation grammar rules
 
 ---
 
@@ -218,6 +218,51 @@ See: `docs/en/ARCHITECTURE.md#resource-management-philosophy`
 - [ ] Implement backend validation (`generate_prompt_from_text_checked()`)
 - [ ] Add rate limiting (optional, future consideration)
 - [ ] Add input sanitization (if accepting external files)
+
+---
+
+## Post v1.0.0: Future Features
+
+### i18n (多言語対応)
+
+**Status**: Planned (after v1.0.0)
+**Priority**: Medium
+**Branch**: Separate from API layer implementation
+
+#### Design Decisions (2026-01-24)
+
+**Architecture**:
+- i18n機能はPhase 0（コアレイヤー）に実装
+- 上位レイヤーへはconfファイル経由で言語設定を伝搬
+- conf読み出しロジックは共通化（一箇所で管理）
+- 各レイヤーは受け取った言語でテキスト切り替えに集中
+
+**Rationale**:
+- Phase 0に置くことで全レイヤーが一貫してi18nを利用可能
+- confファイル経由により、Phase 0のAPIを変更せずに言語設定を共有
+- 責務の分離により、バグの原因特定が容易
+  - conf読み出しに問題 → 共通部分
+  - テキスト表示がおかしい → 該当レイヤー
+- 実行時の言語切り替えにも対応しやすい設計
+
+**Implementation Flow**:
+```
+[conf file] ← 言語設定を保存
+     ↓
+[Phase 0: conf読み出し共通関数]
+     ↓
+[Phase N: 各レイヤーでテキスト切り替え]
+```
+
+#### Implementation Checklist
+
+- [ ] conf file format design (言語設定の保存形式)
+- [ ] Phase 0: conf読み出し共通関数の実装
+- [ ] Phase 0: 言語リソースファイルの設計 (JSON/TOML)
+- [ ] Frontend: UI テキストの外部化
+- [ ] Backend: エラーメッセージ等の外部化
+- [ ] 言語切り替えUI（設定画面）
+- [ ] 初期対応言語: 日本語、英語
 
 ---
 

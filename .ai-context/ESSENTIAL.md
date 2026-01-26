@@ -9,9 +9,9 @@
 
 ## Current Status
 
-**Version**: v0.0.5 (Grammar Validation)
-**Phase**: Phase 5 Complete (Basic Grammar Validation Engine)
-**Tests**: 213 tests at 100% passing (Backend 58 + Frontend 155)
+**Version**: v0.0.6 (Advanced Grammar + Pattern Templates)
+**Phase**: Phase 6 Complete (Advanced Grammar + Pattern Templates + Punctuation)
+**Tests**: 283 tests at 100% passing (Backend 93 + Frontend 190)
 **Branch**: dev (integration branch)
 
 ---
@@ -23,8 +23,8 @@
 | v0.0.3-2 | Phase 3 | Verb blocks | ✅ Complete |
 | v0.0.4 | Phase 4 | Project Persistence (save/load) | ✅ Complete |
 | v0.0.5 | Phase 5 | Logic Check 基礎 (basic validation) | ✅ Complete |
-| v0.0.6 | Phase 6 | Logic Check 拡張 (advanced + suggestions) | Next |
-| **v1.0.0** | - | **Stable Release** | After v0.0.6 verification |
+| v0.0.6 | Phase 6 | Logic Check 拡張 (advanced + patterns + punctuation) | ✅ Complete |
+| **v1.0.0** | - | **Stable Release** | Ready for release |
 
 ---
 
@@ -41,7 +41,7 @@
 - Details: `@.ai-context/context/workflows/BRANCHING.md`
 
 ### 3. Testing Policy
-- **All tests must pass before merge** (213 tests currently)
+- **All tests must pass before merge** (283 tests currently)
 - Implement tests immediately after feature completion
 - Details: `@.ai-context/context/coding/TESTING.md`
 
@@ -60,8 +60,8 @@
 - Frontend: `res/js/main.js`, `res/js/blockly-config.js`, `res/js/project-manager.js`, `res/js/validation-ui.js`
 
 **Tests**:
-- Backend: `src/lib.rs` (13 tests), `src/commands.rs` (25 tests), `src/modules/validation.rs` (20 tests)
-- Frontend: `res/tests/` (155 tests)
+- Backend: `src/lib.rs` (13 tests), `src/commands.rs` (25 tests), `src/modules/validation.rs` (55 tests)
+- Frontend: `res/tests/` (190 tests)
 
 ---
 

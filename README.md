@@ -6,8 +6,8 @@
 > **AIプロンプト作成のためのビジュアルブロックベースツール**
 
 [![Tech Preview](https://img.shields.io/badge/Status-Tech%20Preview-orange)](https://github.com/BonoJovi/Promps/releases)
-[![Version](https://img.shields.io/badge/Version-0.0.4-blue)](https://github.com/BonoJovi/Promps/releases/tag/v0.0.4)
-[![Tests](https://img.shields.io/badge/Tests-168%20passing-brightgreen)](https://github.com/BonoJovi/Promps)
+[![Version](https://img.shields.io/badge/Version-0.0.6-blue)](https://github.com/BonoJovi/Promps/releases/tag/v0.0.6)
+[![Tests](https://img.shields.io/badge/Tests-283%20passing-brightgreen)](https://github.com/BonoJovi/Promps)
 [![Rust](https://img.shields.io/badge/Rust-1.70+-orange.svg)](https://www.rust-lang.org/)
 [![Tauri](https://img.shields.io/badge/Tauri-v2-blue.svg)](https://tauri.app/)
 [![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
@@ -28,22 +28,26 @@
 いつもPrompsに関心を寄せていただき、誠にありがとうございます。
 プロジェクト発案者のBonoJovi(Yoshihiro NAKAHARA)です。
 
-**Ver.0.0.4 (プロトタイプ版) をリリースいたしました！**
+**Ver.0.0.6 (プレリリース版) をリリースいたしました！**
 
-今回のアップデートでは、**プロジェクト保存/読込機能**を実装しました。`.promps`形式でプロジェクトを保存・読込できるようになり、作成したブロック配置を保存して後で再開できます。ツールバー（New, Open, Save, Save As）とキーボードショートカット（Ctrl+N/O/S, Ctrl+Shift+S）にも対応しました。
+今回のアップデートでは、**文法検証機能**と**パターンテンプレート機能**を実装しました：
 
-このプロトタイプ版は、**ユーザーの皆さんからのフィードバック収集**を目的としています。
+🆕 **Phase 5-6 新機能**:
+- **リアルタイム文法検証** - ブロック配置時に即座にエラー・警告を表示
+- **自動修正(AutoFix)** - ワンクリックでブロックを自動挿入
+- **7種類のパターンテンプレート** - 日本語文型に沿ったスマート補完
+- **9種類の句読点ブロック** - 「、」「。」「！」「？」など
+
+これにより、**v1.0.0 安定版リリースの準備が整いました！**
 
 **[Announcement] あなたの意見を聞かせてください！**
-- 保存/読込機能は使いやすいですか？
-- どんな機能があると便利ですか？
+- 文法検証機能は使いやすいですか？
+- パターンテンプレートは役立ちますか？
 - [Issues](https://github.com/BonoJovi/Promps/issues) または [Discussions](https://github.com/BonoJovi/Promps/discussions) でご意見をお寄せください！
 
-Prompsはまだテックプレビュー段階ですが、基本的なプロンプト構築機能と保存/読込機能が動作しており、テストしていただける状態です。文法検証機能は今後のリリースで追加予定です。
+**テスターを募集しています！** v1.0.0リリース前の最終確認にご協力ください。
 
-**テスターを募集しています！** あなたのフィードバックがPrompsの未来を形作ります。動作確認、バグ報告、機能リクエストなど、どんな形でも構いませんので、ぜひご協力ください。
-
-**2026-01-24 (JST) Written by Yoshihiro NAKAHARA**
+**2026-01-26 (JST) Written by Yoshihiro NAKAHARA**
 
 ---
 
@@ -52,22 +56,26 @@ Prompsはまだテックプレビュー段階ですが、基本的なプロン�
 Thank you for your continued interest in Promps.
 I'm BonoJovi (Yoshihiro NAKAHARA), the project initiator.
 
-**We have released Ver.0.0.4 (Prototype)!**
+**We have released Ver.0.0.6 (Pre-release)!**
 
-This update implements **project save/load functionality**. You can now save and load projects in `.promps` format, allowing you to save your block arrangements and resume work later. We've also added toolbar buttons (New, Open, Save, Save As) and keyboard shortcuts (Ctrl+N/O/S, Ctrl+Shift+S).
+This update implements **grammar validation** and **pattern template features**:
 
-This prototype release aims to **collect feedback from users**.
+🆕 **Phase 5-6 New Features**:
+- **Real-time grammar validation** - Instant error/warning display while placing blocks
+- **AutoFix** - One-click automatic block insertion
+- **7 pattern templates** - Smart completion following Japanese sentence patterns
+- **9 punctuation blocks** - 「、」「。」「！」「？」and more
+
+With this, **we are ready for v1.0.0 stable release!**
 
 **[Announcement] We want to hear from you!**
-- Is the save/load feature easy to use?
-- What features would be helpful for you?
+- Is the grammar validation feature easy to use?
+- Are the pattern templates helpful?
 - Share your ideas on [Issues](https://github.com/BonoJovi/Promps/issues) or [Discussions](https://github.com/BonoJovi/Promps/discussions)!
 
-Promps is still in Tech Preview stage, but the basic prompt building functionality and save/load features are working and ready for testing. Grammar validation is planned for future releases.
+**We're looking for testers!** Please help us with final verification before v1.0.0 release.
 
-**We're looking for testers!** Your feedback will shape the future of Promps. Whether it's testing functionality, reporting bugs, or requesting features, any form of contribution is welcome.
-
-**2026-01-24 (JST) Written by Yoshihiro NAKAHARA**
+**2026-01-26 (JST) Written by Yoshihiro NAKAHARA**
 
 </div>
 
@@ -75,19 +83,19 @@ Promps is still in Tech Preview stage, but the basic prompt building functionali
 
 ## ⚠ Tech Preview Notice / テックプレビュー版について
 
-**This is a Technology Preview release (v0.0.4)** - a prototype version with project persistence.
-**これはテクノロジープレビュー版(v0.0.4)です** - プロジェクト保存/読込機能を搭載したプロトタイプ版です。
+**This is a Pre-release version (v0.0.6)** - feature complete, ready for v1.0.0 verification.
+**これはプレリリース版(v0.0.6)です** - 機能完成、v1.0.0検証準備完了。
 
 **What this means: / これが意味すること：**
 - ✅ Core functionality works and is ready for testing / コア機能は動作し、テスト可能な状態です
-- ✅ **NEW in v0.0.4:** Project save/load (.promps format) / **v0.0.4の新機能:** プロジェクト保存/読込（.promps形式）
-- ✅ **NEW in v0.0.4:** Toolbar & keyboard shortcuts / **v0.0.4の新機能:** ツールバー＆キーボードショートカット
+- ✅ **NEW in v0.0.6:** Real-time grammar validation / **v0.0.6の新機能:** リアルタイム文法検証
+- ✅ **NEW in v0.0.6:** AutoFix (one-click block insertion) / **v0.0.6の新機能:** 自動修正機能
+- ✅ **NEW in v0.0.6:** 7 pattern templates / **v0.0.6の新機能:** 7種類のパターンテンプレート
+- ✅ **NEW in v0.0.6:** 9 punctuation blocks / **v0.0.6の新機能:** 9種類の句読点ブロック
+- ✅ Project save/load (.promps format) / プロジェクト保存/読込（.promps形式）
 - ✅ Expanded verb blocks (11 types + custom input) / 動詞ブロック（固定11種＋カスタム入力）
 - ✅ Particle blocks (9 types) / 助詞ブロック（9種類）
-- ✅ Collapsible category UI / 折りたたみ可能なカテゴリUI
-- ✨ **We need your feedback!** / **フィードバックを募集中！**
-- ⚠ No grammar validation yet / 文法検証機能はまだありません
-- [Bug] Bugs are expected - please report them! / バグは想定内です - ぜひ報告してください！
+- ✨ **We need your feedback for v1.0.0!** / **v1.0.0に向けてフィードバックを募集中！**
 
 **We're looking for testers!** Your feedback will shape the future of Promps. See [CONTRIBUTING.md](CONTRIBUTING.md) for how to help.
 **テスターを募集しています！** あなたのフィードバックがPrompsの未来を形作ります。協力方法は[CONTRIBUTING.md](CONTRIBUTING.md)をご覧ください。
@@ -99,7 +107,7 @@ Promps is still in Tech Preview stage, but the basic prompt building functionali
 ### 1. Download & Install / ダウンロード & インストール
 
 **Download the latest release: / 最新リリースをダウンロード：**
-- [Download v0.0.4](https://github.com/BonoJovi/Promps/releases/tag/v0.0.4)
+- [Download v0.0.6](https://github.com/BonoJovi/Promps/releases/tag/v0.0.6)
 
 **Available for: / 対応プラットフォーム：**
 - Linux (AppImage, deb, rpm)
@@ -255,13 +263,21 @@ Text (NOUN) を English (NOUN) に 翻訳して
 - ✅ Multi-platform support (Linux, Windows, macOS)
   マルチプラットフォーム対応
 
+### New in v0.0.6 / v0.0.6の新機能
+
+- ✅ **Grammar validation (basic)** - 4 rules: particle position, consecutive particles, verb position, consecutive nouns
+  **文法検証（基本）** - 4ルール: 助詞位置、連続助詞、動詞位置、連続名詞
+
+- ✅ **Grammar validation (advanced + AutoFix)** - 2 additional rules with one-click fix
+  **文法検証（高度＋自動修正）** - 追加2ルール＋ワンクリック修正
+
+- ✅ **7 Pattern templates** - SOV, OV, Topic, Means, Parallel, Source-Dest, OSV
+  **7種類のパターンテンプレート** - 基本文型、目的語文型、トピック文型など
+
+- ✅ **9 Punctuation blocks** - 、。！？"'，/&
+  **9種類の句読点ブロック**
+
 ### Coming Soon / 近日実装予定
-
-- [Soon] Grammar validation (basic)
-  文法検証（基本）
-
-- [Soon] Grammar validation (advanced + suggestions)
-  文法検証（高度＋提案機能）
 
 - [Soon] More verb types and adjective blocks
   より多くの動詞タイプと形容詞ブロック
@@ -269,8 +285,8 @@ Text (NOUN) を English (NOUN) に 翻訳して
 - [Soon] Layout customization
   レイアウトのカスタマイズ
 
-- [Soon] Example templates
-  サンプルテンプレート
+- [Soon] Export to various AI formats
+  各種AI向けフォーマット出力
 
 ---
 
@@ -288,8 +304,8 @@ We welcome **all types of contributions** - not just code!
 
 **No programming experience needed! / プログラミング経験不要！**
 
-**✨ v0.0.4 with Project Save/Load!**
-**[新着] v0.0.4 プロジェクト保存/読込機能搭載！**
+**✨ v0.0.6 with Grammar Validation & Pattern Templates!**
+**[新着] v0.0.6 文法検証＆パターンテンプレート搭載！**
 
 **Platform Status: / プラットフォーム状況：**
 - ✅ **Linux**: Verified and tested by developer / 開発者により検証済み・テスト済み
@@ -331,6 +347,38 @@ For code contributions:
 ---
 
 ## Release History / リリース履歴
+
+### Version 0.0.6 (2026-01-26)
+
+**Major Features: / 主要機能：**
+- ✨ **Pattern Templates**: 7 Japanese sentence patterns (SOV, OV, Topic, Means, Parallel, Source-Dest, OSV)
+  **パターンテンプレート**: 7種類の日本語文型
+- ✨ **Smart Completion**: Auto-suggest missing blocks based on patterns
+  **スマート補完**: パターンに基づく欠落ブロックの自動提案
+- ✨ **Punctuation Blocks**: 9 types (、。！？"'，/&)
+  **句読点ブロック**: 9種類
+- ✨ **Advanced Grammar Rules**: Missing subject/object warnings
+  **高度な文法ルール**: 主語/目的語欠如の警告
+- ✨ **AutoFix**: One-click automatic block insertion
+  **自動修正**: ワンクリックでブロック自動挿入
+- [Test] Updated tests: 283 tests (Backend: 93, Frontend: 190, 100% passing)
+  テスト更新: 283テスト
+
+### Version 0.0.5 (2026-01-26)
+
+**Major Features: / 主要機能：**
+- ✨ **Grammar Validation Engine**: Real-time validation with 4 rules
+  **文法検証エンジン**: リアルタイム検証（4ルール）
+  - Rule 1: Particle must follow noun (Error) / 助詞は名詞の後に
+  - Rule 2: No consecutive particles (Error) / 連続助詞禁止
+  - Rule 3: Verb should be at end (Warning) / 動詞は末尾に
+  - Rule 4: Consecutive nouns need particle (Warning) / 連続名詞には助詞が必要
+- ✨ **Block Highlighting**: Visual error/warning indicators on blocks
+  **ブロックハイライト**: エラー/警告をブロック上に視覚表示
+- ✨ **Validation UI**: Error/warning panel with success state
+  **検証UI**: エラー/警告パネル（成功状態表示あり）
+- [Test] Updated tests: 213 tests (Backend: 58, Frontend: 155, 100% passing)
+  テスト更新: 213テスト
 
 ### Version 0.0.4 (2026-01-24)
 
@@ -393,10 +441,10 @@ For code contributions:
 - **Build System**: Cargo + Tauri CLI
 
 **Tests: / テスト：**
-- Backend: 34 tests (100% passing)
-- Frontend: 134 tests (100% passing)
-- **Total: 168 tests** (100% passing)
-- Includes: Project persistence, Particle blocks, Verb blocks, Block serialization tests
+- Backend: 93 tests (100% passing)
+- Frontend: 190 tests (100% passing)
+- **Total: 283 tests** (100% passing)
+- Includes: Grammar validation, Pattern templates, Punctuation, Project persistence, Particle/Verb blocks
 
 ---
 
