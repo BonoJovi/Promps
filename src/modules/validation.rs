@@ -18,6 +18,8 @@ pub enum TokenType {
     Particle,
     /// Verb (動詞) - fixed verbs and custom verbs ending in して/する
     Verb,
+    /// Punctuation (句読点) - 、。！？"',/&
+    Punctuation,
     /// Other (その他) - everything else
     Other,
 }
@@ -40,6 +42,11 @@ impl TokenType {
         // Check for verbs (動詞)
         if Self::is_verb(token) {
             return TokenType::Verb;
+        }
+
+        // Check for punctuation (句読点)
+        if Self::is_punctuation(token) {
+            return TokenType::Punctuation;
         }
 
         TokenType::Other
@@ -75,6 +82,24 @@ impl TokenType {
 
         false
     }
+
+    /// Check if token is punctuation (句読点)
+    fn is_punctuation(token: &str) -> bool {
+        const PUNCTUATION: &[&str] = &[
+            "、", "。", "！", "？", "\"", "'", ",", "/", "&",
+        ];
+        PUNCTUATION.contains(&token)
+    }
+
+    /// Check if token is a comma/touten (読点)
+    pub fn is_touten(token: &str) -> bool {
+        token == "、"
+    }
+
+    /// Check if token is a period/kuten (句点)
+    pub fn is_kuten(token: &str) -> bool {
+        token == "。"
+    }
 }
 
 // ============================================================================
@@ -106,6 +131,12 @@ pub enum ValidationErrorCode {
     MissingSubject,
     /// Rule 6: Missing object (no を with verb)
     MissingObject,
+    /// Rule 7: Touten (、) after を particle (invalid)
+    ToutenAfterWo,
+    /// Rule 8: Touten (、) not after particle
+    ToutenNotAfterParticle,
+    /// Rule 9: Kuten (。) not after verb
+    KutenNotAfterVerb,
 }
 
 /// Auto-fix action type
@@ -341,6 +372,57 @@ pub fn validate_sequence(input: &str) -> ValidationResult {
                         label: "「と」を追加".to_string(),
                     },
                 ));
+            }
+        }
+
+        // Rule 7-9: Punctuation rules (句読点)
+        if token_type == TokenType::Punctuation {
+            // Rule 7 & 8: Touten (、) - only allowed after particle (except を)
+            if *token == "、" {
+                if i > 0 {
+                    let prev_token = tokens[i - 1];
+                    if prev_token == "を" {
+                        // Rule 7: Touten after を is invalid
+                        result.add_error(ValidationError::new(
+                            ValidationErrorCode::ToutenAfterWo,
+                            "「を」の後に読点「、」は使用できません".to_string(),
+                            i,
+                            Severity::Error,
+                            Some("読点を削除するか、別の助詞を使用してください".to_string()),
+                        ));
+                    } else if prev_type != Some(TokenType::Particle) {
+                        // Rule 8: Touten not after particle
+                        result.add_error(ValidationError::new(
+                            ValidationErrorCode::ToutenNotAfterParticle,
+                            "読点「、」は助詞の後でのみ使用できます".to_string(),
+                            i,
+                            Severity::Error,
+                            Some("読点の前に助詞を追加してください".to_string()),
+                        ));
+                    }
+                } else {
+                    // Touten at beginning
+                    result.add_error(ValidationError::new(
+                        ValidationErrorCode::ToutenNotAfterParticle,
+                        "読点「、」は文頭では使用できません".to_string(),
+                        i,
+                        Severity::Error,
+                        Some("読点を削除してください".to_string()),
+                    ));
+                }
+            }
+
+            // Rule 9: Kuten (。) - only allowed after verb
+            if *token == "。" {
+                if prev_type != Some(TokenType::Verb) {
+                    result.add_error(ValidationError::new(
+                        ValidationErrorCode::KutenNotAfterVerb,
+                        "句点「。」は動詞の後でのみ使用できます".to_string(),
+                        i,
+                        Severity::Error,
+                        Some("句点の前に動詞を追加してください".to_string()),
+                    ));
+                }
             }
         }
 
@@ -1173,5 +1255,101 @@ mod tests {
         assert!(json.contains("\"patternId\":"));
         assert!(json.contains("\"matchScore\":"));
         assert!(json.contains("\"isComplete\":"));
+    }
+
+    // ========================================================================
+    // Punctuation Validation Tests (句読点)
+    // ========================================================================
+
+    #[test]
+    fn test_punctuation_classify() {
+        assert_eq!(TokenType::classify("、"), TokenType::Punctuation);
+        assert_eq!(TokenType::classify("。"), TokenType::Punctuation);
+        assert_eq!(TokenType::classify("！"), TokenType::Punctuation);
+        assert_eq!(TokenType::classify("？"), TokenType::Punctuation);
+        assert_eq!(TokenType::classify("\""), TokenType::Punctuation);
+        assert_eq!(TokenType::classify("'"), TokenType::Punctuation);
+        assert_eq!(TokenType::classify(","), TokenType::Punctuation);
+        assert_eq!(TokenType::classify("/"), TokenType::Punctuation);
+        assert_eq!(TokenType::classify("&"), TokenType::Punctuation);
+    }
+
+    #[test]
+    fn test_touten_after_particle_ok() {
+        // 「が、」should be valid
+        let result = validate_sequence("_N:User が、 _N:Order を 分析して");
+        let touten_errors: Vec<_> = result.errors.iter()
+            .filter(|e| matches!(e.code, ValidationErrorCode::ToutenAfterWo | ValidationErrorCode::ToutenNotAfterParticle))
+            .collect();
+        assert!(touten_errors.is_empty(), "Touten after が should be valid");
+    }
+
+    #[test]
+    fn test_touten_after_wo_error() {
+        // 「を 、」should be invalid (tokens are space-separated)
+        let result = validate_sequence("_N:User を 、 分析して");
+        let has_error = result.errors.iter()
+            .any(|e| e.code == ValidationErrorCode::ToutenAfterWo);
+        assert!(has_error, "Touten after を should be an error");
+    }
+
+    #[test]
+    fn test_touten_after_noun_error() {
+        // 「名詞 、」(without particle) should be invalid
+        let result = validate_sequence("_N:User 、 を 分析して");
+        let has_error = result.errors.iter()
+            .any(|e| e.code == ValidationErrorCode::ToutenNotAfterParticle);
+        assert!(has_error, "Touten after noun should be an error");
+    }
+
+    #[test]
+    fn test_touten_at_beginning_error() {
+        // 「、」at beginning should be invalid
+        let result = validate_sequence("、 _N:User を 分析して");
+        let has_error = result.errors.iter()
+            .any(|e| e.code == ValidationErrorCode::ToutenNotAfterParticle);
+        assert!(has_error, "Touten at beginning should be an error");
+    }
+
+    #[test]
+    fn test_kuten_after_verb_ok() {
+        // 「分析して 。」should be valid (tokens are space-separated)
+        let result = validate_sequence("_N:User が _N:Doc を 分析して 。");
+        let kuten_errors: Vec<_> = result.errors.iter()
+            .filter(|e| e.code == ValidationErrorCode::KutenNotAfterVerb)
+            .collect();
+        assert!(kuten_errors.is_empty(), "Kuten after verb should be valid");
+    }
+
+    #[test]
+    fn test_kuten_after_particle_error() {
+        // 「を 。」should be invalid
+        let result = validate_sequence("_N:User を 。");
+        let has_error = result.errors.iter()
+            .any(|e| e.code == ValidationErrorCode::KutenNotAfterVerb);
+        assert!(has_error, "Kuten after particle should be an error");
+    }
+
+    #[test]
+    fn test_kuten_after_noun_error() {
+        // 「名詞 。」should be invalid
+        let result = validate_sequence("_N:User 。");
+        let has_error = result.errors.iter()
+            .any(|e| e.code == ValidationErrorCode::KutenNotAfterVerb);
+        assert!(has_error, "Kuten after noun should be an error");
+    }
+
+    #[test]
+    fn test_complete_sentence_with_punctuation() {
+        // Full valid sentence with punctuation (tokens are space-separated)
+        let result = validate_sequence("_N:User が 、 _N:Doc を 分析して 。");
+        let punct_errors: Vec<_> = result.errors.iter()
+            .filter(|e| matches!(e.code,
+                ValidationErrorCode::ToutenAfterWo |
+                ValidationErrorCode::ToutenNotAfterParticle |
+                ValidationErrorCode::KutenNotAfterVerb
+            ))
+            .collect();
+        assert!(punct_errors.is_empty(), "Valid sentence should have no punctuation errors");
     }
 }

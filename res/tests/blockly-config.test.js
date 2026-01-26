@@ -921,3 +921,180 @@ describe('Verb Blocks (Phase 3)', () => {
         expect(code).toBe('_N:Document から _N:Data を 抽出して _N:JSON に 変換して ');
     });
 });
+
+// ============================================================================
+// Punctuation Block Tests (句読点)
+// ============================================================================
+
+describe('Punctuation Blocks (句読点)', () => {
+    // Punctuation block generator function (returns punctuation + space)
+    const generatePunctDSL = (punctText) => {
+        return punctText + ' ';
+    };
+
+    test('should generate correct DSL for 、(touten)', () => {
+        const result = generatePunctDSL('、');
+        expect(result).toBe('、 ');
+    });
+
+    test('should generate correct DSL for 。(kuten)', () => {
+        const result = generatePunctDSL('。');
+        expect(result).toBe('。 ');
+    });
+
+    test('should generate correct DSL for ！(exclamation)', () => {
+        const result = generatePunctDSL('！');
+        expect(result).toBe('！ ');
+    });
+
+    test('should generate correct DSL for ？(question)', () => {
+        const result = generatePunctDSL('？');
+        expect(result).toBe('？ ');
+    });
+
+    test('should generate correct DSL for "(double quote)', () => {
+        const result = generatePunctDSL('"');
+        expect(result).toBe('" ');
+    });
+
+    test('should generate correct DSL for \'(single quote)', () => {
+        const result = generatePunctDSL("'");
+        expect(result).toBe("' ");
+    });
+
+    test('should generate correct DSL for ,(comma)', () => {
+        const result = generatePunctDSL(',');
+        expect(result).toBe(', ');
+    });
+
+    test('should generate correct DSL for /(slash)', () => {
+        const result = generatePunctDSL('/');
+        expect(result).toBe('/ ');
+    });
+
+    test('should generate correct DSL for &(ampersand)', () => {
+        const result = generatePunctDSL('&');
+        expect(result).toBe('& ');
+    });
+
+    test('should handle all punctuation types in a sentence', () => {
+        const punctMarks = ['、', '。', '！', '？', '"', "'", ',', '/', '&'];
+
+        punctMarks.forEach(punct => {
+            const result = generatePunctDSL(punct);
+            expect(result).toBe(punct + ' ');
+        });
+    });
+});
+
+describe('Mixed Blocks with Punctuation', () => {
+    test('should generate DSL with punctuation in sentence', () => {
+        // Sentence: データ、ファイル を 分析して！
+        const blocks = [
+            { type: 'noun', text: 'データ' },
+            { type: 'punct', text: '、' },
+            { type: 'noun', text: 'ファイル' },
+            { type: 'particle', text: 'を' },
+            { type: 'verb', text: '分析して' },
+            { type: 'punct', text: '！' }
+        ];
+
+        const generateDSL = (block) => {
+            if (block.type === 'noun') {
+                return '_N:' + block.text + ' ';
+            } else {
+                return block.text + ' ';
+            }
+        };
+
+        const code = blocks.map(generateDSL).join('');
+        expect(code).toBe('_N:データ 、 _N:ファイル を 分析して ！ ');
+    });
+
+    test('should handle question with ？', () => {
+        // Sentence: データ を 分析して？
+        const blocks = [
+            { type: 'noun', text: 'データ' },
+            { type: 'particle', text: 'を' },
+            { type: 'verb', text: '分析して' },
+            { type: 'punct', text: '？' }
+        ];
+
+        const generateDSL = (block) => {
+            if (block.type === 'noun') {
+                return '_N:' + block.text + ' ';
+            } else {
+                return block.text + ' ';
+            }
+        };
+
+        const code = blocks.map(generateDSL).join('');
+        expect(code).toBe('_N:データ を 分析して ？ ');
+    });
+
+    test('should handle quoted text with " marks', () => {
+        // Sentence: "エラー" を 検索して
+        const blocks = [
+            { type: 'punct', text: '"' },
+            { type: 'noun', text: 'エラー' },
+            { type: 'punct', text: '"' },
+            { type: 'particle', text: 'を' },
+            { type: 'verb', text: '検索して' }
+        ];
+
+        const generateDSL = (block) => {
+            if (block.type === 'noun') {
+                return '_N:' + block.text + ' ';
+            } else {
+                return block.text + ' ';
+            }
+        };
+
+        const code = blocks.map(generateDSL).join('');
+        expect(code).toBe('" _N:エラー " を 検索して ');
+    });
+
+    test('should handle slash for alternatives', () => {
+        // Sentence: データ / ファイル を 選択して
+        const blocks = [
+            { type: 'noun', text: 'データ' },
+            { type: 'punct', text: '/' },
+            { type: 'noun', text: 'ファイル' },
+            { type: 'particle', text: 'を' },
+            { type: 'verb', text: '選択して' }
+        ];
+
+        const generateDSL = (block) => {
+            if (block.type === 'noun') {
+                return '_N:' + block.text + ' ';
+            } else {
+                return block.text + ' ';
+            }
+        };
+
+        const code = blocks.map(generateDSL).join('');
+        expect(code).toBe('_N:データ / _N:ファイル を 選択して ');
+    });
+
+    test('should handle ampersand for AND conditions', () => {
+        // Sentence: データ & ログ を 保存して
+        const blocks = [
+            { type: 'noun', text: 'データ' },
+            { type: 'punct', text: '&' },
+            { type: 'noun', text: 'ログ' },
+            { type: 'particle', text: 'を' },
+            { type: 'verb', text: '保存して' }
+        ];
+
+        const generateDSL = (block) => {
+            if (block.type === 'noun') {
+                return '_N:' + block.text + ' ';
+            } else {
+                return block.text + ' ';
+            }
+        };
+
+        const code = blocks.map(generateDSL).join('');
+        expect(code).toBe('_N:データ & _N:ログ を 保存して ');
+    });
+});

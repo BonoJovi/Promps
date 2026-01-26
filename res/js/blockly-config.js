@@ -471,6 +471,172 @@ javascriptGenerator.forBlock['promps_verb_teach'] = function(block, generator) {
     return '教えて ';
 };
 
+// ============================================================================
+// Punctuation Blocks (句読点)
+// ============================================================================
+
+/**
+ * Punctuation: 、(touten - Japanese comma)
+ */
+Blockly.Blocks['promps_punct_touten'] = {
+    init: function() {
+        this.appendDummyInput()
+            .appendField(new Blockly.FieldLabel("、"));
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setColour(60);
+        this.setTooltip("句読点: 読点（、）");
+        this.setHelpUrl("");
+    }
+};
+javascriptGenerator.forBlock['promps_punct_touten'] = function(block, generator) {
+    return '、 ';
+};
+
+/**
+ * Punctuation: 。(kuten - Japanese period)
+ */
+Blockly.Blocks['promps_punct_kuten'] = {
+    init: function() {
+        this.appendDummyInput()
+            .appendField(new Blockly.FieldLabel("。"));
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setColour(60);
+        this.setTooltip("句読点: 句点（。）");
+        this.setHelpUrl("");
+    }
+};
+javascriptGenerator.forBlock['promps_punct_kuten'] = function(block, generator) {
+    return '。 ';
+};
+
+/**
+ * Punctuation: ！(exclamation mark)
+ */
+Blockly.Blocks['promps_punct_exclaim'] = {
+    init: function() {
+        this.appendDummyInput()
+            .appendField(new Blockly.FieldLabel("！"));
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setColour(60);
+        this.setTooltip("句読点: 感嘆符（！）");
+        this.setHelpUrl("");
+    }
+};
+javascriptGenerator.forBlock['promps_punct_exclaim'] = function(block, generator) {
+    return '！ ';
+};
+
+/**
+ * Punctuation: ？(question mark)
+ */
+Blockly.Blocks['promps_punct_question'] = {
+    init: function() {
+        this.appendDummyInput()
+            .appendField(new Blockly.FieldLabel("？"));
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setColour(60);
+        this.setTooltip("句読点: 疑問符（？）");
+        this.setHelpUrl("");
+    }
+};
+javascriptGenerator.forBlock['promps_punct_question'] = function(block, generator) {
+    return '？ ';
+};
+
+/**
+ * Punctuation: "(double quote)
+ */
+Blockly.Blocks['promps_punct_dquote'] = {
+    init: function() {
+        this.appendDummyInput()
+            .appendField(new Blockly.FieldLabel('"'));
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setColour(60);
+        this.setTooltip("句読点: 二重引用符（\"）");
+        this.setHelpUrl("");
+    }
+};
+javascriptGenerator.forBlock['promps_punct_dquote'] = function(block, generator) {
+    return '" ';
+};
+
+/**
+ * Punctuation: '(single quote)
+ */
+Blockly.Blocks['promps_punct_squote'] = {
+    init: function() {
+        this.appendDummyInput()
+            .appendField(new Blockly.FieldLabel("'"));
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setColour(60);
+        this.setTooltip("句読点: 引用符（'）");
+        this.setHelpUrl("");
+    }
+};
+javascriptGenerator.forBlock['promps_punct_squote'] = function(block, generator) {
+    return "' ";
+};
+
+/**
+ * Punctuation: ,(comma - English style)
+ */
+Blockly.Blocks['promps_punct_comma'] = {
+    init: function() {
+        this.appendDummyInput()
+            .appendField(new Blockly.FieldLabel(","));
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setColour(60);
+        this.setTooltip("句読点: カンマ（,）");
+        this.setHelpUrl("");
+    }
+};
+javascriptGenerator.forBlock['promps_punct_comma'] = function(block, generator) {
+    return ', ';
+};
+
+/**
+ * Punctuation: /(slash)
+ */
+Blockly.Blocks['promps_punct_slash'] = {
+    init: function() {
+        this.appendDummyInput()
+            .appendField(new Blockly.FieldLabel("/"));
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setColour(60);
+        this.setTooltip("句読点: スラッシュ（/）");
+        this.setHelpUrl("");
+    }
+};
+javascriptGenerator.forBlock['promps_punct_slash'] = function(block, generator) {
+    return '/ ';
+};
+
+/**
+ * Punctuation: &(ampersand)
+ */
+Blockly.Blocks['promps_punct_amp'] = {
+    init: function() {
+        this.appendDummyInput()
+            .appendField(new Blockly.FieldLabel("&"));
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setColour(60);
+        this.setTooltip("句読点: アンパサンド（&）");
+        this.setHelpUrl("");
+    }
+};
+javascriptGenerator.forBlock['promps_punct_amp'] = function(block, generator) {
+    return '& ';
+};
+
 /**
  * Initialize Blockly workspace
  */
@@ -602,6 +768,50 @@ function initBlockly() {
                     {
                         "kind": "block",
                         "type": "promps_verb_custom"
+                    }
+                ]
+            },
+            // Punctuation category (句読点)
+            {
+                "kind": "category",
+                "name": "句読点",
+                "colour": "60",
+                "contents": [
+                    {
+                        "kind": "block",
+                        "type": "promps_punct_touten"
+                    },
+                    {
+                        "kind": "block",
+                        "type": "promps_punct_kuten"
+                    },
+                    {
+                        "kind": "block",
+                        "type": "promps_punct_exclaim"
+                    },
+                    {
+                        "kind": "block",
+                        "type": "promps_punct_question"
+                    },
+                    {
+                        "kind": "block",
+                        "type": "promps_punct_dquote"
+                    },
+                    {
+                        "kind": "block",
+                        "type": "promps_punct_squote"
+                    },
+                    {
+                        "kind": "block",
+                        "type": "promps_punct_comma"
+                    },
+                    {
+                        "kind": "block",
+                        "type": "promps_punct_slash"
+                    },
+                    {
+                        "kind": "block",
+                        "type": "promps_punct_amp"
                     }
                 ]
             },
