@@ -51,6 +51,22 @@ jobs:
           fi
           echo "✅ Tag v$VERSION does not exist"
 
+      - name: Delete existing draft releases
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "🔍 Checking for draft releases..."
+          DRAFTS=$(gh release list --json tagName,isDraft --jq '.[] | select(.isDraft) | .tagName')
+          if [ -z "$DRAFTS" ]; then
+            echo "✅ No draft releases found"
+          else
+            echo "$DRAFTS" | while read -r tag; do
+              echo "🗑️  Deleting draft release: $tag"
+              gh release delete "$tag" --yes
+            done
+            echo "✅ Draft releases cleaned up"
+          fi
+
       - name: Get current version
         id: current
         run: |
