@@ -1,6 +1,6 @@
 {
   "name": "promps",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Promps: A ViPL (Visual Prompt Language) generation tool",
   "author": "Yoshihiro NAKAHARA <promps-dev@zundou.org>",
   "license": "MIT",
