@@ -1,8 +1,11 @@
 name: Update ai-context-shared Submodule
 
 on:
+  schedule:
+    - cron: '0 2 * * 0'  # Weekly on Sunday at 2:00 UTC
   repository_dispatch:
     types: [submodule-update]
+  workflow_dispatch:
 
 permissions:
   contents: write
