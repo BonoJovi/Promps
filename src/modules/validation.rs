@@ -378,7 +378,7 @@ pub fn validate_sequence(input: &str) -> ValidationResult {
         // Rule 7-9: Punctuation rules (句読点)
         if token_type == TokenType::Punctuation {
             // Rule 7 & 8: Touten (、) - only allowed after particle (except を)
-            if *token == "、" {
+            if TokenType::is_touten(token) {
                 if i > 0 {
                     let prev_token = tokens[i - 1];
                     if prev_token == "を" {
@@ -413,7 +413,7 @@ pub fn validate_sequence(input: &str) -> ValidationResult {
             }
 
             // Rule 9: Kuten (。) - only allowed after verb
-            if *token == "。" {
+            if TokenType::is_kuten(token) {
                 if prev_type != Some(TokenType::Verb) {
                     result.add_error(ValidationError::new(
                         ValidationErrorCode::KutenNotAfterVerb,
@@ -830,19 +830,6 @@ impl ExpectedToken {
     }
 }
 
-/// Convert block type string to TokenType (for general classification)
-fn block_type_to_token_type(block_type: &str) -> TokenType {
-    if block_type.starts_with("promps_noun") {
-        TokenType::Noun
-    } else if block_type.starts_with("promps_particle") {
-        TokenType::Particle
-    } else if block_type.starts_with("promps_verb") {
-        TokenType::Verb
-    } else {
-        TokenType::Other
-    }
-}
-
 // ============================================================================
 // Tests
 // ============================================================================
@@ -1226,15 +1213,6 @@ mod tests {
         for i in 1..results.len() {
             assert!(results[i - 1].match_score >= results[i].match_score);
         }
-    }
-
-    #[test]
-    fn test_block_type_to_token_type() {
-        assert_eq!(block_type_to_token_type("promps_noun"), TokenType::Noun);
-        assert_eq!(block_type_to_token_type("promps_particle_ga"), TokenType::Particle);
-        assert_eq!(block_type_to_token_type("promps_particle_wo"), TokenType::Particle);
-        assert_eq!(block_type_to_token_type("promps_verb_analyze"), TokenType::Verb);
-        assert_eq!(block_type_to_token_type("promps_other"), TokenType::Other);
     }
 
     #[test]
