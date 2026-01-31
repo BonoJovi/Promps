@@ -2,6 +2,7 @@
  * Promps Phase 6 - Main JavaScript
  *
  * This file handles frontend logic and Tauri command invocation.
+ * Includes i18n (internationalization) support.
  */
 
 // Tauri API will be available after window loads
@@ -40,7 +41,9 @@ async function generatePrompt(input) {
  */
 async function validateDsl(input) {
     try {
-        const result = await invoke('validate_dsl_sequence', { input });
+        // Get current locale for language-specific validation
+        const locale = window.i18n ? window.i18n.getLocale() : 'ja';
+        const result = await invoke('validate_dsl_sequence', { input, locale });
         console.log('Validation result:', result);
         return result;
     } catch (error) {
@@ -177,7 +180,44 @@ function initToolbarButtons() {
         });
     }
 
+    // Language toggle button
+    const btnLang = document.getElementById('btnLang');
+    if (btnLang) {
+        btnLang.addEventListener('click', () => {
+            if (window.i18n && typeof window.i18n.toggleLocale === 'function') {
+                window.i18n.toggleLocale();
+            }
+        });
+    }
+
     console.log('Toolbar buttons initialized');
+}
+
+/**
+ * Initialize locale change listener
+ * Reinitializes Blockly when language changes
+ */
+function initLocaleChangeListener() {
+    window.addEventListener('localechange', (event) => {
+        console.log('Locale changed to:', event.detail.locale);
+
+        // Reinitialize Blockly with new translations
+        if (typeof reinitializeBlockly === 'function') {
+            reinitializeBlockly();
+        }
+
+        // Clear pattern suggestions (since workspace is now empty)
+        if (window.patternUI && typeof window.patternUI.clearSuggestions === 'function') {
+            window.patternUI.clearSuggestions();
+        }
+
+        // Reload pattern templates with new language
+        if (window.patternUI && typeof window.patternUI.loadPatterns === 'function') {
+            window.patternUI.loadPatterns();
+        }
+    });
+
+    console.log('Locale change listener initialized');
 }
 
 /**
@@ -238,6 +278,9 @@ async function init() {
 
     // Initialize toolbar buttons
     initToolbarButtons();
+
+    // Initialize locale change listener
+    initLocaleChangeListener();
 
     // Initialize beforeunload handler
     initBeforeUnload();
