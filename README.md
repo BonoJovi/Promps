@@ -36,9 +36,9 @@
 いつもPrompsに関心を寄せていただき、誠にありがとうございます。
 プロジェクト発案者のBonoJovi(Yoshihiro NAKAHARA)です。
 
-**🎉 Ver.1.0.0 (安定版) をリリースいたしました！**
+**🎉 Ver.1.1.0 (安定版) をリリースいたしました！**
 
-ついに安定版をリリースできる運びとなりました。長らくテックプレビュー版としてお試しいただいていた皆様、ありがとうございました。
+v1.1.0では英語文法エンジンを追加し、日英両対応となりました。長らくテックプレビュー版としてお試しいただいていた皆様、ありがとうございました。
 
 **主な機能**:
 - **ビジュアルブロック編集** - Scratchのようにドラッグ&ドロップでプロンプト作成
@@ -61,9 +61,9 @@
 Thank you for your continued interest in Promps.
 I'm BonoJovi (Yoshihiro NAKAHARA), the project initiator.
 
-**🎉 We have released Ver.1.0.0 (Stable)!**
+**🎉 We have released Ver.1.1.0 (Stable)!**
 
-We are excited to announce the stable release of Promps. Thank you to everyone who tried the tech preview versions and provided feedback.
+v1.1.0 adds English grammar engine, making Promps bilingual (Japanese/English). Thank you to everyone who tried the tech preview versions and provided feedback.
 
 **Key Features**:
 - **Visual block editing** - Create prompts by drag & drop, just like Scratch

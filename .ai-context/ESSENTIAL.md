@@ -1,6 +1,6 @@
 # AI Context - Essential Information Only
 
-**Last Updated**: 2026-01-28
+**Last Updated**: 2026-01-31
 **Purpose**: Minimal context for session startup (token optimization)
 **Keywords**: essential, quick start, overview, status, current state, 現在の状態, エッセンシャル, 概要, project status, version, tests, テスト, critical rules, 重要なルール, quick reference, クイックリファレンス, entry point, starting point
 **Related**: @README.md, @context/coding/API_STABILITY.md, @context/workflows/BRANCHING.md, @context/coding/TESTING.md
@@ -25,6 +25,7 @@
 | v0.0.5 | Phase 5 | Logic Check 基礎 (basic validation) | ✅ Complete |
 | v0.0.6 | Phase 6 | Logic Check 拡張 (advanced + patterns + punctuation) | ✅ Complete |
 | **v1.0.0** | - | **Stable Release** | 🎉 **Released** |
+| **v1.1.0** | - | **English Grammar Engine** | 🎉 **Released** |
 
 ---
 
