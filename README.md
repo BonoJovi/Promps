@@ -19,6 +19,14 @@
 
 ---
 
+> **🚀 Promps Pro Now Available! / Promps Pro 登場！**
+>
+> Looking for more features? **[Promps Pro](https://promps.org)** offers advanced capabilities for professional use.
+>
+> より多くの機能をお探しですか？**[Promps Pro](https://promps.org)** はプロフェッショナル向けの高度な機能を提供します。
+
+---
+
 ## Message from Developer / 開発者からのメッセージ
 
 <div style="border: 3px solid #4a90e2; padding: 20px; margin: 20px 0; background-color: #f8f9fa; font-size: 1.1em;">
