@@ -116,7 +116,7 @@ jobs:
             const { data } = await github.rest.repos.createRelease({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              tag_name: `v${process.env.PACKAGE_VERSION}`,
+              tag_name: `v${process.env.PACKAGE_VERSION}-free`,
               name: `Promps v${process.env.PACKAGE_VERSION}`,
               body: releaseNotes,
               draft: true,
