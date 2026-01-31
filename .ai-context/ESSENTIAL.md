@@ -1,6 +1,6 @@
 # AI Context - Essential Information Only
 
-**Last Updated**: 2026-01-26
+**Last Updated**: 2026-01-28
 **Purpose**: Minimal context for session startup (token optimization)
 **Keywords**: essential, quick start, overview, status, current state, 現在の状態, エッセンシャル, 概要, project status, version, tests, テスト, critical rules, 重要なルール, quick reference, クイックリファレンス, entry point, starting point
 **Related**: @README.md, @context/coding/API_STABILITY.md, @context/workflows/BRANCHING.md, @context/coding/TESTING.md
@@ -9,7 +9,7 @@
 
 ## Current Status
 
-**Version**: v1.0.1 (Stable Release)
+**Version**: v1.1.0 (Stable Release)
 **Phase**: All phases complete - First stable release
 **Tests**: 282 tests at 100% passing (Backend 92 + Frontend 190)
 **Branch**: dev (integration branch)
@@ -28,7 +28,7 @@
 
 ---
 
-## Critical Rules (4 Points)
+## Critical Rules (5 Points)
 
 ### 1. API Stability
 - **Phase 0 APIs are immutable** - Never modify existing functions/structs
@@ -41,7 +41,7 @@
 - Details: `@.ai-context/context/workflows/BRANCHING.md`
 
 ### 3. Testing Policy
-- **All tests must pass before merge** (283 tests currently)
+- **All tests must pass before merge** (282 tests currently)
 - Implement tests immediately after feature completion
 - Details: `@.ai-context/context/coding/TESTING.md`
 
@@ -49,6 +49,11 @@
 - **Always `git pull` before `git push`**
 - Reason: GitHub Actions updates README.md (access graph)
 - Pushing without pull may cause conflicts
+
+### 5. Release & Repository Operations
+- **Verify repository before changes**: `pwd && git remote -v`
+- **Update ALL 3 version files**: `Cargo.toml`, `tauri.conf.json`, `package.json`
+- Details: `@.ai-context/shared/workflows/CRITICAL_OPERATIONS.md`
 
 ---
 
@@ -60,7 +65,7 @@
 - Frontend: `res/js/main.js`, `res/js/blockly-config.js`, `res/js/project-manager.js`, `res/js/validation-ui.js`
 
 **Tests**:
-- Backend: `src/lib.rs` (13 tests), `src/commands.rs` (25 tests), `src/modules/validation.rs` (55 tests)
+- Backend: `src/lib.rs` (13 tests), `src/commands.rs` (25 tests), `src/modules/validation.rs` (54 tests)
 - Frontend: `res/tests/` (190 tests)
 
 ---
@@ -81,6 +86,7 @@
 - Release: `@.ai-context/context/workflows/RELEASE.md`
 
 **Shared Context** (via submodule `shared/`):
+- **Critical Operations**: `@.ai-context/shared/workflows/CRITICAL_OPERATIONS.md` (release/repo checks)
 - Documentation: `@.ai-context/shared/workflows/DOCUMENTATION_CREATION.md`
 - Developer Profile: `@.ai-context/shared/developer/YOSHIHIRO_NAKAHARA_PROFILE.md`
 - Methodology: `@.ai-context/shared/methodology/AI_COLLABORATION.md`

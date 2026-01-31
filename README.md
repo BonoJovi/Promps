@@ -6,7 +6,7 @@
 > **AIプロンプト作成のためのビジュアルブロックベースツール**
 
 [![Stable](https://img.shields.io/badge/Status-Stable-brightgreen)](https://github.com/BonoJovi/Promps/releases)
-[![Version](https://img.shields.io/badge/Version-1.0.1-blue)](https://github.com/BonoJovi/Promps/releases/tag/v1.0.1)
+[![Version](https://img.shields.io/badge/Version-1.1.0-blue)](https://github.com/BonoJovi/Promps/releases/tag/v1.1.0-free)
 [![Tests](https://img.shields.io/badge/Tests-282%20passing-brightgreen)](https://github.com/BonoJovi/Promps)
 [![Rust](https://img.shields.io/badge/Rust-1.70+-orange.svg)](https://www.rust-lang.org/)
 [![Tauri](https://img.shields.io/badge/Tauri-v2-blue.svg)](https://tauri.app/)
@@ -16,6 +16,14 @@
 **Scratchのようにブロックをドラッグ&ドロップしてプロンプトを作成！**
 
 </div>
+
+---
+
+> **🚀 Promps Pro Now Available! / Promps Pro 登場！**
+>
+> Looking for more features? **[Promps Pro](https://promps.org)** offers advanced capabilities for professional use.
+>
+> より多くの機能をお探しですか？**[Promps Pro](https://promps.org)** はプロフェッショナル向けの高度な機能を提供します。
 
 ---
 
@@ -77,8 +85,8 @@ We are excited to announce the stable release of Promps. Thank you to everyone w
 
 ## ✅ Stable Release / 安定版リリース
 
-**This is the first Stable release (v1.0.1)** - production ready.
-**これは初の安定版リリース(v1.0.1)です** - 本番利用可能。
+**This is the first Stable release (v1.1.0)** - production ready.
+**これは初の安定版リリース(v1.1.0)です** - 本番利用可能。
 
 **Available Features: / 利用可能な機能：**
 - ✅ Visual block-based interface / ビジュアルブロックベースインターフェース
@@ -101,7 +109,7 @@ We are excited to announce the stable release of Promps. Thank you to everyone w
 ### 1. Download & Install / ダウンロード & インストール
 
 **Download the latest release: / 最新リリースをダウンロード：**
-- [Download v1.0.1](https://github.com/BonoJovi/Promps/releases/tag/v1.0.1)
+- [Download v1.1.0](https://github.com/BonoJovi/Promps/releases/tag/v1.1.0-free)
 
 **Available for: / 対応プラットフォーム：**
 - Linux (AppImage, deb, rpm)
@@ -298,8 +306,8 @@ We welcome **all types of contributions** - not just code!
 
 **No programming experience needed! / プログラミング経験不要！**
 
-**✨ v1.0.1 Stable Release with Full Features!**
-**[新着] v1.0.1 安定版リリース！全機能搭載！**
+**✨ v1.1.0 Stable Release with Full Features!**
+**[新着] v1.1.0 安定版リリース！全機能搭載！**
 
 **Platform Status: / プラットフォーム状況：**
 - ✅ **Linux**: Verified and tested by developer / 開発者により検証済み・テスト済み
@@ -342,7 +350,7 @@ For code contributions:
 
 ## Release History / リリース履歴
 
-### Version 1.0.1 (2026-01-28) 🔧 Minor Refactoring
+### Version 1.1.0 (2026-01-28) 🔧 Minor Refactoring
 
 **Code Quality Improvements: / コード品質改善：**
 - 🔧 Refactored punctuation validation to use helper functions / 句読点検証をヘルパー関数使用にリファクタ
@@ -495,10 +503,10 @@ Copyright (c) 2025 Yoshihiro NAKAHARA
 
 | Metric | Count |
 |--------|-------|
-| 👁️ **Total Views** | **575** |
-| 📦 **Total Clones** | **1,118** |
+| 👁️ **Total Views** | **646** |
+| 📦 **Total Clones** | **1,720** |
 
-*Last Updated: 2026-01-26 01:34 UTC*
+*Last Updated: 2026-01-31 01:34 UTC*
 
 </div>
 <!-- STATS_END -->

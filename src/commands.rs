@@ -10,8 +10,9 @@ use std::path::Path;
 
 // Phase 5-6: Validation module
 use crate::modules::validation::{
-    validate_sequence, ValidationResult,
-    get_pattern_templates, analyze_patterns,
+    validate_sequence_with_locale, ValidationResult,
+    get_pattern_templates_by_locale,
+    analyze_patterns_with_locale,
     PatternTemplate, PatternMatchResult,
 };
 
@@ -44,12 +45,14 @@ pub fn greet(name: String) -> String {
 ///
 /// # Arguments
 /// * `input` - Space-delimited DSL tokens
+/// * `locale` - Optional locale code ("ja" for Japanese, "en" for English)
 ///
 /// # Returns
 /// ValidationResult with errors and warnings
 #[tauri::command]
-pub fn validate_dsl_sequence(input: String) -> ValidationResult {
-    validate_sequence(&input)
+pub fn validate_dsl_sequence(input: String, locale: Option<String>) -> ValidationResult {
+    let locale_str = locale.as_deref().unwrap_or("ja");
+    validate_sequence_with_locale(&input, locale_str)
 }
 
 // ============================================================================
@@ -58,23 +61,29 @@ pub fn validate_dsl_sequence(input: String) -> ValidationResult {
 
 /// Get all available pattern templates
 ///
+/// # Arguments
+/// * `locale` - Optional locale code ("ja" for Japanese, "en" for English)
+///
 /// # Returns
 /// List of pattern templates for sentence structures
 #[tauri::command]
-pub fn get_patterns() -> Vec<PatternTemplate> {
-    get_pattern_templates()
+pub fn get_patterns(locale: Option<String>) -> Vec<PatternTemplate> {
+    let locale_str = locale.as_deref().unwrap_or("ja");
+    get_pattern_templates_by_locale(locale_str)
 }
 
 /// Analyze current input against pattern templates
 ///
 /// # Arguments
 /// * `input` - Space-delimited DSL tokens
+/// * `locale` - Optional locale code ("ja" for Japanese, "en" for English)
 ///
 /// # Returns
 /// List of pattern match results sorted by match score
 #[tauri::command]
-pub fn analyze_dsl_patterns(input: String) -> Vec<PatternMatchResult> {
-    analyze_patterns(&input)
+pub fn analyze_dsl_patterns(input: String, locale: Option<String>) -> Vec<PatternMatchResult> {
+    let locale_str = locale.as_deref().unwrap_or("ja");
+    analyze_patterns_with_locale(&input, locale_str)
 }
 
 // ============================================================================
@@ -587,7 +596,7 @@ mod tests {
 
     #[test]
     fn test_validate_dsl_sequence_valid() {
-        let result = validate_dsl_sequence("_N:User が _N:Document を 分析して".to_string());
+        let result = validate_dsl_sequence("_N:User が _N:Document を 分析して".to_string(), None);
 
         assert!(result.is_valid);
         assert_eq!(result.error_count, 0);
@@ -596,7 +605,7 @@ mod tests {
 
     #[test]
     fn test_validate_dsl_sequence_particle_without_noun() {
-        let result = validate_dsl_sequence("が _N:User".to_string());
+        let result = validate_dsl_sequence("が _N:User".to_string(), None);
 
         assert!(!result.is_valid);
         assert_eq!(result.error_count, 1);
@@ -605,7 +614,7 @@ mod tests {
 
     #[test]
     fn test_validate_dsl_sequence_consecutive_particles() {
-        let result = validate_dsl_sequence("_N:User が を".to_string());
+        let result = validate_dsl_sequence("_N:User が を".to_string(), None);
 
         assert!(!result.is_valid);
         assert!(result.error_count >= 1);
@@ -613,9 +622,45 @@ mod tests {
 
     #[test]
     fn test_validate_dsl_sequence_empty() {
-        let result = validate_dsl_sequence("".to_string());
+        let result = validate_dsl_sequence("".to_string(), None);
 
         assert!(result.is_valid);
         assert_eq!(result.error_count, 0);
+    }
+
+    // Phase 5: English Grammar Validation Tests
+
+    #[test]
+    fn test_validate_dsl_sequence_en_valid() {
+        let result = validate_dsl_sequence("analyze _N:document".to_string(), Some("en".to_string()));
+
+        assert!(result.is_valid);
+        assert_eq!(result.error_count, 0);
+    }
+
+    #[test]
+    fn test_validate_dsl_sequence_en_with_article() {
+        let result = validate_dsl_sequence("summarize the _N:report".to_string(), Some("en".to_string()));
+
+        assert!(result.is_valid);
+        assert_eq!(result.error_count, 0);
+    }
+
+    #[test]
+    fn test_validate_dsl_sequence_en_article_error() {
+        // Article not followed by noun
+        let result = validate_dsl_sequence("the analyze _N:document".to_string(), Some("en".to_string()));
+
+        assert!(!result.is_valid);
+        assert!(result.error_count >= 1);
+    }
+
+    #[test]
+    fn test_validate_dsl_sequence_en_consecutive_articles() {
+        let result = validate_dsl_sequence("the a _N:document".to_string(), Some("en".to_string()));
+
+        assert!(!result.is_valid);
+        // Should have consecutive articles error
+        assert!(result.errors.iter().any(|e| format!("{:?}", e.code).contains("ConsecutiveArticles")));
     }
 }

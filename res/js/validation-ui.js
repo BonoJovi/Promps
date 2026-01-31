@@ -3,7 +3,21 @@
  *
  * This file handles displaying validation results in the UI,
  * highlighting blocks with errors, and applying auto-fixes.
+ * Includes i18n support for translated messages.
  */
+
+/**
+ * Helper function to get translation with fallback
+ * @param {string} key - Translation key
+ * @param {string} fallback - Fallback text if t() not available
+ * @returns {string} Translated text
+ */
+function vt(key, fallback) {
+    if (typeof window.t === 'function') {
+        return window.t(key);
+    }
+    return fallback;
+}
 
 /**
  * Validation UI Manager
@@ -26,7 +40,7 @@ const validationUI = {
         if (result.isValid && result.warningCount === 0) {
             // Success state
             container.className = 'validation-result validation-success';
-            container.innerHTML = '<span class="validation-icon">&#10003;</span> Grammar check passed';
+            container.innerHTML = '<span class="validation-icon">&#10003;</span> ' + vt('validation.passed', 'Grammar check passed');
         } else if (result.errorCount > 0) {
             // Error state
             container.className = 'validation-result validation-error';
@@ -50,10 +64,12 @@ const validationUI = {
 
         const parts = [];
         if (result.errorCount > 0) {
-            parts.push(`${result.errorCount} error${result.errorCount > 1 ? 's' : ''}`);
+            const errorLabel = result.errorCount > 1 ? vt('validation.errors', 'errors') : vt('validation.error', 'error');
+            parts.push(`${result.errorCount} ${errorLabel}`);
         }
         if (result.warningCount > 0) {
-            parts.push(`${result.warningCount} warning${result.warningCount > 1 ? 's' : ''}`);
+            const warningLabel = result.warningCount > 1 ? vt('validation.warnings', 'warnings') : vt('validation.warning', 'warning');
+            parts.push(`${result.warningCount} ${warningLabel}`);
         }
 
         const icon = result.errorCount > 0 ? '&#10007;' : '&#9888;';
@@ -326,7 +342,7 @@ const patternUI = {
 
         const header = document.createElement('div');
         header.className = 'pattern-header';
-        header.innerHTML = '<span class="pattern-icon">📋</span> パターンテンプレート';
+        header.innerHTML = '<span class="pattern-icon">📋</span> ' + vt('pattern.header', 'Pattern Templates');
         container.appendChild(header);
 
         const list = document.createElement('div');
@@ -348,12 +364,12 @@ const patternUI = {
 
             const example = document.createElement('div');
             example.className = 'pattern-example';
-            example.textContent = `例: ${pattern.example}`;
+            example.textContent = `${vt('pattern.example', 'Example')}: ${pattern.example}`;
             item.appendChild(example);
 
             const applyBtn = document.createElement('button');
             applyBtn.className = 'pattern-apply-btn';
-            applyBtn.textContent = '適用';
+            applyBtn.textContent = vt('pattern.apply', 'Apply');
             applyBtn.addEventListener('click', () => {
                 this.applyPattern(pattern);
             });
@@ -389,7 +405,7 @@ const patternUI = {
 
         const header = document.createElement('div');
         header.className = 'suggestion-header';
-        header.innerHTML = '<span class="suggestion-icon">💡</span> おすすめパターン';
+        header.innerHTML = '<span class="suggestion-icon">💡</span> ' + vt('suggestion.header', 'Recommended Patterns');
         container.appendChild(header);
 
         const list = document.createElement('div');
@@ -416,13 +432,13 @@ const patternUI = {
             if (match.isComplete) {
                 const badge = document.createElement('span');
                 badge.className = 'suggestion-badge';
-                badge.textContent = '完成';
+                badge.textContent = vt('suggestion.complete', 'Complete');
                 item.appendChild(badge);
             } else {
                 // Add apply button for incomplete patterns
                 const applyBtn = document.createElement('button');
                 applyBtn.className = 'suggestion-apply-btn';
-                applyBtn.textContent = '適用';
+                applyBtn.textContent = vt('suggestion.apply', 'Apply');
                 applyBtn.addEventListener('click', (e) => {
                     e.stopPropagation();
                     this.applyPatternById(match.patternId);
@@ -437,6 +453,18 @@ const patternUI = {
     },
 
     /**
+     * Clear pattern suggestions
+     * Called when language changes or workspace is cleared
+     */
+    clearSuggestions: function() {
+        const container = document.getElementById('patternSuggestions');
+        if (container) {
+            container.innerHTML = '';
+        }
+        this.currentMatchResults = null;
+    },
+
+    /**
      * Apply pattern by ID - adds missing blocks only (for suggestions)
      * @param {string} patternId - Pattern ID to apply
      */
@@ -447,7 +475,8 @@ const patternUI = {
                 return;
             }
             // Get all patterns and find the one to apply
-            const patterns = await invoke('get_patterns');
+            const locale = window.i18n ? window.i18n.getLocale() : 'ja';
+            const patterns = await invoke('get_patterns', { locale });
             const pattern = patterns.find(p => p.id === patternId);
             if (pattern) {
                 this.completePattern(pattern);
@@ -689,7 +718,9 @@ const patternUI = {
                 console.warn('Tauri API not available for pattern loading');
                 return;
             }
-            const patterns = await invoke('get_patterns');
+            // Get current locale for language-specific patterns
+            const locale = window.i18n ? window.i18n.getLocale() : 'ja';
+            const patterns = await invoke('get_patterns', { locale });
             this.displayPatterns(patterns);
         } catch (error) {
             console.warn('Failed to load patterns:', error);
@@ -706,7 +737,9 @@ const patternUI = {
             if (!invoke) {
                 return;
             }
-            const results = await invoke('analyze_dsl_patterns', { input: dslInput });
+            // Get current locale for language-specific pattern matching
+            const locale = window.i18n ? window.i18n.getLocale() : 'ja';
+            const results = await invoke('analyze_dsl_patterns', { input: dslInput, locale });
             this.displayMatchResults(results);
         } catch (error) {
             console.warn('Failed to analyze patterns:', error);

@@ -2,6 +2,10 @@
  * Promps - Blockly.js Configuration
  *
  * This file defines custom blocks and initializes the Blockly workspace.
+ * Includes full i18n support for block labels, outputs, and tooltips.
+ *
+ * Japanese mode: generates Japanese prompts (SOV with particles)
+ * English mode: generates English prompts (SVO)
  */
 
 // Global workspace variable
@@ -11,631 +15,807 @@ let workspace = null;
 const javascriptGenerator = Blockly.JavaScript || new Blockly.Generator('JavaScript');
 
 /**
- * Define custom "Noun" block
+ * Helper function to get translation with fallback
+ * @param {string} key - Translation key
+ * @param {string} fallback - Fallback text if t() not available
+ * @returns {string} Translated text
  */
-Blockly.Blocks['promps_noun'] = {
-    init: function() {
-        this.appendDummyInput()
-            .appendField("名詞:")
-            .appendField(new Blockly.FieldTextInput("User"), "TEXT");
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
-        this.setColour(120); // Green color
-        this.setTooltip("名詞ブロック (_N: プレフィックス付き)");
-        this.setHelpUrl("");
+function tt(key, fallback) {
+    if (typeof window.t === 'function') {
+        return window.t(key);
     }
-};
+    return fallback;
+}
 
 /**
- * Generate DSL code from Noun block
+ * Register all block definitions with current locale translations
+ * This function can be called multiple times to update block labels
  */
-javascriptGenerator.forBlock['promps_noun'] = function(block, generator) {
-    const text = block.getFieldValue('TEXT');
-    // Add _N: prefix for noun marking
-    return '_N:' + text + ' ';
-};
+function registerBlockDefinitions() {
+    // ========================================================================
+    // Noun Block
+    // ========================================================================
+    Blockly.Blocks['promps_noun'] = {
+        init: function() {
+            this.appendDummyInput()
+                .appendField(tt('blockly.noun.label', 'Noun:'))
+                .appendField(new Blockly.FieldTextInput("User"), "TEXT");
+            this.setPreviousStatement(true, null);
+            this.setNextStatement(true, null);
+            this.setColour(120);
+            this.setTooltip(() => tt('blockly.noun.tooltip', 'Noun block (_N: prefix)'));
+            this.setHelpUrl("");
+        }
+    };
+
+    javascriptGenerator.forBlock['promps_noun'] = function(block, generator) {
+        const text = block.getFieldValue('TEXT');
+        return '_N:' + text + ' ';
+    };
+
+    // ========================================================================
+    // Other Block
+    // ========================================================================
+    Blockly.Blocks['promps_other'] = {
+        init: function() {
+            this.appendDummyInput()
+                .appendField(tt('blockly.other.label', 'Other:'))
+                .appendField(new Blockly.FieldTextInput("text"), "TEXT");
+            this.setPreviousStatement(true, null);
+            this.setNextStatement(true, null);
+            this.setColour(230);
+            this.setTooltip(() => tt('blockly.other.tooltip', 'Other block'));
+            this.setHelpUrl("");
+        }
+    };
+
+    javascriptGenerator.forBlock['promps_other'] = function(block, generator) {
+        const text = block.getFieldValue('TEXT');
+        return text + ' ';
+    };
+
+    // ========================================================================
+    // Particle Blocks
+    // ========================================================================
+
+    // が (subject marker)
+    Blockly.Blocks['promps_particle_ga'] = {
+        init: function() {
+            this.appendDummyInput()
+                .appendField(new Blockly.FieldLabel(tt('blockly.particle.ga.label', 'が')));
+            this.setPreviousStatement(true, null);
+            this.setNextStatement(true, null);
+            this.setColour(230);
+            this.setTooltip(() => tt('blockly.particle.ga.tooltip', 'Subject marker'));
+            this.setHelpUrl("");
+        }
+    };
+    javascriptGenerator.forBlock['promps_particle_ga'] = function(block, generator) {
+        return tt('blockly.particle.ga.output', 'が ');
+    };
+
+    // を (object marker)
+    Blockly.Blocks['promps_particle_wo'] = {
+        init: function() {
+            this.appendDummyInput()
+                .appendField(new Blockly.FieldLabel(tt('blockly.particle.wo.label', 'を')));
+            this.setPreviousStatement(true, null);
+            this.setNextStatement(true, null);
+            this.setColour(230);
+            this.setTooltip(() => tt('blockly.particle.wo.tooltip', 'Object marker'));
+            this.setHelpUrl("");
+        }
+    };
+    javascriptGenerator.forBlock['promps_particle_wo'] = function(block, generator) {
+        return tt('blockly.particle.wo.output', 'を ');
+    };
+
+    // に (direction/target marker)
+    Blockly.Blocks['promps_particle_ni'] = {
+        init: function() {
+            this.appendDummyInput()
+                .appendField(new Blockly.FieldLabel(tt('blockly.particle.ni.label', 'に')));
+            this.setPreviousStatement(true, null);
+            this.setNextStatement(true, null);
+            this.setColour(230);
+            this.setTooltip(() => tt('blockly.particle.ni.tooltip', 'Direction marker'));
+            this.setHelpUrl("");
+        }
+    };
+    javascriptGenerator.forBlock['promps_particle_ni'] = function(block, generator) {
+        return tt('blockly.particle.ni.output', 'に ');
+    };
+
+    // で (means/location marker)
+    Blockly.Blocks['promps_particle_de'] = {
+        init: function() {
+            this.appendDummyInput()
+                .appendField(new Blockly.FieldLabel(tt('blockly.particle.de.label', 'で')));
+            this.setPreviousStatement(true, null);
+            this.setNextStatement(true, null);
+            this.setColour(230);
+            this.setTooltip(() => tt('blockly.particle.de.tooltip', 'Means marker'));
+            this.setHelpUrl("");
+        }
+    };
+    javascriptGenerator.forBlock['promps_particle_de'] = function(block, generator) {
+        return tt('blockly.particle.de.output', 'で ');
+    };
+
+    // と (and/with marker)
+    Blockly.Blocks['promps_particle_to'] = {
+        init: function() {
+            this.appendDummyInput()
+                .appendField(new Blockly.FieldLabel(tt('blockly.particle.to.label', 'と')));
+            this.setPreviousStatement(true, null);
+            this.setNextStatement(true, null);
+            this.setColour(230);
+            this.setTooltip(() => tt('blockly.particle.to.tooltip', 'And/with marker'));
+            this.setHelpUrl("");
+        }
+    };
+    javascriptGenerator.forBlock['promps_particle_to'] = function(block, generator) {
+        return tt('blockly.particle.to.output', 'と ');
+    };
+
+    // へ (direction marker)
+    Blockly.Blocks['promps_particle_he'] = {
+        init: function() {
+            this.appendDummyInput()
+                .appendField(new Blockly.FieldLabel(tt('blockly.particle.he.label', 'へ')));
+            this.setPreviousStatement(true, null);
+            this.setNextStatement(true, null);
+            this.setColour(230);
+            this.setTooltip(() => tt('blockly.particle.he.tooltip', 'Direction marker'));
+            this.setHelpUrl("");
+        }
+    };
+    javascriptGenerator.forBlock['promps_particle_he'] = function(block, generator) {
+        return tt('blockly.particle.he.output', 'へ ');
+    };
+
+    // から (from marker)
+    Blockly.Blocks['promps_particle_kara'] = {
+        init: function() {
+            this.appendDummyInput()
+                .appendField(new Blockly.FieldLabel(tt('blockly.particle.kara.label', 'から')));
+            this.setPreviousStatement(true, null);
+            this.setNextStatement(true, null);
+            this.setColour(230);
+            this.setTooltip(() => tt('blockly.particle.kara.tooltip', 'From marker'));
+            this.setHelpUrl("");
+        }
+    };
+    javascriptGenerator.forBlock['promps_particle_kara'] = function(block, generator) {
+        return tt('blockly.particle.kara.output', 'から ');
+    };
+
+    // まで (until marker)
+    Blockly.Blocks['promps_particle_made'] = {
+        init: function() {
+            this.appendDummyInput()
+                .appendField(new Blockly.FieldLabel(tt('blockly.particle.made.label', 'まで')));
+            this.setPreviousStatement(true, null);
+            this.setNextStatement(true, null);
+            this.setColour(230);
+            this.setTooltip(() => tt('blockly.particle.made.tooltip', 'Until marker'));
+            this.setHelpUrl("");
+        }
+    };
+    javascriptGenerator.forBlock['promps_particle_made'] = function(block, generator) {
+        return tt('blockly.particle.made.output', 'まで ');
+    };
+
+    // より (comparison marker)
+    Blockly.Blocks['promps_particle_yori'] = {
+        init: function() {
+            this.appendDummyInput()
+                .appendField(new Blockly.FieldLabel(tt('blockly.particle.yori.label', 'より')));
+            this.setPreviousStatement(true, null);
+            this.setNextStatement(true, null);
+            this.setColour(230);
+            this.setTooltip(() => tt('blockly.particle.yori.tooltip', 'Comparison marker'));
+            this.setHelpUrl("");
+        }
+    };
+    javascriptGenerator.forBlock['promps_particle_yori'] = function(block, generator) {
+        return tt('blockly.particle.yori.output', 'より ');
+    };
+
+    // ========================================================================
+    // Article Blocks (English mode only)
+    // ========================================================================
+
+    // a (indefinite article)
+    Blockly.Blocks['promps_article_a'] = {
+        init: function() {
+            this.appendDummyInput()
+                .appendField(new Blockly.FieldLabel(tt('blockly.article.a.label', 'a')));
+            this.setPreviousStatement(true, null);
+            this.setNextStatement(true, null);
+            this.setColour(180);
+            this.setTooltip(() => tt('blockly.article.a.tooltip', 'Indefinite article'));
+            this.setHelpUrl("");
+        }
+    };
+    javascriptGenerator.forBlock['promps_article_a'] = function(block, generator) {
+        return tt('blockly.article.a.output', 'a ');
+    };
+
+    // an (indefinite article for vowels)
+    Blockly.Blocks['promps_article_an'] = {
+        init: function() {
+            this.appendDummyInput()
+                .appendField(new Blockly.FieldLabel(tt('blockly.article.an.label', 'an')));
+            this.setPreviousStatement(true, null);
+            this.setNextStatement(true, null);
+            this.setColour(180);
+            this.setTooltip(() => tt('blockly.article.an.tooltip', 'Indefinite article for vowels'));
+            this.setHelpUrl("");
+        }
+    };
+    javascriptGenerator.forBlock['promps_article_an'] = function(block, generator) {
+        return tt('blockly.article.an.output', 'an ');
+    };
+
+    // the (definite article)
+    Blockly.Blocks['promps_article_the'] = {
+        init: function() {
+            this.appendDummyInput()
+                .appendField(new Blockly.FieldLabel(tt('blockly.article.the.label', 'the')));
+            this.setPreviousStatement(true, null);
+            this.setNextStatement(true, null);
+            this.setColour(180);
+            this.setTooltip(() => tt('blockly.article.the.tooltip', 'Definite article'));
+            this.setHelpUrl("");
+        }
+    };
+    javascriptGenerator.forBlock['promps_article_the'] = function(block, generator) {
+        return tt('blockly.article.the.output', 'the ');
+    };
+
+    // this (demonstrative)
+    Blockly.Blocks['promps_article_this'] = {
+        init: function() {
+            this.appendDummyInput()
+                .appendField(new Blockly.FieldLabel(tt('blockly.article.this.label', 'this')));
+            this.setPreviousStatement(true, null);
+            this.setNextStatement(true, null);
+            this.setColour(180);
+            this.setTooltip(() => tt('blockly.article.this.tooltip', 'Demonstrative for nearby'));
+            this.setHelpUrl("");
+        }
+    };
+    javascriptGenerator.forBlock['promps_article_this'] = function(block, generator) {
+        return tt('blockly.article.this.output', 'this ');
+    };
+
+    // that (demonstrative)
+    Blockly.Blocks['promps_article_that'] = {
+        init: function() {
+            this.appendDummyInput()
+                .appendField(new Blockly.FieldLabel(tt('blockly.article.that.label', 'that')));
+            this.setPreviousStatement(true, null);
+            this.setNextStatement(true, null);
+            this.setColour(180);
+            this.setTooltip(() => tt('blockly.article.that.tooltip', 'Demonstrative for distant'));
+            this.setHelpUrl("");
+        }
+    };
+    javascriptGenerator.forBlock['promps_article_that'] = function(block, generator) {
+        return tt('blockly.article.that.output', 'that ');
+    };
+
+    // please (polite marker)
+    Blockly.Blocks['promps_article_please'] = {
+        init: function() {
+            this.appendDummyInput()
+                .appendField(new Blockly.FieldLabel(tt('blockly.article.please.label', 'please')));
+            this.setPreviousStatement(true, null);
+            this.setNextStatement(true, null);
+            this.setColour(180);
+            this.setTooltip(() => tt('blockly.article.please.tooltip', 'Polite request marker'));
+            this.setHelpUrl("");
+        }
+    };
+    javascriptGenerator.forBlock['promps_article_please'] = function(block, generator) {
+        return tt('blockly.article.please.output', 'please ');
+    };
+
+    // ========================================================================
+    // Verb Blocks
+    // ========================================================================
+
+    // 分析して (analyze)
+    Blockly.Blocks['promps_verb_analyze'] = {
+        init: function() {
+            this.appendDummyInput()
+                .appendField(new Blockly.FieldLabel(tt('blockly.verb.analyze.label', '分析して')));
+            this.setPreviousStatement(true, null);
+            this.setNextStatement(true, null);
+            this.setColour(290);
+            this.setTooltip(() => tt('blockly.verb.analyze.tooltip', 'Verb: analyze'));
+            this.setHelpUrl("");
+        }
+    };
+    javascriptGenerator.forBlock['promps_verb_analyze'] = function(block, generator) {
+        return tt('blockly.verb.analyze.output', '分析して ');
+    };
+
+    // 要約して (summarize)
+    Blockly.Blocks['promps_verb_summarize'] = {
+        init: function() {
+            this.appendDummyInput()
+                .appendField(new Blockly.FieldLabel(tt('blockly.verb.summarize.label', '要約して')));
+            this.setPreviousStatement(true, null);
+            this.setNextStatement(true, null);
+            this.setColour(290);
+            this.setTooltip(() => tt('blockly.verb.summarize.tooltip', 'Verb: summarize'));
+            this.setHelpUrl("");
+        }
+    };
+    javascriptGenerator.forBlock['promps_verb_summarize'] = function(block, generator) {
+        return tt('blockly.verb.summarize.output', '要約して ');
+    };
+
+    // 翻訳して (translate)
+    Blockly.Blocks['promps_verb_translate'] = {
+        init: function() {
+            this.appendDummyInput()
+                .appendField(new Blockly.FieldLabel(tt('blockly.verb.translate.label', '翻訳して')));
+            this.setPreviousStatement(true, null);
+            this.setNextStatement(true, null);
+            this.setColour(290);
+            this.setTooltip(() => tt('blockly.verb.translate.tooltip', 'Verb: translate'));
+            this.setHelpUrl("");
+        }
+    };
+    javascriptGenerator.forBlock['promps_verb_translate'] = function(block, generator) {
+        return tt('blockly.verb.translate.output', '翻訳して ');
+    };
+
+    // 作成して (create)
+    Blockly.Blocks['promps_verb_create'] = {
+        init: function() {
+            this.appendDummyInput()
+                .appendField(new Blockly.FieldLabel(tt('blockly.verb.create.label', '作成して')));
+            this.setPreviousStatement(true, null);
+            this.setNextStatement(true, null);
+            this.setColour(290);
+            this.setTooltip(() => tt('blockly.verb.create.tooltip', 'Verb: create'));
+            this.setHelpUrl("");
+        }
+    };
+    javascriptGenerator.forBlock['promps_verb_create'] = function(block, generator) {
+        return tt('blockly.verb.create.output', '作成して ');
+    };
+
+    // 生成して (generate)
+    Blockly.Blocks['promps_verb_generate'] = {
+        init: function() {
+            this.appendDummyInput()
+                .appendField(new Blockly.FieldLabel(tt('blockly.verb.generate.label', '生成して')));
+            this.setPreviousStatement(true, null);
+            this.setNextStatement(true, null);
+            this.setColour(290);
+            this.setTooltip(() => tt('blockly.verb.generate.tooltip', 'Verb: generate'));
+            this.setHelpUrl("");
+        }
+    };
+    javascriptGenerator.forBlock['promps_verb_generate'] = function(block, generator) {
+        return tt('blockly.verb.generate.output', '生成して ');
+    };
+
+    // 変換して (convert)
+    Blockly.Blocks['promps_verb_convert'] = {
+        init: function() {
+            this.appendDummyInput()
+                .appendField(new Blockly.FieldLabel(tt('blockly.verb.convert.label', '変換して')));
+            this.setPreviousStatement(true, null);
+            this.setNextStatement(true, null);
+            this.setColour(290);
+            this.setTooltip(() => tt('blockly.verb.convert.tooltip', 'Verb: convert'));
+            this.setHelpUrl("");
+        }
+    };
+    javascriptGenerator.forBlock['promps_verb_convert'] = function(block, generator) {
+        return tt('blockly.verb.convert.output', '変換して ');
+    };
+
+    // 削除して (delete)
+    Blockly.Blocks['promps_verb_delete'] = {
+        init: function() {
+            this.appendDummyInput()
+                .appendField(new Blockly.FieldLabel(tt('blockly.verb.delete.label', '削除して')));
+            this.setPreviousStatement(true, null);
+            this.setNextStatement(true, null);
+            this.setColour(290);
+            this.setTooltip(() => tt('blockly.verb.delete.tooltip', 'Verb: delete'));
+            this.setHelpUrl("");
+        }
+    };
+    javascriptGenerator.forBlock['promps_verb_delete'] = function(block, generator) {
+        return tt('blockly.verb.delete.output', '削除して ');
+    };
+
+    // 更新して (update)
+    Blockly.Blocks['promps_verb_update'] = {
+        init: function() {
+            this.appendDummyInput()
+                .appendField(new Blockly.FieldLabel(tt('blockly.verb.update.label', '更新して')));
+            this.setPreviousStatement(true, null);
+            this.setNextStatement(true, null);
+            this.setColour(290);
+            this.setTooltip(() => tt('blockly.verb.update.tooltip', 'Verb: update'));
+            this.setHelpUrl("");
+        }
+    };
+    javascriptGenerator.forBlock['promps_verb_update'] = function(block, generator) {
+        return tt('blockly.verb.update.output', '更新して ');
+    };
+
+    // 抽出して (extract)
+    Blockly.Blocks['promps_verb_extract'] = {
+        init: function() {
+            this.appendDummyInput()
+                .appendField(new Blockly.FieldLabel(tt('blockly.verb.extract.label', '抽出して')));
+            this.setPreviousStatement(true, null);
+            this.setNextStatement(true, null);
+            this.setColour(290);
+            this.setTooltip(() => tt('blockly.verb.extract.tooltip', 'Verb: extract'));
+            this.setHelpUrl("");
+        }
+    };
+    javascriptGenerator.forBlock['promps_verb_extract'] = function(block, generator) {
+        return tt('blockly.verb.extract.output', '抽出して ');
+    };
+
+    // 説明して (explain)
+    Blockly.Blocks['promps_verb_explain'] = {
+        init: function() {
+            this.appendDummyInput()
+                .appendField(new Blockly.FieldLabel(tt('blockly.verb.explain.label', '説明して')));
+            this.setPreviousStatement(true, null);
+            this.setNextStatement(true, null);
+            this.setColour(290);
+            this.setTooltip(() => tt('blockly.verb.explain.tooltip', 'Verb: explain'));
+            this.setHelpUrl("");
+        }
+    };
+    javascriptGenerator.forBlock['promps_verb_explain'] = function(block, generator) {
+        return tt('blockly.verb.explain.output', '説明して ');
+    };
+
+    // 解説して (describe)
+    Blockly.Blocks['promps_verb_describe'] = {
+        init: function() {
+            this.appendDummyInput()
+                .appendField(new Blockly.FieldLabel(tt('blockly.verb.describe.label', '解説して')));
+            this.setPreviousStatement(true, null);
+            this.setNextStatement(true, null);
+            this.setColour(290);
+            this.setTooltip(() => tt('blockly.verb.describe.tooltip', 'Verb: describe'));
+            this.setHelpUrl("");
+        }
+    };
+    javascriptGenerator.forBlock['promps_verb_describe'] = function(block, generator) {
+        return tt('blockly.verb.describe.output', '解説して ');
+    };
+
+    // 教えて (teach)
+    Blockly.Blocks['promps_verb_teach'] = {
+        init: function() {
+            this.appendDummyInput()
+                .appendField(new Blockly.FieldLabel(tt('blockly.verb.teach.label', '教えて')));
+            this.setPreviousStatement(true, null);
+            this.setNextStatement(true, null);
+            this.setColour(290);
+            this.setTooltip(() => tt('blockly.verb.teach.tooltip', 'Verb: teach'));
+            this.setHelpUrl("");
+        }
+    };
+    javascriptGenerator.forBlock['promps_verb_teach'] = function(block, generator) {
+        return tt('blockly.verb.teach.output', '教えて ');
+    };
+
+    // Custom Verb (user input)
+    Blockly.Blocks['promps_verb_custom'] = {
+        init: function() {
+            this.appendDummyInput()
+                .appendField(tt('blockly.verb.label', '動詞:'))
+                .appendField(new Blockly.FieldTextInput(tt('blockly.verb.custom.default', '作成して')), "TEXT");
+            this.setPreviousStatement(true, null);
+            this.setNextStatement(true, null);
+            this.setColour(290);
+            this.setTooltip(() => tt('blockly.verb.custom.tooltip', 'Custom verb block'));
+            this.setHelpUrl("");
+        }
+    };
+    javascriptGenerator.forBlock['promps_verb_custom'] = function(block, generator) {
+        const text = block.getFieldValue('TEXT');
+        return text + ' ';
+    };
+
+    // ========================================================================
+    // Punctuation Blocks
+    // ========================================================================
+
+    // 、(touten - comma)
+    Blockly.Blocks['promps_punct_touten'] = {
+        init: function() {
+            this.appendDummyInput()
+                .appendField(new Blockly.FieldLabel(tt('blockly.punct.touten.label', '、')));
+            this.setPreviousStatement(true, null);
+            this.setNextStatement(true, null);
+            this.setColour(60);
+            this.setTooltip(() => tt('blockly.punct.touten.tooltip', 'Punctuation: comma'));
+            this.setHelpUrl("");
+        }
+    };
+    javascriptGenerator.forBlock['promps_punct_touten'] = function(block, generator) {
+        return tt('blockly.punct.touten.output', '、 ');
+    };
+
+    // 。(kuten - period)
+    Blockly.Blocks['promps_punct_kuten'] = {
+        init: function() {
+            this.appendDummyInput()
+                .appendField(new Blockly.FieldLabel(tt('blockly.punct.kuten.label', '。')));
+            this.setPreviousStatement(true, null);
+            this.setNextStatement(true, null);
+            this.setColour(60);
+            this.setTooltip(() => tt('blockly.punct.kuten.tooltip', 'Punctuation: period'));
+            this.setHelpUrl("");
+        }
+    };
+    javascriptGenerator.forBlock['promps_punct_kuten'] = function(block, generator) {
+        return tt('blockly.punct.kuten.output', '。 ');
+    };
+
+    // ！(exclamation)
+    Blockly.Blocks['promps_punct_exclaim'] = {
+        init: function() {
+            this.appendDummyInput()
+                .appendField(new Blockly.FieldLabel(tt('blockly.punct.exclaim.label', '！')));
+            this.setPreviousStatement(true, null);
+            this.setNextStatement(true, null);
+            this.setColour(60);
+            this.setTooltip(() => tt('blockly.punct.exclaim.tooltip', 'Punctuation: exclamation'));
+            this.setHelpUrl("");
+        }
+    };
+    javascriptGenerator.forBlock['promps_punct_exclaim'] = function(block, generator) {
+        return tt('blockly.punct.exclaim.output', '！ ');
+    };
+
+    // ？(question)
+    Blockly.Blocks['promps_punct_question'] = {
+        init: function() {
+            this.appendDummyInput()
+                .appendField(new Blockly.FieldLabel(tt('blockly.punct.question.label', '？')));
+            this.setPreviousStatement(true, null);
+            this.setNextStatement(true, null);
+            this.setColour(60);
+            this.setTooltip(() => tt('blockly.punct.question.tooltip', 'Punctuation: question'));
+            this.setHelpUrl("");
+        }
+    };
+    javascriptGenerator.forBlock['promps_punct_question'] = function(block, generator) {
+        return tt('blockly.punct.question.output', '？ ');
+    };
+
+    // "(double quote)
+    Blockly.Blocks['promps_punct_dquote'] = {
+        init: function() {
+            this.appendDummyInput()
+                .appendField(new Blockly.FieldLabel(tt('blockly.punct.dquote.label', '"')));
+            this.setPreviousStatement(true, null);
+            this.setNextStatement(true, null);
+            this.setColour(60);
+            this.setTooltip(() => tt('blockly.punct.dquote.tooltip', 'Punctuation: double quote'));
+            this.setHelpUrl("");
+        }
+    };
+    javascriptGenerator.forBlock['promps_punct_dquote'] = function(block, generator) {
+        return tt('blockly.punct.dquote.output', '" ');
+    };
+
+    // '(single quote)
+    Blockly.Blocks['promps_punct_squote'] = {
+        init: function() {
+            this.appendDummyInput()
+                .appendField(new Blockly.FieldLabel(tt('blockly.punct.squote.label', "'")));
+            this.setPreviousStatement(true, null);
+            this.setNextStatement(true, null);
+            this.setColour(60);
+            this.setTooltip(() => tt('blockly.punct.squote.tooltip', 'Punctuation: single quote'));
+            this.setHelpUrl("");
+        }
+    };
+    javascriptGenerator.forBlock['promps_punct_squote'] = function(block, generator) {
+        return tt('blockly.punct.squote.output', "' ");
+    };
+
+    // ,(comma)
+    Blockly.Blocks['promps_punct_comma'] = {
+        init: function() {
+            this.appendDummyInput()
+                .appendField(new Blockly.FieldLabel(tt('blockly.punct.comma.label', ',')));
+            this.setPreviousStatement(true, null);
+            this.setNextStatement(true, null);
+            this.setColour(60);
+            this.setTooltip(() => tt('blockly.punct.comma.tooltip', 'Punctuation: comma'));
+            this.setHelpUrl("");
+        }
+    };
+    javascriptGenerator.forBlock['promps_punct_comma'] = function(block, generator) {
+        return tt('blockly.punct.comma.output', ', ');
+    };
+
+    // /(slash)
+    Blockly.Blocks['promps_punct_slash'] = {
+        init: function() {
+            this.appendDummyInput()
+                .appendField(new Blockly.FieldLabel(tt('blockly.punct.slash.label', '/')));
+            this.setPreviousStatement(true, null);
+            this.setNextStatement(true, null);
+            this.setColour(60);
+            this.setTooltip(() => tt('blockly.punct.slash.tooltip', 'Punctuation: slash'));
+            this.setHelpUrl("");
+        }
+    };
+    javascriptGenerator.forBlock['promps_punct_slash'] = function(block, generator) {
+        return tt('blockly.punct.slash.output', '/ ');
+    };
+
+    // &(ampersand)
+    Blockly.Blocks['promps_punct_amp'] = {
+        init: function() {
+            this.appendDummyInput()
+                .appendField(new Blockly.FieldLabel(tt('blockly.punct.amp.label', '&')));
+            this.setPreviousStatement(true, null);
+            this.setNextStatement(true, null);
+            this.setColour(60);
+            this.setTooltip(() => tt('blockly.punct.amp.tooltip', 'Punctuation: ampersand'));
+            this.setHelpUrl("");
+        }
+    };
+    javascriptGenerator.forBlock['promps_punct_amp'] = function(block, generator) {
+        return tt('blockly.punct.amp.output', '& ');
+    };
+
+    // . (period)
+    Blockly.Blocks['promps_punct_period'] = {
+        init: function() {
+            this.appendDummyInput()
+                .appendField(new Blockly.FieldLabel(tt('blockly.punct.period.label', '.')));
+            this.setPreviousStatement(true, null);
+            this.setNextStatement(true, null);
+            this.setColour(60);
+            this.setTooltip(() => tt('blockly.punct.period.tooltip', 'Punctuation: period'));
+            this.setHelpUrl("");
+        }
+    };
+    javascriptGenerator.forBlock['promps_punct_period'] = function(block, generator) {
+        return tt('blockly.punct.period.output', '. ');
+    };
+
+    console.log('Block definitions registered');
+}
+
+// Register blocks on initial load
+registerBlockDefinitions();
 
 /**
- * Define custom "Other" block
- * For particles, verbs, adjectives, and connectives
+ * Build toolbox definition with translated category names
+ * @returns {Object} Toolbox definition
  */
-Blockly.Blocks['promps_other'] = {
-    init: function() {
-        this.appendDummyInput()
-            .appendField("その他:")
-            .appendField(new Blockly.FieldTextInput("が"), "TEXT");
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
-        this.setColour(230); // Blue color
-        this.setTooltip("その他ブロック (助詞、動詞、形容詞、接続詞など)");
-        this.setHelpUrl("");
-    }
-};
-
-/**
- * Generate DSL code from Other block
- */
-javascriptGenerator.forBlock['promps_other'] = function(block, generator) {
-    const text = block.getFieldValue('TEXT');
-    // No prefix for other blocks
-    return text + ' ';
-};
-
-// ============================================================================
-// Particle Blocks (助詞ブロック)
-// ============================================================================
-
-/**
- * Particle: が (subject marker)
- */
-Blockly.Blocks['promps_particle_ga'] = {
-    init: function() {
-        this.appendDummyInput()
-            .appendField(new Blockly.FieldLabel("が"));
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
-        this.setColour(230);
-        this.setTooltip("助詞: が（主語を示す）");
-        this.setHelpUrl("");
-    }
-};
-javascriptGenerator.forBlock['promps_particle_ga'] = function(block, generator) {
-    return 'が ';
-};
-
-/**
- * Particle: を (object marker)
- */
-Blockly.Blocks['promps_particle_wo'] = {
-    init: function() {
-        this.appendDummyInput()
-            .appendField(new Blockly.FieldLabel("を"));
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
-        this.setColour(230);
-        this.setTooltip("助詞: を（目的語を示す）");
-        this.setHelpUrl("");
-    }
-};
-javascriptGenerator.forBlock['promps_particle_wo'] = function(block, generator) {
-    return 'を ';
-};
-
-/**
- * Particle: に (direction/target marker)
- */
-Blockly.Blocks['promps_particle_ni'] = {
-    init: function() {
-        this.appendDummyInput()
-            .appendField(new Blockly.FieldLabel("に"));
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
-        this.setColour(230);
-        this.setTooltip("助詞: に（方向・対象を示す）");
-        this.setHelpUrl("");
-    }
-};
-javascriptGenerator.forBlock['promps_particle_ni'] = function(block, generator) {
-    return 'に ';
-};
-
-/**
- * Particle: で (means/location marker)
- */
-Blockly.Blocks['promps_particle_de'] = {
-    init: function() {
-        this.appendDummyInput()
-            .appendField(new Blockly.FieldLabel("で"));
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
-        this.setColour(230);
-        this.setTooltip("助詞: で（手段・場所を示す）");
-        this.setHelpUrl("");
-    }
-};
-javascriptGenerator.forBlock['promps_particle_de'] = function(block, generator) {
-    return 'で ';
-};
-
-/**
- * Particle: と (and/with marker)
- */
-Blockly.Blocks['promps_particle_to'] = {
-    init: function() {
-        this.appendDummyInput()
-            .appendField(new Blockly.FieldLabel("と"));
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
-        this.setColour(230);
-        this.setTooltip("助詞: と（並列・共同を示す）");
-        this.setHelpUrl("");
-    }
-};
-javascriptGenerator.forBlock['promps_particle_to'] = function(block, generator) {
-    return 'と ';
-};
-
-/**
- * Particle: へ (direction marker)
- */
-Blockly.Blocks['promps_particle_he'] = {
-    init: function() {
-        this.appendDummyInput()
-            .appendField(new Blockly.FieldLabel("へ"));
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
-        this.setColour(230);
-        this.setTooltip("助詞: へ（方向を示す）");
-        this.setHelpUrl("");
-    }
-};
-javascriptGenerator.forBlock['promps_particle_he'] = function(block, generator) {
-    return 'へ ';
-};
-
-/**
- * Particle: から (from marker)
- */
-Blockly.Blocks['promps_particle_kara'] = {
-    init: function() {
-        this.appendDummyInput()
-            .appendField(new Blockly.FieldLabel("から"));
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
-        this.setColour(230);
-        this.setTooltip("助詞: から（起点を示す）");
-        this.setHelpUrl("");
-    }
-};
-javascriptGenerator.forBlock['promps_particle_kara'] = function(block, generator) {
-    return 'から ';
-};
-
-/**
- * Particle: まで (until marker)
- */
-Blockly.Blocks['promps_particle_made'] = {
-    init: function() {
-        this.appendDummyInput()
-            .appendField(new Blockly.FieldLabel("まで"));
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
-        this.setColour(230);
-        this.setTooltip("助詞: まで（終点を示す）");
-        this.setHelpUrl("");
-    }
-};
-javascriptGenerator.forBlock['promps_particle_made'] = function(block, generator) {
-    return 'まで ';
-};
-
-/**
- * Particle: より (comparison marker)
- */
-Blockly.Blocks['promps_particle_yori'] = {
-    init: function() {
-        this.appendDummyInput()
-            .appendField(new Blockly.FieldLabel("より"));
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
-        this.setColour(230);
-        this.setTooltip("助詞: より（比較を示す）");
-        this.setHelpUrl("");
-    }
-};
-javascriptGenerator.forBlock['promps_particle_yori'] = function(block, generator) {
-    return 'より ';
-};
-
-// ============================================================================
-// Verb Blocks (動詞ブロック)
-// ============================================================================
-
-/**
- * Fixed Verb: 分析して (analyze)
- */
-Blockly.Blocks['promps_verb_analyze'] = {
-    init: function() {
-        this.appendDummyInput()
-            .appendField(new Blockly.FieldLabel("分析して"));
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
-        this.setColour(290); // Red color for verbs
-        this.setTooltip("動詞: 分析して");
-        this.setHelpUrl("");
-    }
-};
-javascriptGenerator.forBlock['promps_verb_analyze'] = function(block, generator) {
-    return '分析して ';
-};
-
-/**
- * Fixed Verb: 要約して (summarize)
- */
-Blockly.Blocks['promps_verb_summarize'] = {
-    init: function() {
-        this.appendDummyInput()
-            .appendField(new Blockly.FieldLabel("要約して"));
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
-        this.setColour(290);
-        this.setTooltip("動詞: 要約して");
-        this.setHelpUrl("");
-    }
-};
-javascriptGenerator.forBlock['promps_verb_summarize'] = function(block, generator) {
-    return '要約して ';
-};
-
-/**
- * Fixed Verb: 翻訳して (translate)
- */
-Blockly.Blocks['promps_verb_translate'] = {
-    init: function() {
-        this.appendDummyInput()
-            .appendField(new Blockly.FieldLabel("翻訳して"));
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
-        this.setColour(290);
-        this.setTooltip("動詞: 翻訳して");
-        this.setHelpUrl("");
-    }
-};
-javascriptGenerator.forBlock['promps_verb_translate'] = function(block, generator) {
-    return '翻訳して ';
-};
-
-/**
- * Custom Verb (user input)
- */
-Blockly.Blocks['promps_verb_custom'] = {
-    init: function() {
-        this.appendDummyInput()
-            .appendField("動詞:")
-            .appendField(new Blockly.FieldTextInput("作成して"), "TEXT");
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
-        this.setColour(290);
-        this.setTooltip("カスタム動詞ブロック");
-        this.setHelpUrl("");
-    }
-};
-javascriptGenerator.forBlock['promps_verb_custom'] = function(block, generator) {
-    const text = block.getFieldValue('TEXT');
-    return text + ' ';
-};
-
-// ============================================================================
-// Additional Verb Blocks (追加動詞ブロック) - Phase 3-2
-// ============================================================================
-
-/**
- * Fixed Verb: 作成して (create)
- */
-Blockly.Blocks['promps_verb_create'] = {
-    init: function() {
-        this.appendDummyInput()
-            .appendField(new Blockly.FieldLabel("作成して"));
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
-        this.setColour(290);
-        this.setTooltip("動詞: 作成して");
-        this.setHelpUrl("");
-    }
-};
-javascriptGenerator.forBlock['promps_verb_create'] = function(block, generator) {
-    return '作成して ';
-};
-
-/**
- * Fixed Verb: 生成して (generate)
- */
-Blockly.Blocks['promps_verb_generate'] = {
-    init: function() {
-        this.appendDummyInput()
-            .appendField(new Blockly.FieldLabel("生成して"));
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
-        this.setColour(290);
-        this.setTooltip("動詞: 生成して");
-        this.setHelpUrl("");
-    }
-};
-javascriptGenerator.forBlock['promps_verb_generate'] = function(block, generator) {
-    return '生成して ';
-};
-
-/**
- * Fixed Verb: 変換して (convert)
- */
-Blockly.Blocks['promps_verb_convert'] = {
-    init: function() {
-        this.appendDummyInput()
-            .appendField(new Blockly.FieldLabel("変換して"));
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
-        this.setColour(290);
-        this.setTooltip("動詞: 変換して");
-        this.setHelpUrl("");
-    }
-};
-javascriptGenerator.forBlock['promps_verb_convert'] = function(block, generator) {
-    return '変換して ';
-};
-
-/**
- * Fixed Verb: 削除して (delete)
- */
-Blockly.Blocks['promps_verb_delete'] = {
-    init: function() {
-        this.appendDummyInput()
-            .appendField(new Blockly.FieldLabel("削除して"));
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
-        this.setColour(290);
-        this.setTooltip("動詞: 削除して");
-        this.setHelpUrl("");
-    }
-};
-javascriptGenerator.forBlock['promps_verb_delete'] = function(block, generator) {
-    return '削除して ';
-};
-
-/**
- * Fixed Verb: 更新して (update)
- */
-Blockly.Blocks['promps_verb_update'] = {
-    init: function() {
-        this.appendDummyInput()
-            .appendField(new Blockly.FieldLabel("更新して"));
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
-        this.setColour(290);
-        this.setTooltip("動詞: 更新して");
-        this.setHelpUrl("");
-    }
-};
-javascriptGenerator.forBlock['promps_verb_update'] = function(block, generator) {
-    return '更新して ';
-};
-
-/**
- * Fixed Verb: 抽出して (extract)
- */
-Blockly.Blocks['promps_verb_extract'] = {
-    init: function() {
-        this.appendDummyInput()
-            .appendField(new Blockly.FieldLabel("抽出して"));
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
-        this.setColour(290);
-        this.setTooltip("動詞: 抽出して");
-        this.setHelpUrl("");
-    }
-};
-javascriptGenerator.forBlock['promps_verb_extract'] = function(block, generator) {
-    return '抽出して ';
-};
-
-/**
- * Fixed Verb: 説明して (explain)
- */
-Blockly.Blocks['promps_verb_explain'] = {
-    init: function() {
-        this.appendDummyInput()
-            .appendField(new Blockly.FieldLabel("説明して"));
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
-        this.setColour(290);
-        this.setTooltip("動詞: 説明して");
-        this.setHelpUrl("");
-    }
-};
-javascriptGenerator.forBlock['promps_verb_explain'] = function(block, generator) {
-    return '説明して ';
-};
-
-/**
- * Fixed Verb: 解説して (describe)
- */
-Blockly.Blocks['promps_verb_describe'] = {
-    init: function() {
-        this.appendDummyInput()
-            .appendField(new Blockly.FieldLabel("解説して"));
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
-        this.setColour(290);
-        this.setTooltip("動詞: 解説して");
-        this.setHelpUrl("");
-    }
-};
-javascriptGenerator.forBlock['promps_verb_describe'] = function(block, generator) {
-    return '解説して ';
-};
-
-/**
- * Fixed Verb: 教えて (teach)
- */
-Blockly.Blocks['promps_verb_teach'] = {
-    init: function() {
-        this.appendDummyInput()
-            .appendField(new Blockly.FieldLabel("教えて"));
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
-        this.setColour(290);
-        this.setTooltip("動詞: 教えて");
-        this.setHelpUrl("");
-    }
-};
-javascriptGenerator.forBlock['promps_verb_teach'] = function(block, generator) {
-    return '教えて ';
-};
-
-// ============================================================================
-// Punctuation Blocks (句読点)
-// ============================================================================
-
-/**
- * Punctuation: 、(touten - Japanese comma)
- */
-Blockly.Blocks['promps_punct_touten'] = {
-    init: function() {
-        this.appendDummyInput()
-            .appendField(new Blockly.FieldLabel("、"));
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
-        this.setColour(60);
-        this.setTooltip("句読点: 読点（、）");
-        this.setHelpUrl("");
-    }
-};
-javascriptGenerator.forBlock['promps_punct_touten'] = function(block, generator) {
-    return '、 ';
-};
-
-/**
- * Punctuation: 。(kuten - Japanese period)
- */
-Blockly.Blocks['promps_punct_kuten'] = {
-    init: function() {
-        this.appendDummyInput()
-            .appendField(new Blockly.FieldLabel("。"));
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
-        this.setColour(60);
-        this.setTooltip("句読点: 句点（。）");
-        this.setHelpUrl("");
-    }
-};
-javascriptGenerator.forBlock['promps_punct_kuten'] = function(block, generator) {
-    return '。 ';
-};
-
-/**
- * Punctuation: ！(exclamation mark)
- */
-Blockly.Blocks['promps_punct_exclaim'] = {
-    init: function() {
-        this.appendDummyInput()
-            .appendField(new Blockly.FieldLabel("！"));
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
-        this.setColour(60);
-        this.setTooltip("句読点: 感嘆符（！）");
-        this.setHelpUrl("");
-    }
-};
-javascriptGenerator.forBlock['promps_punct_exclaim'] = function(block, generator) {
-    return '！ ';
-};
-
-/**
- * Punctuation: ？(question mark)
- */
-Blockly.Blocks['promps_punct_question'] = {
-    init: function() {
-        this.appendDummyInput()
-            .appendField(new Blockly.FieldLabel("？"));
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
-        this.setColour(60);
-        this.setTooltip("句読点: 疑問符（？）");
-        this.setHelpUrl("");
-    }
-};
-javascriptGenerator.forBlock['promps_punct_question'] = function(block, generator) {
-    return '？ ';
-};
-
-/**
- * Punctuation: "(double quote)
- */
-Blockly.Blocks['promps_punct_dquote'] = {
-    init: function() {
-        this.appendDummyInput()
-            .appendField(new Blockly.FieldLabel('"'));
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
-        this.setColour(60);
-        this.setTooltip("句読点: 二重引用符（\"）");
-        this.setHelpUrl("");
-    }
-};
-javascriptGenerator.forBlock['promps_punct_dquote'] = function(block, generator) {
-    return '" ';
-};
-
-/**
- * Punctuation: '(single quote)
- */
-Blockly.Blocks['promps_punct_squote'] = {
-    init: function() {
-        this.appendDummyInput()
-            .appendField(new Blockly.FieldLabel("'"));
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
-        this.setColour(60);
-        this.setTooltip("句読点: 引用符（'）");
-        this.setHelpUrl("");
-    }
-};
-javascriptGenerator.forBlock['promps_punct_squote'] = function(block, generator) {
-    return "' ";
-};
-
-/**
- * Punctuation: ,(comma - English style)
- */
-Blockly.Blocks['promps_punct_comma'] = {
-    init: function() {
-        this.appendDummyInput()
-            .appendField(new Blockly.FieldLabel(","));
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
-        this.setColour(60);
-        this.setTooltip("句読点: カンマ（,）");
-        this.setHelpUrl("");
-    }
-};
-javascriptGenerator.forBlock['promps_punct_comma'] = function(block, generator) {
-    return ', ';
-};
-
-/**
- * Punctuation: /(slash)
- */
-Blockly.Blocks['promps_punct_slash'] = {
-    init: function() {
-        this.appendDummyInput()
-            .appendField(new Blockly.FieldLabel("/"));
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
-        this.setColour(60);
-        this.setTooltip("句読点: スラッシュ（/）");
-        this.setHelpUrl("");
-    }
-};
-javascriptGenerator.forBlock['promps_punct_slash'] = function(block, generator) {
-    return '/ ';
-};
-
-/**
- * Punctuation: &(ampersand)
- */
-Blockly.Blocks['promps_punct_amp'] = {
-    init: function() {
-        this.appendDummyInput()
-            .appendField(new Blockly.FieldLabel("&"));
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
-        this.setColour(60);
-        this.setTooltip("句読点: アンパサンド（&）");
-        this.setHelpUrl("");
-    }
-};
-javascriptGenerator.forBlock['promps_punct_amp'] = function(block, generator) {
-    return '& ';
-};
+function buildToolbox() {
+    return {
+        "kind": "categoryToolbox",
+        "contents": [
+            // Noun category
+            {
+                "kind": "category",
+                "name": tt('blockly.category.noun', 'Noun'),
+                "colour": "120",
+                "contents": [
+                    { "kind": "block", "type": "promps_noun" }
+                ]
+            },
+            // Particle/Connector category
+            {
+                "kind": "category",
+                "name": tt('blockly.category.particle', 'Particle'),
+                "colour": "230",
+                "contents": (function() {
+                    const isJapanese = typeof window.getLocale === 'function' && window.getLocale() === 'ja';
+                    const particles = [];
+                    // Subject/object markers only shown in Japanese mode
+                    if (isJapanese) {
+                        particles.push({ "kind": "block", "type": "promps_particle_ga" });
+                        particles.push({ "kind": "block", "type": "promps_particle_wo" });
+                    }
+                    // Other particles shown in both modes
+                    particles.push({ "kind": "block", "type": "promps_particle_ni" });
+                    particles.push({ "kind": "block", "type": "promps_particle_de" });
+                    particles.push({ "kind": "block", "type": "promps_particle_to" });
+                    particles.push({ "kind": "block", "type": "promps_particle_he" });
+                    particles.push({ "kind": "block", "type": "promps_particle_kara" });
+                    particles.push({ "kind": "block", "type": "promps_particle_made" });
+                    particles.push({ "kind": "block", "type": "promps_particle_yori" });
+                    return particles;
+                })()
+            },
+            // Article category (English mode only)
+            ...(function() {
+                const isEnglish = typeof window.getLocale === 'function' && window.getLocale() === 'en';
+                if (!isEnglish) return [];
+                return [{
+                    "kind": "category",
+                    "name": tt('blockly.category.article', 'Article'),
+                    "colour": "180",
+                    "contents": [
+                        { "kind": "block", "type": "promps_article_a" },
+                        { "kind": "block", "type": "promps_article_an" },
+                        { "kind": "block", "type": "promps_article_the" },
+                        { "kind": "block", "type": "promps_article_this" },
+                        { "kind": "block", "type": "promps_article_that" },
+                        { "kind": "block", "type": "promps_article_please" }
+                    ]
+                }];
+            })(),
+            // Verb/Action category
+            {
+                "kind": "category",
+                "name": tt('blockly.category.verb', 'Verb'),
+                "colour": "290",
+                "contents": [
+                    { "kind": "block", "type": "promps_verb_analyze" },
+                    { "kind": "block", "type": "promps_verb_summarize" },
+                    { "kind": "block", "type": "promps_verb_translate" },
+                    { "kind": "block", "type": "promps_verb_create" },
+                    { "kind": "block", "type": "promps_verb_generate" },
+                    { "kind": "block", "type": "promps_verb_convert" },
+                    { "kind": "block", "type": "promps_verb_delete" },
+                    { "kind": "block", "type": "promps_verb_update" },
+                    { "kind": "block", "type": "promps_verb_extract" },
+                    { "kind": "block", "type": "promps_verb_explain" },
+                    { "kind": "block", "type": "promps_verb_describe" },
+                    { "kind": "block", "type": "promps_verb_teach" },
+                    { "kind": "block", "type": "promps_verb_custom" }
+                ]
+            },
+            // Punctuation category
+            {
+                "kind": "category",
+                "name": tt('blockly.category.punctuation', 'Punctuation'),
+                "colour": "60",
+                "contents": [
+                    { "kind": "block", "type": "promps_punct_touten" },
+                    { "kind": "block", "type": "promps_punct_kuten" },
+                    { "kind": "block", "type": "promps_punct_exclaim" },
+                    { "kind": "block", "type": "promps_punct_question" },
+                    { "kind": "block", "type": "promps_punct_dquote" },
+                    { "kind": "block", "type": "promps_punct_squote" },
+                    { "kind": "block", "type": "promps_punct_comma" },
+                    { "kind": "block", "type": "promps_punct_slash" },
+                    { "kind": "block", "type": "promps_punct_amp" },
+                    { "kind": "block", "type": "promps_punct_period" }
+                ]
+            },
+            // Other category
+            {
+                "kind": "category",
+                "name": tt('blockly.category.other', 'Other'),
+                "colour": "20",
+                "contents": [
+                    { "kind": "block", "type": "promps_other" }
+                ]
+            }
+        ]
+    };
+}
 
 /**
  * Initialize Blockly workspace
@@ -646,189 +826,8 @@ function initBlockly() {
     // Remove placeholder
     blocklyDiv.innerHTML = '';
 
-    // Toolbox definition
-    const toolbox = {
-        "kind": "categoryToolbox",
-        "contents": [
-            // Noun category
-            {
-                "kind": "category",
-                "name": "名詞",
-                "colour": "120",
-                "contents": [
-                    {
-                        "kind": "block",
-                        "type": "promps_noun"
-                    }
-                ]
-            },
-            // Particle category (collapsible)
-            {
-                "kind": "category",
-                "name": "助詞",
-                "colour": "230",
-                "contents": [
-                    {
-                        "kind": "block",
-                        "type": "promps_particle_ga"
-                    },
-                    {
-                        "kind": "block",
-                        "type": "promps_particle_wo"
-                    },
-                    {
-                        "kind": "block",
-                        "type": "promps_particle_ni"
-                    },
-                    {
-                        "kind": "block",
-                        "type": "promps_particle_de"
-                    },
-                    {
-                        "kind": "block",
-                        "type": "promps_particle_to"
-                    },
-                    {
-                        "kind": "block",
-                        "type": "promps_particle_he"
-                    },
-                    {
-                        "kind": "block",
-                        "type": "promps_particle_kara"
-                    },
-                    {
-                        "kind": "block",
-                        "type": "promps_particle_made"
-                    },
-                    {
-                        "kind": "block",
-                        "type": "promps_particle_yori"
-                    }
-                ]
-            },
-            // Verb category (collapsible)
-            {
-                "kind": "category",
-                "name": "動詞",
-                "colour": "290",
-                "contents": [
-                    // 分析系
-                    {
-                        "kind": "block",
-                        "type": "promps_verb_analyze"
-                    },
-                    {
-                        "kind": "block",
-                        "type": "promps_verb_summarize"
-                    },
-                    {
-                        "kind": "block",
-                        "type": "promps_verb_translate"
-                    },
-                    // 変換・生成系
-                    {
-                        "kind": "block",
-                        "type": "promps_verb_create"
-                    },
-                    {
-                        "kind": "block",
-                        "type": "promps_verb_generate"
-                    },
-                    {
-                        "kind": "block",
-                        "type": "promps_verb_convert"
-                    },
-                    // 操作系
-                    {
-                        "kind": "block",
-                        "type": "promps_verb_delete"
-                    },
-                    {
-                        "kind": "block",
-                        "type": "promps_verb_update"
-                    },
-                    {
-                        "kind": "block",
-                        "type": "promps_verb_extract"
-                    },
-                    // 説明系
-                    {
-                        "kind": "block",
-                        "type": "promps_verb_explain"
-                    },
-                    {
-                        "kind": "block",
-                        "type": "promps_verb_describe"
-                    },
-                    {
-                        "kind": "block",
-                        "type": "promps_verb_teach"
-                    },
-                    // カスタム
-                    {
-                        "kind": "block",
-                        "type": "promps_verb_custom"
-                    }
-                ]
-            },
-            // Punctuation category (句読点)
-            {
-                "kind": "category",
-                "name": "句読点",
-                "colour": "60",
-                "contents": [
-                    {
-                        "kind": "block",
-                        "type": "promps_punct_touten"
-                    },
-                    {
-                        "kind": "block",
-                        "type": "promps_punct_kuten"
-                    },
-                    {
-                        "kind": "block",
-                        "type": "promps_punct_exclaim"
-                    },
-                    {
-                        "kind": "block",
-                        "type": "promps_punct_question"
-                    },
-                    {
-                        "kind": "block",
-                        "type": "promps_punct_dquote"
-                    },
-                    {
-                        "kind": "block",
-                        "type": "promps_punct_squote"
-                    },
-                    {
-                        "kind": "block",
-                        "type": "promps_punct_comma"
-                    },
-                    {
-                        "kind": "block",
-                        "type": "promps_punct_slash"
-                    },
-                    {
-                        "kind": "block",
-                        "type": "promps_punct_amp"
-                    }
-                ]
-            },
-            // Other category (for backward compatibility)
-            {
-                "kind": "category",
-                "name": "その他",
-                "colour": "20",
-                "contents": [
-                    {
-                        "kind": "block",
-                        "type": "promps_other"
-                    }
-                ]
-            }
-        ]
-    };
+    // Build toolbox with translated category names
+    const toolbox = buildToolbox();
 
     // Workspace options
     const options = {
@@ -888,7 +887,6 @@ function onBlocklyChange(event) {
     let shouldMarkDirty = false;
 
     // Track newly created blocks (from flyout)
-    // Map: blockId -> timerId (null if no timer yet)
     if (!window._newlyCreatedBlocks) {
         window._newlyCreatedBlocks = new Map();
     }
@@ -901,7 +899,6 @@ function onBlocklyChange(event) {
     // Move event
     if (event.type === Blockly.Events.BLOCK_MOVE) {
         if (window._newlyCreatedBlocks.has(event.blockId)) {
-            // Newly created block is being moved - schedule dirty after delay
             const existingTimer = window._newlyCreatedBlocks.get(event.blockId);
             if (existingTimer) {
                 clearTimeout(existingTimer);
@@ -917,7 +914,6 @@ function onBlocklyChange(event) {
             }, 150);
             window._newlyCreatedBlocks.set(event.blockId, timerId);
         } else {
-            // Existing block was moved
             shouldMarkDirty = true;
         }
     }
@@ -925,19 +921,17 @@ function onBlocklyChange(event) {
     // Delete event
     if (event.type === Blockly.Events.BLOCK_DELETE) {
         if (window._newlyCreatedBlocks.has(event.blockId)) {
-            // Cancel any pending timer - this was a cancelled drag
             const timerId = window._newlyCreatedBlocks.get(event.blockId);
             if (timerId) {
                 clearTimeout(timerId);
             }
             window._newlyCreatedBlocks.delete(event.blockId);
         } else {
-            // Real deletion of existing block
             shouldMarkDirty = true;
         }
     }
 
-    // Field change event - always mark dirty
+    // Field change event
     if (event.type === Blockly.Events.BLOCK_CHANGE) {
         shouldMarkDirty = true;
     }
@@ -948,24 +942,22 @@ function onBlocklyChange(event) {
         }
     }
 
-    // Generate DSL code from all blocks (including standalone blocks for pattern analysis)
+    // Generate DSL code from all blocks
     let code = '';
     const topBlocks = workspace.getTopBlocks(true);
 
     for (const block of topBlocks) {
-        // Process all blocks (including standalone blocks)
-        // This enables pattern suggestions even for single blocks
         code += javascriptGenerator.blockToCode(block);
     }
 
-    // Update preview (will be implemented in main.js)
+    // Update preview
     if (typeof updatePreview === 'function') {
         updatePreview(code.trim());
     }
 }
 
 /**
- * Get DSL code from current workspace (including standalone blocks)
+ * Get DSL code from current workspace
  */
 function getWorkspaceCode() {
     if (!workspace) {
@@ -976,9 +968,90 @@ function getWorkspaceCode() {
     const topBlocks = workspace.getTopBlocks(true);
 
     for (const block of topBlocks) {
-        // Process all blocks (including standalone blocks)
         code += javascriptGenerator.blockToCode(block);
     }
 
     return code.trim();
+}
+
+/**
+ * Reinitialize Blockly workspace (called when language changes)
+ * Clears workspace and rebuilds with new language-specific toolbox
+ */
+function reinitializeBlockly() {
+    if (!workspace) {
+        console.warn('Workspace not initialized, cannot reinitialize');
+        return;
+    }
+
+    try {
+        // Get the blockly div
+        const blocklyDiv = document.getElementById('blocklyDiv');
+
+        // Dispose of the old workspace
+        workspace.dispose();
+        workspace = null;
+
+        // Clear the container
+        blocklyDiv.innerHTML = '';
+
+        // Re-register block definitions with new translations
+        registerBlockDefinitions();
+
+        // Build new toolbox with updated translations
+        const toolbox = buildToolbox();
+
+        // Workspace options
+        const options = {
+            toolbox: toolbox,
+            collapse: false,
+            comments: false,
+            disable: false,
+            maxBlocks: Infinity,
+            trashcan: true,
+            horizontalLayout: false,
+            toolboxPosition: 'start',
+            css: true,
+            media: 'https://unpkg.com/blockly/media/',
+            rtl: false,
+            scrollbars: true,
+            sounds: true,
+            oneBasedIndex: true,
+            grid: {
+                spacing: 20,
+                length: 3,
+                colour: '#ccc',
+                snap: true
+            },
+            zoom: {
+                controls: true,
+                wheel: true,
+                startScale: 1.0,
+                maxScale: 3,
+                minScale: 0.3,
+                scaleSpeed: 1.2
+            }
+        };
+
+        // Inject new workspace (empty - cleared on language change)
+        workspace = Blockly.inject(blocklyDiv, options);
+
+        // Re-add change listener
+        workspace.addChangeListener(onBlocklyChange);
+
+        // Reset project manager dirty state (since workspace is now empty)
+        if (window.projectManager && typeof window.projectManager.resetDirtyState === 'function') {
+            window.projectManager.resetDirtyState();
+        }
+
+        console.log('Blockly workspace reinitialized with new language (workspace cleared)');
+
+        // Clear preview
+        if (typeof updatePreview === 'function') {
+            updatePreview('');
+        }
+
+    } catch (error) {
+        console.error('Failed to reinitialize Blockly:', error);
+    }
 }

@@ -3,7 +3,21 @@
  *
  * Handles project persistence: save, load, new project operations
  * Uses Blockly JSON Serialization and Tauri v2 commands
+ * Includes i18n support for translated messages.
  */
+
+/**
+ * Helper function to get translation with fallback
+ * @param {string} key - Translation key
+ * @param {string} fallback - Fallback text if t() not available
+ * @returns {string} Translated text
+ */
+function pt(key, fallback) {
+    if (typeof window.t === 'function') {
+        return window.t(key);
+    }
+    return fallback;
+}
 
 // Initialize projectManager namespace immediately
 window.projectManager = window.projectManager || {};
@@ -227,7 +241,7 @@ async function saveProject(saveAs = false) {
         return true;
     } catch (error) {
         console.error('Failed to save project:', error);
-        alert('Failed to save project: ' + error);
+        alert(pt('project.save.failed', 'Failed to save project') + ': ' + error);
         return false;
     }
 }
@@ -275,7 +289,7 @@ async function loadProject() {
         return true;
     } catch (error) {
         console.error('Failed to load project:', error);
-        alert('Failed to load project: ' + error);
+        alert(pt('project.load.failed', 'Failed to load project') + ': ' + error);
         return false;
     }
 }
@@ -287,12 +301,12 @@ async function loadProject() {
 async function confirmDiscardChanges() {
     try {
         return await invoke('show_confirm_dialog', {
-            title: 'Unsaved Changes',
-            message: 'You have unsaved changes. Do you want to discard them?'
+            title: pt('project.unsaved.title', 'Unsaved Changes'),
+            message: pt('project.unsaved.message', 'You have unsaved changes. Do you want to discard them?')
         });
     } catch (error) {
         console.error('Confirm dialog error:', error);
-        return confirm('You have unsaved changes. Discard them?');
+        return confirm(pt('project.unsaved.message', 'You have unsaved changes. Do you want to discard them?'));
     }
 }
 
@@ -323,6 +337,14 @@ function markDirty() {
         isDirty = true;
         updateWindowTitle();
     }
+}
+
+/**
+ * Reset dirty state (used when workspace is programmatically cleared, e.g., language change)
+ */
+function resetDirtyState() {
+    isDirty = false;
+    updateWindowTitle();
 }
 
 /**
@@ -357,6 +379,7 @@ window.projectManager.loadProject = loadProject;
 window.projectManager.getWorkspaceState = getWorkspaceState;
 window.projectManager.loadWorkspaceState = loadWorkspaceState;
 window.projectManager.markDirty = markDirty;
+window.projectManager.resetDirtyState = resetDirtyState;
 window.projectManager.hasUnsavedChanges = hasUnsavedChanges;
 window.projectManager.getCurrentProject = getCurrentProject;
 window.projectManager.getCurrentFilePath = getCurrentFilePath;
