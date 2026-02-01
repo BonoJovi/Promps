@@ -8,6 +8,8 @@
 
     <!-- Blockly.js -->
     <script src="https://unpkg.com/blockly/blockly.min.js"></script>
+    <!-- i18n (must load before other scripts) -->
+    <script src="js/i18n.js"></script>
 </head>
 <body>
     <div class="app-container">
@@ -16,25 +18,34 @@
             <div class="header-content">
                 <div class="header-title">
                     <h1>Promps</h1>
-                    <p class="subtitle">Visual Prompt Language Generator</p>
+                    <p class="subtitle" data-i18n="app.subtitle">Visual Prompt Language Generator</p>
                 </div>
                 <!-- Toolbar -->
                 <div class="toolbar">
-                    <button id="btnNew" class="toolbar-btn" title="New Project (Ctrl+N)">
+                    <button id="btnNew" class="toolbar-btn" data-i18n-title="toolbar.new.title" title="New Project (Ctrl+N)">
                         <span class="toolbar-icon">+</span>
-                        <span class="toolbar-label">New</span>
+                        <span class="toolbar-label" data-i18n="toolbar.new">New</span>
                     </button>
-                    <button id="btnOpen" class="toolbar-btn" title="Open Project (Ctrl+O)">
+                    <button id="btnOpen" class="toolbar-btn" data-i18n-title="toolbar.open.title" title="Open Project (Ctrl+O)">
                         <span class="toolbar-icon">&#128194;</span>
-                        <span class="toolbar-label">Open</span>
+                        <span class="toolbar-label" data-i18n="toolbar.open">Open</span>
                     </button>
-                    <button id="btnSave" class="toolbar-btn" title="Save Project (Ctrl+S)">
+                    <button id="btnSave" class="toolbar-btn" data-i18n-title="toolbar.save.title" title="Save Project (Ctrl+S)">
                         <span class="toolbar-icon">&#128190;</span>
-                        <span class="toolbar-label">Save</span>
+                        <span class="toolbar-label" data-i18n="toolbar.save">Save</span>
                     </button>
-                    <button id="btnSaveAs" class="toolbar-btn" title="Save As (Ctrl+Shift+S)">
+                    <button id="btnSaveAs" class="toolbar-btn" data-i18n-title="toolbar.saveAs.title" title="Save As (Ctrl+Shift+S)">
                         <span class="toolbar-icon">&#128190;</span>
-                        <span class="toolbar-label">Save As</span>
+                        <span class="toolbar-label" data-i18n="toolbar.saveAs">Save As</span>
+                    </button>
+                    <div class="toolbar-separator"></div>
+                    <button id="btnTheme" class="toolbar-btn" data-i18n-title="toolbar.theme.title" title="Toggle Dark Mode">
+                        <span class="toolbar-icon">🌙</span>
+                        <span class="toolbar-label" data-i18n="toolbar.theme">Theme</span>
+                    </button>
+                    <button id="btnLang" class="toolbar-btn toolbar-btn-lang" data-i18n-title="toolbar.lang.title" title="Switch to English">
+                        <span class="toolbar-icon">&#127760;</span>
+                        <span class="toolbar-label" data-i18n="toolbar.lang">EN</span>
                     </button>
                 </div>
             </div>
@@ -44,17 +55,17 @@
         <main class="main-content">
             <!-- Workspace (Left + Center) -->
             <section class="workspace">
-                <h2>Workspace</h2>
+                <h2 data-i18n="workspace.title">Workspace</h2>
                 <div id="blocklyDiv" class="blockly-workspace">
-                    <p class="placeholder">Loading Blockly workspace...</p>
+                    <p class="placeholder" data-i18n="workspace.loading">Loading Blockly workspace...</p>
                 </div>
             </section>
 
             <!-- Preview (Right) -->
             <aside class="preview-pane">
-                <h2>Generated Prompt</h2>
+                <h2 data-i18n="preview.title">Generated Prompt</h2>
                 <div id="promptPreview" class="prompt-output">
-                    <p class="placeholder">Generated prompt will appear here.</p>
+                    <p class="placeholder" data-i18n="preview.placeholder">Generated prompt will appear here.</p>
                 </div>
                 <!-- Validation Result Section -->
                 <div id="validationResult" class="validation-result"></div>
@@ -62,13 +73,13 @@
                 <div id="patternSuggestions" class="pattern-suggestions"></div>
                 <!-- Pattern Templates Section -->
                 <div id="patternTemplates" class="pattern-templates"></div>
-                <button id="testButton" class="btn-primary">Test Connection</button>
+                <button id="testButton" class="btn-primary" data-i18n="preview.testConnection">Test Connection</button>
             </aside>
         </main>
 
         <!-- Footer -->
         <footer class="app-footer">
-            <p>Promps v0.0.5 - Phase 6 (Pattern Templates)</p>
+            <p data-i18n="footer.version">Promps v1.0.1 - i18n Support</p>
         </footer>
     </div>
 

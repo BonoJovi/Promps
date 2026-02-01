@@ -2,11 +2,63 @@
  * Promps Phase 6 - Main JavaScript
  *
  * This file handles frontend logic and Tauri command invocation.
- * Includes i18n (internationalization) support.
+ * Includes i18n (internationalization) support and dark mode.
  */
 
 // Tauri API will be available after window loads
 let invoke;
+
+/* ============================================================================
+   Theme Management
+   ============================================================================ */
+
+/**
+ * Initialize theme from localStorage or system preference
+ */
+function initTheme() {
+    const savedTheme = localStorage.getItem('promps-theme');
+
+    if (savedTheme) {
+        document.documentElement.setAttribute('data-theme', savedTheme);
+    } else {
+        // Check system preference
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const theme = prefersDark ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+    }
+
+    updateThemeButton();
+}
+
+/**
+ * Toggle between light and dark theme
+ */
+function toggleTheme() {
+    const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+    document.documentElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem('promps-theme', newTheme);
+    updateThemeButton();
+
+    console.log('Theme switched to:', newTheme);
+}
+
+/**
+ * Update theme button icon based on current theme
+ */
+function updateThemeButton() {
+    const btn = document.getElementById('btnTheme');
+    if (!btn) return;
+
+    const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+    const icon = btn.querySelector('.toolbar-icon');
+
+    if (icon) {
+        // Show sun when in dark mode (to switch to light), moon when in light mode (to switch to dark)
+        icon.textContent = currentTheme === 'dark' ? '☀️' : '🌙';
+    }
+}
 
 /**
  * Test Tauri connection
@@ -180,6 +232,12 @@ function initToolbarButtons() {
         });
     }
 
+    // Theme toggle button
+    const btnTheme = document.getElementById('btnTheme');
+    if (btnTheme) {
+        btnTheme.addEventListener('click', toggleTheme);
+    }
+
     // Language toggle button
     const btnLang = document.getElementById('btnLang');
     if (btnLang) {
@@ -238,6 +296,9 @@ function initBeforeUnload() {
  */
 async function init() {
     console.log('Promps Phase 6 initialized');
+
+    // Initialize theme (must be early to avoid flash of wrong theme)
+    initTheme();
 
     // Initialize Tauri API (v2 compatible)
     if (window.__TAURI_INTERNALS__) {
