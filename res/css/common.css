@@ -683,21 +683,42 @@ h2 {
     fill: var(--bg-primary) !important;
 }
 
+/* Blockly toolbox in dark mode - darker background */
+[data-theme="dark"] .blocklyToolboxDiv {
+    background-color: #1a1a2e !important;
+}
+
+/* Blockly category row in dark mode - preserve category color indicator */
+[data-theme="dark"] .blocklyTreeRow {
+    background-color: transparent !important;
+}
+
+/* Blockly toolbox category in dark mode */
+[data-theme="dark"] .blocklyToolboxCategory {
+    background-color: rgba(255, 255, 255, 0.03) !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
 /* Blockly toolbox category hover in dark mode */
 [data-theme="dark"] .blocklyToolboxCategory:hover {
-    border-color: rgba(255, 255, 255, 0.15) !important;
-    background-color: rgba(255, 255, 255, 0.05) !important;
+    border-color: rgba(255, 255, 255, 0.25) !important;
+    background-color: rgba(255, 255, 255, 0.08) !important;
 }
 
 /* Blockly selected category in dark mode */
 [data-theme="dark"] .blocklyToolboxCategory.blocklyTreeSelected {
-    border: 2px solid rgba(255, 255, 255, 0.2) !important;
-    background-color: rgba(255, 255, 255, 0.1) !important;
+    border: 2px solid rgba(255, 255, 255, 0.3) !important;
+    background-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+/* Blockly category label text in dark mode */
+[data-theme="dark"] .blocklyTreeLabel {
+    color: #e0e0e0 !important;
 }
 
 /* Blockly flyout background in dark mode */
 [data-theme="dark"] .blocklyFlyoutBackground {
-    fill: var(--blockly-flyout-bg) !important;
+    fill: #0f0f1a !important;
 }
 
 /* Blockly scrollbar in dark mode */

@@ -41,6 +41,11 @@ function toggleTheme() {
     localStorage.setItem('promps-theme', newTheme);
     updateThemeButton();
 
+    // Update Blockly theme
+    if (typeof updateBlocklyTheme === 'function') {
+        updateBlocklyTheme();
+    }
+
     console.log('Theme switched to:', newTheme);
 }
 
@@ -55,8 +60,8 @@ function updateThemeButton() {
     const icon = btn.querySelector('.toolbar-icon');
 
     if (icon) {
-        // Show sun when in dark mode (to switch to light), moon when in light mode (to switch to dark)
-        icon.textContent = currentTheme === 'dark' ? '☀️' : '🌙';
+        // Show current theme icon: moon for dark mode, sun for light mode
+        icon.textContent = currentTheme === 'dark' ? '🌙' : '☀️';
     }
 }
 

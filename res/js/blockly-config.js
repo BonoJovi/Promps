@@ -818,6 +818,53 @@ function buildToolbox() {
 }
 
 /**
+ * Create Blockly dark theme
+ */
+function createDarkTheme() {
+    return Blockly.Theme.defineTheme('dark', {
+        'base': Blockly.Themes.Classic,
+        'componentStyles': {
+            'workspaceBackgroundColour': '#1a1a2e',
+            'toolboxBackgroundColour': '#16213e',
+            'toolboxForegroundColour': '#e0e0e0',
+            'flyoutBackgroundColour': '#0f0f1a',
+            'flyoutForegroundColour': '#e0e0e0',
+            'flyoutOpacity': 1,
+            'scrollbarColour': '#404060',
+            'scrollbarOpacity': 0.8,
+            'insertionMarkerColour': '#fff',
+            'insertionMarkerOpacity': 0.3,
+            'cursorColour': '#d0d0d0'
+        },
+        'fontStyle': {
+            'family': '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+            'weight': 'normal',
+            'size': 12
+        }
+    });
+}
+
+/**
+ * Get current theme based on data-theme attribute
+ */
+function getCurrentBlocklyTheme() {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    if (isDark) {
+        return createDarkTheme();
+    }
+    return Blockly.Themes.Classic;
+}
+
+/**
+ * Update Blockly theme when app theme changes
+ */
+function updateBlocklyTheme() {
+    if (workspace) {
+        workspace.setTheme(getCurrentBlocklyTheme());
+    }
+}
+
+/**
  * Initialize Blockly workspace
  */
 function initBlockly() {
@@ -832,6 +879,7 @@ function initBlockly() {
     // Workspace options
     const options = {
         toolbox: toolbox,
+        theme: getCurrentBlocklyTheme(),
         collapse: false,
         comments: false,
         disable: false,
@@ -848,7 +896,7 @@ function initBlockly() {
         grid: {
             spacing: 20,
             length: 3,
-            colour: '#ccc',
+            colour: document.documentElement.getAttribute('data-theme') === 'dark' ? '#404060' : '#ccc',
             snap: true
         },
         zoom: {
