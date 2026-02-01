@@ -2,6 +2,103 @@
  * Promps Phase 5 - Common Styles
  */
 
+/* ============================================================================
+   Theme Variables - CSS Custom Properties
+   ============================================================================ */
+:root {
+    /* Light mode (default) */
+    --bg-primary: #f5f5f5;
+    --bg-surface: #ffffff;
+    --bg-header: #2c3e50;
+    --bg-footer: #ecf0f1;
+    --bg-code: #f9f9f9;
+    --text-primary: #333333;
+    --text-secondary: #666666;
+    --text-muted: #7f8c8d;
+    --text-header: #2c3e50;
+    --text-inverse: #ffffff;
+    --border-color: #dddddd;
+    --border-light: #dee2e6;
+    --accent-primary: #3498db;
+    --accent-primary-hover: #2980b9;
+    --accent-primary-active: #1c5985;
+    --accent-success: #28a745;
+    --accent-success-hover: #218838;
+    --accent-error: #dc3545;
+    --accent-warning: #ffc107;
+    --accent-info: #17a2b8;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --shadow-strong: rgba(0, 0, 0, 0.2);
+    --scrollbar-track: #f1f1f1;
+    --scrollbar-thumb: #888888;
+    --scrollbar-thumb-hover: #555555;
+    /* Validation colors */
+    --validation-success-bg: #d4edda;
+    --validation-success-border: #c3e6cb;
+    --validation-success-text: #155724;
+    --validation-error-bg: #f8d7da;
+    --validation-error-border: #f5c6cb;
+    --validation-error-text: #721c24;
+    --validation-warning-bg: #fff3cd;
+    --validation-warning-border: #ffeeba;
+    --validation-warning-text: #856404;
+    /* Pattern suggestion colors */
+    --pattern-bg: #e8f4fd;
+    --pattern-border: #b8daff;
+    --pattern-header: #004085;
+    --pattern-item-bg: #f8f9fa;
+    /* Blockly */
+    --blockly-toolbox-bg: #f8f9fa;
+    --blockly-flyout-bg: #f5f5f5;
+}
+
+[data-theme="dark"] {
+    /* Dark mode */
+    --bg-primary: #1a1a2e;
+    --bg-surface: #16213e;
+    --bg-header: #0f0f23;
+    --bg-footer: #1a1a2e;
+    --bg-code: #0d1b2a;
+    --text-primary: #e0e0e0;
+    --text-secondary: #a0a0a0;
+    --text-muted: #808080;
+    --text-header: #e0e0e0;
+    --text-inverse: #ffffff;
+    --border-color: #404040;
+    --border-light: #2a2a4a;
+    --accent-primary: #5dade2;
+    --accent-primary-hover: #3498db;
+    --accent-primary-active: #2980b9;
+    --accent-success: #58d68d;
+    --accent-success-hover: #48c878;
+    --accent-error: #ec7063;
+    --accent-warning: #f7dc6f;
+    --accent-info: #5bc0de;
+    --shadow-color: rgba(0, 0, 0, 0.3);
+    --shadow-strong: rgba(0, 0, 0, 0.5);
+    --scrollbar-track: #1a1a2e;
+    --scrollbar-thumb: #404060;
+    --scrollbar-thumb-hover: #505080;
+    /* Validation colors (dark mode) */
+    --validation-success-bg: #1e4620;
+    --validation-success-border: #2d5a30;
+    --validation-success-text: #a3d9a5;
+    --validation-error-bg: #4a1c1c;
+    --validation-error-border: #6b2c2c;
+    --validation-error-text: #f5a0a0;
+    --validation-warning-bg: #4a4020;
+    --validation-warning-border: #6b5c30;
+    --validation-warning-text: #f0e090;
+    /* Pattern suggestion colors (dark mode) */
+    --pattern-bg: #1a2a3e;
+    --pattern-border: #2a4060;
+    --pattern-header: #7db4e0;
+    --pattern-item-bg: #16213e;
+    /* Blockly */
+    --blockly-toolbox-bg: #16213e;
+    --blockly-flyout-bg: #1a1a2e;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -12,8 +109,8 @@ body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     font-size: 14px;
     line-height: 1.6;
-    color: #333;
-    background-color: #f5f5f5;
+    color: var(--text-primary);
+    background-color: var(--bg-primary);
 }
 
 .app-container {
@@ -24,10 +121,10 @@ body {
 
 /* Header */
 .app-header {
-    background-color: #2c3e50;
-    color: white;
+    background-color: var(--bg-header);
+    color: var(--text-inverse);
     padding: 0.75rem 2rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px var(--shadow-color);
 }
 
 .header-content {
@@ -56,6 +153,23 @@ body {
     display: flex;
     gap: 0.5rem;
     align-items: center;
+}
+
+.toolbar-separator {
+    width: 1px;
+    height: 32px;
+    background-color: rgba(255, 255, 255, 0.3);
+    margin: 0 0.25rem;
+}
+
+.toolbar-btn-lang {
+    background-color: rgba(52, 152, 219, 0.3);
+    border-color: rgba(52, 152, 219, 0.5);
+}
+
+.toolbar-btn-lang:hover {
+    background-color: rgba(52, 152, 219, 0.5);
+    border-color: rgba(52, 152, 219, 0.7);
 }
 
 .toolbar-btn {
@@ -109,10 +223,10 @@ body {
 
 .workspace {
     grid-area: workspace;
-    background-color: white;
+    background-color: var(--bg-surface);
     border-radius: 8px;
     padding: 1rem;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 8px var(--shadow-color);
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -120,10 +234,10 @@ body {
 
 .preview-pane {
     grid-area: preview;
-    background-color: white;
+    background-color: var(--bg-surface);
     border-radius: 8px;
     padding: 1rem;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 8px var(--shadow-color);
     display: flex;
     flex-direction: column;
 }
@@ -137,28 +251,29 @@ body {
 
 .prompt-output {
     flex: 1;
-    border: 1px solid #ddd;
+    border: 1px solid var(--border-color);
     border-radius: 4px;
     padding: 1rem;
     margin: 1rem 0;
     font-family: 'Courier New', monospace;
     font-size: 0.875rem;
-    background-color: #f9f9f9;
+    background-color: var(--bg-code);
+    color: var(--text-primary);
     overflow-y: auto;
     white-space: pre-wrap;
 }
 
 /* Placeholder */
 .placeholder {
-    color: #999;
+    color: var(--text-muted);
     font-style: italic;
     text-align: center;
 }
 
 /* Buttons */
 .btn-primary {
-    background-color: #3498db;
-    color: white;
+    background-color: var(--accent-primary);
+    color: var(--text-inverse);
     border: none;
     padding: 0.75rem 1.5rem;
     border-radius: 4px;
@@ -168,28 +283,28 @@ body {
 }
 
 .btn-primary:hover {
-    background-color: #2980b9;
+    background-color: var(--accent-primary-hover);
 }
 
 .btn-primary:active {
-    background-color: #1c5985;
+    background-color: var(--accent-primary-active);
 }
 
 /* Footer */
 .app-footer {
-    background-color: #ecf0f1;
+    background-color: var(--bg-footer);
     padding: 0.75rem 2rem;
     text-align: center;
     font-size: 0.875rem;
-    color: #7f8c8d;
+    color: var(--text-muted);
 }
 
 /* Section Headers */
 h2 {
     font-size: 1.125rem;
     margin-bottom: 0.75rem;
-    color: #2c3e50;
-    border-bottom: 2px solid #3498db;
+    color: var(--text-header);
+    border-bottom: 2px solid var(--accent-primary);
     padding-bottom: 0.5rem;
 }
 
@@ -200,17 +315,17 @@ h2 {
 }
 
 ::-webkit-scrollbar-track {
-    background: #f1f1f1;
+    background: var(--scrollbar-track);
     border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb {
-    background: #888;
+    background: var(--scrollbar-thumb);
     border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: #555;
+    background: var(--scrollbar-thumb-hover);
 }
 
 /* ============================================================================
@@ -271,15 +386,15 @@ h2 {
 
 /* Toolbox background */
 .blocklyToolboxDiv {
-    background-color: #f8f9fa !important;
-    border-right: 1px solid #dee2e6 !important;
+    background-color: var(--blockly-toolbox-bg) !important;
+    border-right: 1px solid var(--border-light) !important;
     padding: 8px 0 !important;
 }
 
 /* Flyout (the popup showing blocks when category is clicked) */
 .blocklyFlyout {
-    border: 1px solid #dee2e6 !important;
-    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1) !important;
+    border: 1px solid var(--border-light) !important;
+    box-shadow: 2px 0 8px var(--shadow-color) !important;
 }
 
 /* ============================================================================
@@ -297,37 +412,37 @@ h2 {
 
 /* Success state */
 .validation-success {
-    background-color: #d4edda;
-    border: 1px solid #c3e6cb;
-    color: #155724;
+    background-color: var(--validation-success-bg);
+    border: 1px solid var(--validation-success-border);
+    color: var(--validation-success-text);
 }
 
 .validation-success .validation-icon {
-    color: #28a745;
+    color: var(--accent-success);
     font-weight: bold;
 }
 
 /* Error state */
 .validation-error {
-    background-color: #f8d7da;
-    border: 1px solid #f5c6cb;
-    color: #721c24;
+    background-color: var(--validation-error-bg);
+    border: 1px solid var(--validation-error-border);
+    color: var(--validation-error-text);
 }
 
 .validation-error .validation-icon {
-    color: #dc3545;
+    color: var(--accent-error);
     font-weight: bold;
 }
 
 /* Warning state */
 .validation-warning {
-    background-color: #fff3cd;
-    border: 1px solid #ffeeba;
-    color: #856404;
+    background-color: var(--validation-warning-bg);
+    border: 1px solid var(--validation-warning-border);
+    color: var(--validation-warning-text);
 }
 
 .validation-warning .validation-icon {
-    color: #ffc107;
+    color: var(--accent-warning);
     font-weight: bold;
 }
 
@@ -350,11 +465,11 @@ h2 {
 
 /* Error item severity */
 .validation-item.validation-error {
-    color: #721c24;
+    color: var(--validation-error-text);
 }
 
 .validation-item.validation-warning {
-    color: #856404;
+    color: var(--validation-warning-text);
 }
 
 /* Suggestion text */
@@ -369,8 +484,8 @@ h2 {
     margin-left: 0.5rem;
     padding: 0.125rem 0.5rem;
     font-size: 0.75rem;
-    background-color: #28a745;
-    color: white;
+    background-color: var(--accent-success);
+    color: var(--text-inverse);
     border: none;
     border-radius: 3px;
     cursor: pointer;
@@ -378,20 +493,20 @@ h2 {
 }
 
 .validation-fix-btn:hover {
-    background-color: #218838;
+    background-color: var(--accent-success-hover);
 }
 
 .validation-fix-btn:active {
-    background-color: #1e7e34;
+    background-color: var(--accent-success-hover);
 }
 
 /* Block error highlight (Blockly SVG) */
 .validation-block-error {
-    filter: drop-shadow(0 0 4px #dc3545) drop-shadow(0 0 8px #dc3545);
+    filter: drop-shadow(0 0 4px var(--accent-error)) drop-shadow(0 0 8px var(--accent-error));
 }
 
 .validation-block-warning {
-    filter: drop-shadow(0 0 4px #ffc107) drop-shadow(0 0 8px #ffc107);
+    filter: drop-shadow(0 0 4px var(--accent-warning)) drop-shadow(0 0 8px var(--accent-warning));
 }
 
 /* ============================================================================
@@ -403,8 +518,8 @@ h2 {
     margin-top: 0.5rem;
     padding: 0.5rem;
     border-radius: 6px;
-    background-color: #e8f4fd;
-    border: 1px solid #b8daff;
+    background-color: var(--pattern-bg);
+    border: 1px solid var(--pattern-border);
 }
 
 .pattern-suggestions:empty {
@@ -413,7 +528,7 @@ h2 {
 
 .suggestion-header {
     font-weight: 600;
-    color: #004085;
+    color: var(--pattern-header);
     margin-bottom: 0.5rem;
     font-size: 0.875rem;
 }
@@ -433,29 +548,29 @@ h2 {
     align-items: center;
     gap: 0.5rem;
     padding: 0.25rem 0.5rem;
-    background-color: white;
+    background-color: var(--bg-surface);
     border-radius: 4px;
     font-size: 0.8125rem;
 }
 
 .suggestion-item.suggestion-complete {
-    background-color: #d4edda;
-    border: 1px solid #c3e6cb;
+    background-color: var(--validation-success-bg);
+    border: 1px solid var(--validation-success-border);
 }
 
 .suggestion-name {
     flex: 1;
-    color: #333;
+    color: var(--text-primary);
 }
 
 .suggestion-score {
     font-weight: 600;
-    color: #007bff;
+    color: var(--accent-primary);
 }
 
 .suggestion-badge {
-    background-color: #28a745;
-    color: white;
+    background-color: var(--accent-success);
+    color: var(--text-inverse);
     padding: 0.125rem 0.375rem;
     border-radius: 3px;
     font-size: 0.6875rem;
@@ -465,8 +580,8 @@ h2 {
 .suggestion-apply-btn {
     padding: 0.125rem 0.5rem;
     font-size: 0.6875rem;
-    background-color: #17a2b8;
-    color: white;
+    background-color: var(--accent-info);
+    color: var(--text-inverse);
     border: none;
     border-radius: 3px;
     cursor: pointer;
@@ -474,7 +589,7 @@ h2 {
 }
 
 .suggestion-apply-btn:hover {
-    background-color: #138496;
+    background-color: var(--accent-primary-hover);
 }
 
 /* Pattern templates (static list) */
@@ -486,11 +601,11 @@ h2 {
 
 .pattern-header {
     font-weight: 600;
-    color: #495057;
+    color: var(--text-secondary);
     margin-bottom: 0.5rem;
     font-size: 0.875rem;
     padding-bottom: 0.25rem;
-    border-bottom: 1px solid #dee2e6;
+    border-bottom: 1px solid var(--border-light);
 }
 
 .pattern-icon {
@@ -505,29 +620,29 @@ h2 {
 
 .pattern-item {
     padding: 0.5rem;
-    background-color: #f8f9fa;
-    border: 1px solid #dee2e6;
+    background-color: var(--pattern-item-bg);
+    border: 1px solid var(--border-light);
     border-radius: 6px;
     transition: all 0.2s ease;
 }
 
 .pattern-item:hover {
-    background-color: #e9ecef;
-    border-color: #ced4da;
+    background-color: var(--bg-primary);
+    border-color: var(--border-color);
 }
 
 .pattern-name {
     font-weight: 600;
     font-size: 0.8125rem;
-    color: #2c3e50;
+    color: var(--text-header);
     margin-bottom: 0.25rem;
 }
 
 .pattern-structure {
     font-family: 'Courier New', monospace;
     font-size: 0.75rem;
-    color: #6c757d;
-    background-color: #e9ecef;
+    color: var(--text-secondary);
+    background-color: var(--bg-primary);
     padding: 0.25rem 0.5rem;
     border-radius: 3px;
     margin-bottom: 0.25rem;
@@ -535,7 +650,7 @@ h2 {
 
 .pattern-example {
     font-size: 0.75rem;
-    color: #868e96;
+    color: var(--text-muted);
     font-style: italic;
     margin-bottom: 0.375rem;
 }
@@ -543,8 +658,8 @@ h2 {
 .pattern-apply-btn {
     padding: 0.25rem 0.75rem;
     font-size: 0.75rem;
-    background-color: #3498db;
-    color: white;
+    background-color: var(--accent-primary);
+    color: var(--text-inverse);
     border: none;
     border-radius: 4px;
     cursor: pointer;
@@ -552,9 +667,62 @@ h2 {
 }
 
 .pattern-apply-btn:hover {
-    background-color: #2980b9;
+    background-color: var(--accent-primary-hover);
 }
 
 .pattern-apply-btn:active {
-    background-color: #1c5985;
+    background-color: var(--accent-primary-active);
+}
+
+/* ============================================================================
+   Dark Mode Specific Overrides
+   ============================================================================ */
+
+/* Blockly workspace background in dark mode */
+[data-theme="dark"] .blocklyMainBackground {
+    fill: var(--bg-primary) !important;
+}
+
+/* Blockly toolbox category hover in dark mode */
+[data-theme="dark"] .blocklyToolboxCategory:hover {
+    border-color: rgba(255, 255, 255, 0.15) !important;
+    background-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+/* Blockly selected category in dark mode */
+[data-theme="dark"] .blocklyToolboxCategory.blocklyTreeSelected {
+    border: 2px solid rgba(255, 255, 255, 0.2) !important;
+    background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Blockly flyout background in dark mode */
+[data-theme="dark"] .blocklyFlyoutBackground {
+    fill: var(--blockly-flyout-bg) !important;
+}
+
+/* Blockly scrollbar in dark mode */
+[data-theme="dark"] .blocklyScrollbarBackground {
+    fill: var(--bg-surface) !important;
+}
+
+[data-theme="dark"] .blocklyScrollbarHandle {
+    fill: var(--scrollbar-thumb) !important;
+}
+
+/* Blockly text field in dark mode */
+[data-theme="dark"] .blocklyEditableText > text {
+    fill: var(--text-primary) !important;
+}
+
+/* Theme transition for smooth switching */
+body,
+.app-header,
+.workspace,
+.preview-pane,
+.prompt-output,
+.app-footer,
+.validation-result,
+.pattern-suggestions,
+.pattern-item {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
