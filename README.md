@@ -6,7 +6,7 @@
 > **AIプロンプト作成のためのビジュアルブロックベースツール**
 
 [![Stable](https://img.shields.io/badge/Status-Stable-brightgreen)](https://github.com/BonoJovi/Promps/releases)
-[![Version](https://img.shields.io/badge/Version-1.1.0-blue)](https://github.com/BonoJovi/Promps/releases/tag/v1.1.0-free)
+[![Version](https://img.shields.io/badge/Version-1.3.1-blue)](https://github.com/BonoJovi/Promps/releases/tag/v1.3.1-free)
 [![Tests](https://img.shields.io/badge/Tests-282%20passing-brightgreen)](https://github.com/BonoJovi/Promps)
 [![Rust](https://img.shields.io/badge/Rust-1.70+-orange.svg)](https://www.rust-lang.org/)
 [![Tauri](https://img.shields.io/badge/Tauri-v2-blue.svg)](https://tauri.app/)
@@ -36,9 +36,9 @@
 いつもPrompsに関心を寄せていただき、誠にありがとうございます。
 プロジェクト発案者のBonoJovi(Yoshihiro NAKAHARA)です。
 
-**🎉 Ver.1.1.0 (安定版) をリリースいたしました！**
+**🎉 Ver.1.3.1 (安定版) をリリースいたしました！**
 
-v1.1.0では英語文法エンジンを追加し、日英両対応となりました。長らくテックプレビュー版としてお試しいただいていた皆様、ありがとうございました。
+v1.3.1ではダークモードとテンプレート機能を追加しました。
 
 **主な機能**:
 - **ビジュアルブロック編集** - Scratchのようにドラッグ&ドロップでプロンプト作成
@@ -46,6 +46,8 @@ v1.1.0では英語文法エンジンを追加し、日英両対応となりま�
 - **自動修正(AutoFix)** - ワンクリックでブロックを自動挿入
 - **7種類のパターンテンプレート** - 日本語文型に沿ったスマート補完
 - **プロジェクト保存/読込** - .promps形式で作業を保存・再開
+- **ダークモード** - 目に優しいダークテーマ
+- **テンプレート機能** - ブロックグループをマクロとして保存・再利用
 
 **[Announcement] フィードバックをお待ちしています！**
 - 使いやすさはいかがですか？
@@ -61,9 +63,9 @@ v1.1.0では英語文法エンジンを追加し、日英両対応となりま�
 Thank you for your continued interest in Promps.
 I'm BonoJovi (Yoshihiro NAKAHARA), the project initiator.
 
-**🎉 We have released Ver.1.1.0 (Stable)!**
+**🎉 We have released Ver.1.3.1 (Stable)!**
 
-v1.1.0 adds English grammar engine, making Promps bilingual (Japanese/English). Thank you to everyone who tried the tech preview versions and provided feedback.
+v1.3.1 adds dark mode and template feature.
 
 **Key Features**:
 - **Visual block editing** - Create prompts by drag & drop, just like Scratch
@@ -71,6 +73,8 @@ v1.1.0 adds English grammar engine, making Promps bilingual (Japanese/English). 
 - **AutoFix** - One-click automatic block insertion
 - **7 pattern templates** - Smart completion following Japanese sentence patterns
 - **Project save/load** - Save and resume your work in .promps format
+- **Dark mode** - Eye-friendly dark theme
+- **Template feature** - Save and reuse block groups as macros
 
 **[Announcement] We want to hear from you!**
 - How is the usability?
@@ -85,8 +89,8 @@ v1.1.0 adds English grammar engine, making Promps bilingual (Japanese/English). 
 
 ## ✅ Stable Release / 安定版リリース
 
-**This is the first Stable release (v1.1.0)** - production ready.
-**これは初の安定版リリース(v1.1.0)です** - 本番利用可能。
+**This is the Stable release (v1.3.1)** - production ready.
+**これは安定版リリース(v1.3.1)です** - 本番利用可能。
 
 **Available Features: / 利用可能な機能：**
 - ✅ Visual block-based interface / ビジュアルブロックベースインターフェース
@@ -109,7 +113,7 @@ v1.1.0 adds English grammar engine, making Promps bilingual (Japanese/English). 
 ### 1. Download & Install / ダウンロード & インストール
 
 **Download the latest release: / 最新リリースをダウンロード：**
-- [Download v1.1.0](https://github.com/BonoJovi/Promps/releases/tag/v1.1.0-free)
+- [Download v1.3.1](https://github.com/BonoJovi/Promps/releases/tag/v1.3.1-free)
 
 **Available for: / 対応プラットフォーム：**
 - Linux (AppImage, deb, rpm)
@@ -306,8 +310,8 @@ We welcome **all types of contributions** - not just code!
 
 **No programming experience needed! / プログラミング経験不要！**
 
-**✨ v1.1.0 Stable Release with Full Features!**
-**[新着] v1.1.0 安定版リリース！全機能搭載！**
+**✨ v1.3.1 Stable Release with Full Features!**
+**[新着] v1.3.1 安定版リリース！全機能搭載！**
 
 **Platform Status: / プラットフォーム状況：**
 - ✅ **Linux**: Verified and tested by developer / 開発者により検証済み・テスト済み
@@ -349,6 +353,16 @@ For code contributions:
 ---
 
 ## Release History / リリース履歴
+
+### Version 1.3.1 (2026-02-02) 🌙 Dark Mode & Templates
+
+**New Features: / 新機能：**
+- 🌙 Dark mode with Blockly workspace theme / ダークモード（Blocklyワークスペース対応）
+- 📦 Template feature (block grouping/macros) / テンプレート機能（ブロックグループ/マクロ）
+
+**Fixes: / 修正：**
+- 🔧 Fixed theme application on workspace reinitialize / ワークスペース再初期化時のテーマ適用を修正
+- 🖼️ Fixed app icons (converted to RGBA format) / アプリアイコンを修正（RGBA形式に変換）
 
 ### Version 1.1.0 (2026-01-28) 🔧 Minor Refactoring
 
