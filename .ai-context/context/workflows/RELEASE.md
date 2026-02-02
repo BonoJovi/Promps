@@ -1,6 +1,6 @@
 # Release Process
 
-**Last Updated**: 2025-12-06
+**Last Updated**: 2026-02-02
 **Purpose**: Step-by-step release procedure for Promps project
 **Keywords**: release, deploy, deployment, publish, リリース, デプロイ, 公開, version bump, バージョンアップ, tagging, git tag, タグ, GitHub Actions, workflow, ワークフロー, CI/CD, automated build, 自動ビルド, draft release, ドラフトリリース, artifacts, binaries, バイナリ, publish release, rollback, ロールバック, version numbering, バージョン管理
 **Related**: @BRANCHING.md, @TESTING.md, @GITHUB_PROJECTS.md, @CONVENTIONS.md
@@ -96,19 +96,25 @@ gh api -X DELETE repos/BonoJovi/Promps/releases/<RELEASE_ID>
 
 **Create tag:**
 ```bash
-git tag vX.Y.Z
-git push origin vX.Y.Z
+git tag vX.Y.Z-free
+git push origin vX.Y.Z-free
 ```
+
+⚠️ **IMPORTANT: Do NOT manually create a release!**
+- GitHub Actions automatically creates a Draft release when the tag is pushed
+- The workflow builds all platforms and uploads assets
+- The release is automatically published when builds complete
+- Running `gh release create` manually will create a duplicate empty release
 
 **If tag already exists (re-releasing):**
 ```bash
 # Delete old tag locally and remotely
-git tag -d vX.Y.Z
-git push origin :refs/tags/vX.Y.Z
+git tag -d vX.Y.Z-free
+git push origin :refs/tags/vX.Y.Z-free
 
 # Create new tag
-git tag vX.Y.Z
-git push origin vX.Y.Z
+git tag vX.Y.Z-free
+git push origin vX.Y.Z-free
 ```
 
 ---
@@ -195,6 +201,44 @@ gh api repos/BonoJovi/Promps/releases --jq '.[] | select(.draft == true)'
 gh api -X DELETE repos/BonoJovi/Promps/releases/<ID1>
 gh api -X DELETE repos/BonoJovi/Promps/releases/<ID2>
 ```
+
+---
+
+### Issue 4: Duplicate Releases (Latest + Draft)
+
+**Symptom:**
+- Two releases with the same tag: one "Latest" (empty) and one "Draft" (with assets)
+
+**Cause:**
+- Manual execution of `gh release create` after pushing a tag
+- GitHub Actions automatically creates a Draft release on tag push
+- Manual creation duplicates the release
+
+**Flow that causes the issue:**
+```
+1. git tag v1.3.1-free && git push origin v1.3.1-free
+   ↓
+2. GitHub Actions triggers → Creates Draft release → Builds → Uploads assets
+   ↓
+3. Manual: gh release create v1.3.1-free  ← WRONG! Creates duplicate
+```
+
+**Solution:**
+```bash
+# Find and delete the empty release
+gh api repos/BonoJovi/Promps/releases --jq '.[] | select(.tag_name == "v1.3.1-free") | {name, draft, assets: (.assets | length)}'
+
+# Delete the empty one (assets: 0)
+gh api -X DELETE repos/BonoJovi/Promps/releases/<EMPTY_RELEASE_ID>
+
+# Publish the Draft with assets
+gh api -X PATCH repos/BonoJovi/Promps/releases/<DRAFT_RELEASE_ID> -f draft=false
+```
+
+**Prevention:**
+- ⚠️ **NEVER manually run `gh release create` after pushing a tag**
+- GitHub Actions handles everything automatically
+- Just push the tag and wait for the workflow to complete
 
 ---
 
