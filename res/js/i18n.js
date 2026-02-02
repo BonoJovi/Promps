@@ -54,6 +54,14 @@ const TRANSLATIONS = {
         'blockly.category.punctuation': '句読点',
         'blockly.category.other': 'その他',
 
+        // Template (Macro) Feature
+        'toolbox.myTemplates': 'マイテンプレート',
+        'template.saveAs': 'テンプレートとして保存',
+        'template.enterName': 'テンプレート名を入力:',
+        'template.empty': '保存されたテンプレートはありません',
+        'template.delete': '削除',
+        'template.deleteConfirm': 'このテンプレートを削除しますか？',
+
         // Blockly Block Labels (displayed on blocks)
         'blockly.noun.label': '名詞:',
         'blockly.other.label': 'その他:',
@@ -253,6 +261,14 @@ const TRANSLATIONS = {
         'blockly.category.verb': 'Action',
         'blockly.category.punctuation': 'Punctuation',
         'blockly.category.other': 'Other',
+
+        // Template (Macro) Feature
+        'toolbox.myTemplates': 'My Templates',
+        'template.saveAs': 'Save as Template',
+        'template.enterName': 'Enter template name:',
+        'template.empty': 'No templates saved',
+        'template.delete': 'Delete',
+        'template.deleteConfirm': 'Delete this template?',
 
         // Blockly Block Labels (displayed on blocks)
         'blockly.noun.label': 'Noun:',
