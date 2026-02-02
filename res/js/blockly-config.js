@@ -1293,6 +1293,7 @@ function reinitializeBlockly() {
         // Workspace options
         const options = {
             toolbox: toolbox,
+            theme: getCurrentBlocklyTheme(),
             collapse: false,
             comments: false,
             disable: false,
@@ -1309,7 +1310,7 @@ function reinitializeBlockly() {
             grid: {
                 spacing: 20,
                 length: 3,
-                colour: '#ccc',
+                colour: document.documentElement.getAttribute('data-theme') === 'dark' ? '#404060' : '#ccc',
                 snap: true
             },
             zoom: {
