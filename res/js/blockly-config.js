@@ -11,6 +11,139 @@
 // Global workspace variable
 let workspace = null;
 
+// ========================================================================
+// Template Manager - Save and reuse block groups (macros)
+// ========================================================================
+
+/**
+ * Template Manager for saving and loading block templates
+ * Stores templates in localStorage for persistence
+ */
+const templateManager = {
+    STORAGE_KEY: 'promps-templates',
+
+    /**
+     * Get all saved templates
+     * @returns {Array} Array of template objects
+     */
+    getTemplates() {
+        const data = localStorage.getItem(this.STORAGE_KEY);
+        return data ? JSON.parse(data) : [];
+    },
+
+    /**
+     * Save a block chain as a template
+     * @param {string} name - Template name
+     * @param {Blockly.Block} block - Starting block of the chain
+     */
+    saveTemplate(name, block) {
+        const templates = this.getTemplates();
+        const blockJson = Blockly.serialization.blocks.save(block);
+
+        templates.push({
+            id: Date.now().toString(),
+            name: name,
+            blocks: blockJson,
+            createdAt: new Date().toISOString()
+        });
+
+        localStorage.setItem(this.STORAGE_KEY, JSON.stringify(templates));
+        this.refreshToolbox();
+    },
+
+    /**
+     * Delete a template by ID
+     * @param {string} id - Template ID
+     */
+    deleteTemplate(id) {
+        const templates = this.getTemplates().filter(t => t.id !== id);
+        localStorage.setItem(this.STORAGE_KEY, JSON.stringify(templates));
+
+        // Close the flyout first, then refresh toolbox
+        if (workspace) {
+            const toolbox = workspace.getToolbox();
+            if (toolbox) {
+                toolbox.clearSelection();  // Close the flyout
+            }
+        }
+        this.refreshToolbox();
+    },
+
+    /**
+     * Insert a template into the workspace at center of visible area
+     * @param {string} id - Template ID
+     */
+    insertTemplate(id) {
+        const template = this.getTemplates().find(t => t.id === id);
+        if (template && workspace) {
+            try {
+                // Get workspace metrics for positioning
+                const metrics = workspace.getMetrics();
+
+                // Calculate center position in workspace coordinates
+                // viewLeft/viewTop are already in workspace coordinates
+                const centerX = (metrics.viewLeft + metrics.viewWidth / 2) / workspace.scale;
+                const centerY = (metrics.viewTop + metrics.viewHeight / 2) / workspace.scale;
+
+                // Clone the template blocks data and set position
+                const blockData = JSON.parse(JSON.stringify(template.blocks));
+                blockData.x = centerX;
+                blockData.y = centerY;
+
+                Blockly.serialization.blocks.append(blockData, workspace);
+            } catch (e) {
+                console.error('Error inserting template:', e);
+                // Fallback: insert without positioning
+                Blockly.serialization.blocks.append(template.blocks, workspace);
+            }
+
+            // Trigger preview update and validation after inserting template
+            // Use setTimeout to ensure blocks are fully added to workspace
+            setTimeout(() => {
+                if (typeof updatePreview === 'function') {
+                    const code = getWorkspaceCode();
+                    updatePreview(code);
+                }
+            }, 100);
+        }
+    },
+
+    /**
+     * Refresh the toolbox to show updated templates
+     */
+    refreshToolbox() {
+        if (workspace) {
+            // Re-register button callbacks for new templates
+            this.registerButtonCallbacks();
+            // Update the toolbox
+            workspace.updateToolbox(buildToolbox());
+        }
+    },
+
+    /**
+     * Register button callbacks for all templates
+     * Called during workspace initialization and after template changes
+     */
+    registerButtonCallbacks() {
+        if (!workspace) return;
+
+        this.getTemplates().forEach(template => {
+            workspace.registerButtonCallback(`insert_template_${template.id}`, () => {
+                this.insertTemplate(template.id);
+            });
+            workspace.registerButtonCallback(`delete_template_${template.id}`, () => {
+                const confirmMsg = tt('template.deleteConfirm', 'Delete this template?');
+                if (confirm(`${confirmMsg}\n${template.name}`)) {
+                    this.deleteTemplate(template.id);
+                }
+            });
+        });
+    }
+};
+
+// Export to global scope
+window.templateManager = templateManager;
+
 // Create JavaScript generator
 const javascriptGenerator = Blockly.JavaScript || new Blockly.Generator('JavaScript');
 
@@ -812,9 +945,111 @@ function buildToolbox() {
                 "contents": [
                     { "kind": "block", "type": "promps_other" }
                 ]
+            },
+            // My Templates category (dynamic)
+            {
+                "kind": "category",
+                "name": tt('toolbox.myTemplates', 'My Templates'),
+                "colour": "330",
+                "custom": "MY_TEMPLATES"
             }
         ]
     };
+}
+
+/**
+ * Generate dynamic content for My Templates category
+ * @param {Blockly.Workspace} ws - The workspace
+ * @returns {Array} Array of toolbox items
+ */
+function generateTemplateCategory(ws) {
+    const templates = templateManager.getTemplates();
+    const blockList = [];
+
+    if (templates.length === 0) {
+        blockList.push({
+            kind: 'label',
+            text: tt('template.empty', 'No templates saved')
+        });
+    } else {
+        templates.forEach(template => {
+            // Add insert button for each template
+            blockList.push({
+                kind: 'button',
+                text: template.name,
+                callbackKey: `insert_template_${template.id}`
+            });
+            // Add delete button
+            blockList.push({
+                kind: 'button',
+                text: `${tt('template.delete', 'Delete')}: ${template.name}`,
+                callbackKey: `delete_template_${template.id}`
+            });
+        });
+    }
+
+    return blockList;
+}
+
+/**
+ * Register custom context menu for saving blocks as templates
+ */
+function registerTemplateContextMenu() {
+    // Ensure Blockly is loaded
+    if (typeof Blockly === 'undefined' || !Blockly.ContextMenuRegistry) {
+        console.error('Blockly not loaded, cannot register context menu');
+        return;
+    }
+
+    // Check if already registered to avoid duplicate registration
+    try {
+        if (Blockly.ContextMenuRegistry.registry.getItem('save_as_template')) {
+            console.log('Template context menu already registered');
+            return;
+        }
+    } catch (e) {
+        // Item doesn't exist, continue with registration
+    }
+
+    try {
+        Blockly.ContextMenuRegistry.registry.register({
+            id: 'save_as_template',
+            weight: 10,  // Low weight = appears near top of menu
+            displayText: function() {
+                return tt('template.saveAs', 'Save as Template');
+            },
+            preconditionFn: function(scope) {
+                // Only show for blocks in the main workspace (not flyout)
+                if (scope.block && !scope.block.isInFlyout) {
+                    return 'enabled';
+                }
+                return 'hidden';
+            },
+            callback: function(scope) {
+                const namePrompt = tt('template.enterName', 'Enter template name:');
+                const name = prompt(namePrompt);
+                if (name && name.trim()) {
+                    templateManager.saveTemplate(name.trim(), scope.block);
+                }
+            },
+            scopeType: Blockly.ContextMenuRegistry.ScopeType.BLOCK
+        });
+        console.log('Template context menu registered successfully');
+    } catch (e) {
+        console.error('Failed to register template context menu:', e);
+    }
+}
+
+/**
+ * Register the dynamic template category callback
+ */
+function registerTemplateCategory() {
+    if (!workspace) return;
+
+    workspace.registerToolboxCategoryCallback('MY_TEMPLATES', generateTemplateCategory);
+    templateManager.registerButtonCallbacks();
+
+    console.log('Template category registered');
 }
 
 /**
@@ -911,6 +1146,12 @@ function initBlockly() {
 
     // Inject Blockly workspace
     workspace = Blockly.inject(blocklyDiv, options);
+
+    // Register template context menu (global, only once)
+    registerTemplateContextMenu();
+
+    // Register dynamic template category (must be after workspace creation)
+    registerTemplateCategory();
 
     // Add change listener for real-time preview
     workspace.addChangeListener(onBlocklyChange);
@@ -1052,6 +1293,7 @@ function reinitializeBlockly() {
         // Workspace options
         const options = {
             toolbox: toolbox,
+            theme: getCurrentBlocklyTheme(),
             collapse: false,
             comments: false,
             disable: false,
@@ -1068,7 +1310,7 @@ function reinitializeBlockly() {
             grid: {
                 spacing: 20,
                 length: 3,
-                colour: '#ccc',
+                colour: document.documentElement.getAttribute('data-theme') === 'dark' ? '#404060' : '#ccc',
                 snap: true
             },
             zoom: {
@@ -1083,6 +1325,9 @@ function reinitializeBlockly() {
 
         // Inject new workspace (empty - cleared on language change)
         workspace = Blockly.inject(blocklyDiv, options);
+
+        // Re-register dynamic template category
+        registerTemplateCategory();
 
         // Re-add change listener
         workspace.addChangeListener(onBlocklyChange);
