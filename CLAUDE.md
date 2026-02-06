@@ -18,7 +18,8 @@ This file automatically loads **minimal** project context at the start of each C
 ### Project-Specific Context
 
 **For Coding Tasks**:
-- Conventions: `@.ai-context/context/coding/CONVENTIONS.md`
+- Conventions: `@.ai-context/context/coding/CONVENTIONS_OVERVIEW.md`
+- Conventions (detailed): `@.ai-context/context/coding/archive/CONVENTIONS_DETAILED.md`
 - Testing Strategy: `@.ai-context/context/coding/TESTING.md`
 - API Stability: `@.ai-context/context/coding/API_STABILITY.md`
 
