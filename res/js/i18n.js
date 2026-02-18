@@ -21,6 +21,9 @@ const TRANSLATIONS = {
         'toolbar.save.title': 'プロジェクトを保存 (Ctrl+S)',
         'toolbar.saveAs': '名前を付けて保存',
         'toolbar.saveAs.title': '名前を付けて保存 (Ctrl+Shift+S)',
+        'toolbar.theme': 'テーマ',
+        'toolbar.theme.title.toDark': 'ダークモードへ切替',
+        'toolbar.theme.title.toLight': 'ライトモードへ切替',
         'toolbar.lang': 'JA',
         'toolbar.lang.title': 'Switch to English',
 
@@ -29,8 +32,6 @@ const TRANSLATIONS = {
         'workspace.loading': 'Blocklyワークスペースを読み込み中...',
         'preview.title': '生成されたプロンプト',
         'preview.placeholder': '生成されたプロンプトがここに表示されます。',
-        'preview.testConnection': '接続テスト',
-
         // Validation
         'validation.passed': '文法チェック OK',
         'validation.error': 'エラー',
@@ -229,6 +230,9 @@ const TRANSLATIONS = {
         'toolbar.save.title': 'Save Project (Ctrl+S)',
         'toolbar.saveAs': 'Save As',
         'toolbar.saveAs.title': 'Save As (Ctrl+Shift+S)',
+        'toolbar.theme': 'Theme',
+        'toolbar.theme.title.toDark': 'Switch to Dark Mode',
+        'toolbar.theme.title.toLight': 'Switch to Light Mode',
         'toolbar.lang': 'EN',
         'toolbar.lang.title': '日本語に切り替え',
 
@@ -237,8 +241,6 @@ const TRANSLATIONS = {
         'workspace.loading': 'Loading Blockly workspace...',
         'preview.title': 'Generated Prompt',
         'preview.placeholder': 'Generated prompt will appear here.',
-        'preview.testConnection': 'Test Connection',
-
         // Validation
         'validation.passed': 'Grammar check passed',
         'validation.error': 'error',

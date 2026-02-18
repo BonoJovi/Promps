@@ -47,6 +47,25 @@
     --pattern-border: #b8daff;
     --pattern-header: #004085;
     --pattern-item-bg: #f8f9fa;
+    /* Button colors */
+    --btn-secondary-bg: #6c757d;
+    --btn-secondary-hover-bg: #5a6268;
+    --btn-disabled-bg: #95a5a6;
+    /* Input */
+    --border-input: #ced4da;
+    /* Additional accent colors */
+    --accent-error-hover: #c82333;
+    /* Gradients */
+    --gradient-pro: linear-gradient(135deg, #f39c12, #e74c3c);
+    --gradient-trial: linear-gradient(135deg, #3498db, #2ecc71);
+    --gradient-modal-header: linear-gradient(135deg, #2c3e50, #34495e);
+    --gradient-modal-export: linear-gradient(135deg, #2980b9, #3498db);
+    /* Notification */
+    --notification-info-bg: #d1ecf1;
+    --notification-info-text: #0c5460;
+    --notification-warning-border: #ffc107;
+    --notification-error-border: #dc3545;
+    --notification-info-border: #17a2b8;
     /* Blockly */
     --blockly-toolbox-bg: #f8f9fa;
     --blockly-flyout-bg: #f5f5f5;
@@ -94,6 +113,25 @@
     --pattern-border: #2a4060;
     --pattern-header: #7db4e0;
     --pattern-item-bg: #16213e;
+    /* Button colors */
+    --btn-secondary-bg: #5a6268;
+    --btn-secondary-hover-bg: #6c757d;
+    --btn-disabled-bg: #6b7b7c;
+    /* Input */
+    --border-input: #505070;
+    /* Additional accent colors */
+    --accent-error-hover: #d94050;
+    /* Gradients */
+    --gradient-pro: linear-gradient(135deg, #f39c12, #e74c3c);
+    --gradient-trial: linear-gradient(135deg, #5dade2, #58d68d);
+    --gradient-modal-header: linear-gradient(135deg, #1a2a3e, #2a3a4e);
+    --gradient-modal-export: linear-gradient(135deg, #1a6090, #2880b0);
+    /* Notification */
+    --notification-info-bg: #1a3a4a;
+    --notification-info-text: #a0d8e8;
+    --notification-warning-border: #6b5c30;
+    --notification-error-border: #6b2c2c;
+    --notification-info-border: #2a5a6a;
     /* Blockly */
     --blockly-toolbox-bg: #16213e;
     --blockly-flyout-bg: #1a1a2e;
