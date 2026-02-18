@@ -17,6 +17,9 @@ on:
       - 'README.md'
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   check-version-consistency:
     runs-on: ubuntu-latest

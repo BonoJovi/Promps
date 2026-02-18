@@ -140,7 +140,7 @@ async function updatePreview(dslCode) {
             await window.patternUI.analyzeCurrent(dslCode);
         }
     } catch (error) {
-        previewDiv.innerHTML = `<p style="color: red;">Error: ${error}</p>`;
+        previewDiv.innerHTML = `<p style="color: var(--accent-error);">Error: ${error}</p>`;
     }
 }
 

@@ -9,6 +9,9 @@ on:
       - '.github/**'
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   notify-promps-pro:
     runs-on: ubuntu-latest

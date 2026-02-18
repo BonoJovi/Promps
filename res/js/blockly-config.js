@@ -1053,23 +1053,30 @@ function registerTemplateCategory() {
 }
 
 /**
+ * Get CSS custom property value from the document root
+ */
+function getCSSVar(name) {
+    return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+}
+
+/**
  * Create Blockly dark theme
  */
 function createDarkTheme() {
     return Blockly.Theme.defineTheme('dark', {
         'base': Blockly.Themes.Classic,
         'componentStyles': {
-            'workspaceBackgroundColour': '#1a1a2e',
-            'toolboxBackgroundColour': '#16213e',
-            'toolboxForegroundColour': '#e0e0e0',
-            'flyoutBackgroundColour': '#0f0f1a',
-            'flyoutForegroundColour': '#e0e0e0',
+            'workspaceBackgroundColour': getCSSVar('--bg-primary'),
+            'toolboxBackgroundColour': getCSSVar('--blockly-toolbox-bg'),
+            'toolboxForegroundColour': getCSSVar('--text-primary'),
+            'flyoutBackgroundColour': getCSSVar('--blockly-flyout-bg'),
+            'flyoutForegroundColour': getCSSVar('--text-primary'),
             'flyoutOpacity': 1,
-            'scrollbarColour': '#404060',
+            'scrollbarColour': getCSSVar('--scrollbar-thumb'),
             'scrollbarOpacity': 0.8,
-            'insertionMarkerColour': '#fff',
+            'insertionMarkerColour': getCSSVar('--blockly-insertion-marker-color'),
             'insertionMarkerOpacity': 0.3,
-            'cursorColour': '#d0d0d0'
+            'cursorColour': getCSSVar('--blockly-cursor-color')
         },
         'fontStyle': {
             'family': '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
@@ -1131,7 +1138,7 @@ function initBlockly() {
         grid: {
             spacing: 20,
             length: 3,
-            colour: document.documentElement.getAttribute('data-theme') === 'dark' ? '#404060' : '#ccc',
+            colour: getCSSVar('--blockly-grid-color'),
             snap: true
         },
         zoom: {
@@ -1310,7 +1317,7 @@ function reinitializeBlockly() {
             grid: {
                 spacing: 20,
                 length: 3,
-                colour: document.documentElement.getAttribute('data-theme') === 'dark' ? '#404060' : '#ccc',
+                colour: getCSSVar('--blockly-grid-color'),
                 snap: true
             },
             zoom: {
