@@ -47,9 +47,46 @@
     --pattern-border: #b8daff;
     --pattern-header: #004085;
     --pattern-item-bg: #f8f9fa;
+    /* Button colors */
+    --btn-secondary-bg: #6c757d;
+    --btn-secondary-hover-bg: #5a6268;
+    --btn-disabled-bg: #95a5a6;
+    /* Input */
+    --border-input: #ced4da;
+    /* Additional accent colors */
+    --accent-error-hover: #c82333;
+    /* Gradients */
+    --gradient-pro: linear-gradient(135deg, #f39c12, #e74c3c);
+    --gradient-trial: linear-gradient(135deg, #3498db, #2ecc71);
+    --gradient-modal-header: linear-gradient(135deg, #2c3e50, #34495e);
+    --gradient-modal-export: linear-gradient(135deg, #2980b9, #3498db);
+    /* Notification */
+    --notification-info-bg: #d1ecf1;
+    --notification-info-text: #0c5460;
+    --notification-warning-border: #ffc107;
+    --notification-error-border: #dc3545;
+    --notification-info-border: #17a2b8;
     /* Blockly */
     --blockly-toolbox-bg: #f8f9fa;
     --blockly-flyout-bg: #f5f5f5;
+    --blockly-category-hover-border: rgba(0, 0, 0, 0.15);
+    --blockly-category-hover-bg: rgba(255, 255, 255, 0.1);
+    --blockly-category-selected-border: rgba(0, 0, 0, 0.2);
+    --blockly-category-selected-bg: rgba(255, 255, 255, 0.2);
+    --blockly-grid-color: #ccc;
+    --blockly-insertion-marker-color: #fff;
+    --blockly-cursor-color: #d0d0d0;
+    /* Toolbar */
+    --toolbar-separator-color: rgba(255, 255, 255, 0.3);
+    --toolbar-btn-lang-bg: rgba(52, 152, 219, 0.3);
+    --toolbar-btn-lang-border: rgba(52, 152, 219, 0.5);
+    --toolbar-btn-lang-hover-bg: rgba(52, 152, 219, 0.5);
+    --toolbar-btn-lang-hover-border: rgba(52, 152, 219, 0.7);
+    --toolbar-btn-bg: rgba(255, 255, 255, 0.1);
+    --toolbar-btn-border: rgba(255, 255, 255, 0.2);
+    --toolbar-btn-hover-bg: rgba(255, 255, 255, 0.2);
+    --toolbar-btn-hover-border: rgba(255, 255, 255, 0.4);
+    --toolbar-btn-active-bg: rgba(255, 255, 255, 0.3);
 }
 
 [data-theme="dark"] {
@@ -94,9 +131,41 @@
     --pattern-border: #2a4060;
     --pattern-header: #7db4e0;
     --pattern-item-bg: #16213e;
+    /* Button colors */
+    --btn-secondary-bg: #5a6268;
+    --btn-secondary-hover-bg: #6c757d;
+    --btn-disabled-bg: #6b7b7c;
+    /* Input */
+    --border-input: #505070;
+    /* Additional accent colors */
+    --accent-error-hover: #d94050;
+    /* Gradients */
+    --gradient-pro: linear-gradient(135deg, #f39c12, #e74c3c);
+    --gradient-trial: linear-gradient(135deg, #5dade2, #58d68d);
+    --gradient-modal-header: linear-gradient(135deg, #1a2a3e, #2a3a4e);
+    --gradient-modal-export: linear-gradient(135deg, #1a6090, #2880b0);
+    /* Notification */
+    --notification-info-bg: #1a3a4a;
+    --notification-info-text: #a0d8e8;
+    --notification-warning-border: #6b5c30;
+    --notification-error-border: #6b2c2c;
+    --notification-info-border: #2a5a6a;
     /* Blockly */
-    --blockly-toolbox-bg: #16213e;
-    --blockly-flyout-bg: #1a1a2e;
+    --blockly-toolbox-bg: #1a1a2e;
+    --blockly-flyout-bg: #0f0f1a;
+    --blockly-category-bg: rgba(255, 255, 255, 0.03);
+    --blockly-category-border: rgba(255, 255, 255, 0.1);
+    --blockly-category-hover-border: rgba(255, 255, 255, 0.25);
+    --blockly-category-hover-bg: rgba(255, 255, 255, 0.08);
+    --blockly-category-selected-border: rgba(255, 255, 255, 0.3);
+    --blockly-category-selected-bg: rgba(255, 255, 255, 0.12);
+    --blockly-grid-color: #404060;
+    --blockly-cursor-color: #d0d0d0;
+    /* Toolbar */
+    --toolbar-btn-lang-bg: rgba(93, 173, 226, 0.3);
+    --toolbar-btn-lang-border: rgba(93, 173, 226, 0.5);
+    --toolbar-btn-lang-hover-bg: rgba(93, 173, 226, 0.5);
+    --toolbar-btn-lang-hover-border: rgba(93, 173, 226, 0.7);
 }
 
 * {
@@ -158,18 +227,18 @@ body {
 .toolbar-separator {
     width: 1px;
     height: 32px;
-    background-color: rgba(255, 255, 255, 0.3);
+    background-color: var(--toolbar-separator-color);
     margin: 0 0.25rem;
 }
 
 .toolbar-btn-lang {
-    background-color: rgba(52, 152, 219, 0.3);
-    border-color: rgba(52, 152, 219, 0.5);
+    background-color: var(--toolbar-btn-lang-bg);
+    border-color: var(--toolbar-btn-lang-border);
 }
 
 .toolbar-btn-lang:hover {
-    background-color: rgba(52, 152, 219, 0.5);
-    border-color: rgba(52, 152, 219, 0.7);
+    background-color: var(--toolbar-btn-lang-hover-bg);
+    border-color: var(--toolbar-btn-lang-hover-border);
 }
 
 .toolbar-btn {
@@ -177,8 +246,8 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    background-color: var(--toolbar-btn-bg);
+    border: 1px solid var(--toolbar-btn-border);
     border-radius: 6px;
     color: white;
     padding: 0.5rem 0.75rem;
@@ -188,12 +257,12 @@ body {
 }
 
 .toolbar-btn:hover {
-    background-color: rgba(255, 255, 255, 0.2);
-    border-color: rgba(255, 255, 255, 0.4);
+    background-color: var(--toolbar-btn-hover-bg);
+    border-color: var(--toolbar-btn-hover-border);
 }
 
 .toolbar-btn:active {
-    background-color: rgba(255, 255, 255, 0.3);
+    background-color: var(--toolbar-btn-active-bg);
     transform: translateY(1px);
 }
 
@@ -353,16 +422,16 @@ h2 {
 
 /* Category hover effect */
 .blocklyToolboxCategory:hover {
-    border-color: rgba(0, 0, 0, 0.15) !important;
-    background-color: rgba(255, 255, 255, 0.1) !important;
+    border-color: var(--blockly-category-hover-border) !important;
+    background-color: var(--blockly-category-hover-bg) !important;
     transform: translateX(2px);
 }
 
 /* Selected category */
 .blocklyToolboxCategory.blocklyTreeSelected {
-    border: 2px solid rgba(0, 0, 0, 0.2) !important;
-    background-color: rgba(255, 255, 255, 0.2) !important;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 2px solid var(--blockly-category-selected-border) !important;
+    background-color: var(--blockly-category-selected-bg) !important;
+    box-shadow: 0 2px 4px var(--shadow-color);
 }
 
 /* Category label */
@@ -683,11 +752,6 @@ h2 {
     fill: var(--bg-primary) !important;
 }
 
-/* Blockly toolbox in dark mode - darker background */
-[data-theme="dark"] .blocklyToolboxDiv {
-    background-color: #1a1a2e !important;
-}
-
 /* Blockly category row in dark mode - preserve category color indicator */
 [data-theme="dark"] .blocklyTreeRow {
     background-color: transparent !important;
@@ -695,30 +759,18 @@ h2 {
 
 /* Blockly toolbox category in dark mode */
 [data-theme="dark"] .blocklyToolboxCategory {
-    background-color: rgba(255, 255, 255, 0.03) !important;
-    border-color: rgba(255, 255, 255, 0.1) !important;
-}
-
-/* Blockly toolbox category hover in dark mode */
-[data-theme="dark"] .blocklyToolboxCategory:hover {
-    border-color: rgba(255, 255, 255, 0.25) !important;
-    background-color: rgba(255, 255, 255, 0.08) !important;
-}
-
-/* Blockly selected category in dark mode */
-[data-theme="dark"] .blocklyToolboxCategory.blocklyTreeSelected {
-    border: 2px solid rgba(255, 255, 255, 0.3) !important;
-    background-color: rgba(255, 255, 255, 0.12) !important;
+    background-color: var(--blockly-category-bg) !important;
+    border-color: var(--blockly-category-border) !important;
 }
 
 /* Blockly category label text in dark mode */
 [data-theme="dark"] .blocklyTreeLabel {
-    color: #e0e0e0 !important;
+    color: var(--text-primary) !important;
 }
 
 /* Blockly flyout background in dark mode */
 [data-theme="dark"] .blocklyFlyoutBackground {
-    fill: #0f0f1a !important;
+    fill: var(--blockly-flyout-bg) !important;
 }
 
 /* Blockly scrollbar in dark mode */

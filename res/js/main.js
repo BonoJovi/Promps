@@ -63,20 +63,12 @@ function updateThemeButton() {
         // Show current theme icon: moon for dark mode, sun for light mode
         icon.textContent = currentTheme === 'dark' ? '🌙' : '☀️';
     }
-}
 
-/**
- * Test Tauri connection
- */
-async function testConnection() {
-    try {
-        const result = await invoke('greet', { name: 'Tauri' });
-        console.log('Connection test result:', result);
-        alert(result);
-    } catch (error) {
-        console.error('Failed to invoke command:', error);
-        alert('Error: ' + error);
-    }
+    // Update tooltip to show target mode
+    const titleKey = currentTheme === 'dark'
+        ? 'toolbar.theme.title.toLight'
+        : 'toolbar.theme.title.toDark';
+    btn.title = typeof t === 'function' ? t(titleKey) : btn.title;
 }
 
 /**
@@ -148,7 +140,7 @@ async function updatePreview(dslCode) {
             await window.patternUI.analyzeCurrent(dslCode);
         }
     } catch (error) {
-        previewDiv.innerHTML = `<p style="color: red;">Error: ${error}</p>`;
+        previewDiv.innerHTML = `<p style="color: var(--accent-error);">Error: ${error}</p>`;
     }
 }
 
@@ -278,6 +270,9 @@ function initLocaleChangeListener() {
         if (window.patternUI && typeof window.patternUI.loadPatterns === 'function') {
             window.patternUI.loadPatterns();
         }
+
+        // Update theme button tooltip with new language
+        updateThemeButton();
     });
 
     console.log('Locale change listener initialized');
@@ -318,12 +313,6 @@ async function init() {
         console.error('Tauri API not available');
         console.log('Available globals:', Object.keys(window).filter(k => k.includes('TAURI')));
         // Continue anyway to initialize Blockly
-    }
-
-    // Test button event listener
-    const testButton = document.getElementById('testButton');
-    if (testButton) {
-        testButton.addEventListener('click', testConnection);
     }
 
     // Initialize Blockly.js workspace
