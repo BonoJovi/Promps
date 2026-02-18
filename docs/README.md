@@ -1,7 +1,7 @@
 # Promps Documentation
 
-**Version**: v0.0.3-2 (Phase 3-First Half)
-**Last Updated**: 2026-01-19 (JST)
+**Version**: v1.3.3 (Stable Release)
+**Last Updated**: 2026-02-18
 
 ---
 
@@ -47,15 +47,18 @@ docs/
 ## Quick Links / クイックリンク
 
 ### English
+- [User Guide](./user/en/USER_GUIDE.md) - How to use Promps
 - [Core Features](./developer/en/guides/CORE_FEATURES.md) - Feature documentation
 - [API Reference](./developer/en/api/API_REFERENCE.md) - Complete API reference
 - [Architecture](./design/ARCHITECTURE_en.md) - System architecture
+- [Test Overview](./testing/en/TEST_OVERVIEW.md) - Testing strategy (282 tests)
 
 ### 日本語
+- [ユーザーガイド](./user/ja/USER_GUIDE.md) - 使い方ガイド
 - [コア機能](./developer/ja/guides/CORE_FEATURES.md) - 機能ドキュメント
 - [API リファレンス](./developer/ja/api/API_REFERENCE.md) - 完全な API 仕様書
 - [アーキテクチャ](./design/ARCHITECTURE.md) - システムアーキテクチャ
-- [ユーザーガイド](./user/ja/USER_GUIDE.md) - 使い方ガイド
+- [テスト概要](./testing/ja/TEST_OVERVIEW.md) - テスト戦略（282件）
 
 ### Contributor / コントリビューター向け
 - [API Stability](./developer/ja/contributor/API_STABILITY.md) - API 安定性ポリシー
