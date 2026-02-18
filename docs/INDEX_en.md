@@ -1,13 +1,13 @@
 # Promps Documentation
 
-**Version**: v0.0.3-2 (Phase 3-First Half)
-**Last Updated**: 2026-01-19 (JST)
+**Version**: v1.3.3 (Stable Release)
+**Last Updated**: 2026-02-18
 
 ---
 
 ## Welcome to Promps Documentation
 
-This directory contains technical documentation for **Promps Phase 0**, the foundational DSL parsing and prompt generation engine.
+This directory contains technical documentation for **Promps**, a visual prompt language generator. All phases (Phase 0-6) are complete, with features including DSL parsing, Blockly.js visual editor, project persistence, grammar validation, pattern templates, and i18n support (Japanese/English).
 
 ---
 
@@ -19,6 +19,17 @@ This directory contains technical documentation for **Promps Phase 0**, the foun
 - Quick overview of Promps
 - Installation instructions
 - Basic usage examples
+
+---
+
+### For Users
+
+- **[User Guide (English)](./user/en/USER_GUIDE.md)** - How to use Promps
+  - Basic block operations
+  - Grammar validation & AutoFix
+  - Pattern templates
+  - Project save/load
+  - Keyboard shortcuts
 
 ---
 
@@ -50,6 +61,10 @@ This directory contains technical documentation for **Promps Phase 0**, the foun
   - Design decisions
   - Evolution path
   - Deployment architecture
+
+**Testing**:
+- **[Test Overview](./testing/en/TEST_OVERVIEW.md)** - Test strategy and execution (282 tests)
+- **[Frontend Test Index](./testing/en/FRONTEND_TEST_INDEX.md)** - Frontend test case details (190 tests)
 
 ---
 
@@ -187,31 +202,22 @@ Documentation is updated:
 
 ---
 
-## Next Steps
+## Completed Phases
 
-### Phase 1 Documentation (Planned)
+All planned phases have been implemented:
 
-**New Documents**:
-- BLOCKLY_INTEGRATION.md (Blockly.js integration guide)
-- GUI_ARCHITECTURE.md (Frontend architecture)
-- BLOCK_TYPES.md (Custom block definitions)
-
-**Updated Documents**:
-- API_REFERENCE.md (new Tauri commands)
-- ARCHITECTURE.md (GUI data flow)
-
----
-
-### Phase N Documentation (Planned)
-
-**New Documents**:
-- LOGIC_CHECK.md (AST-based validation)
-- PATTERN_REFERENCE.md (Grammatical patterns)
-- ERROR_HANDLING.md (Error types and handling)
-
-**Updated Documents**:
-- API_REFERENCE.md (error types, new signatures)
-- CORE_FEATURES.md (validation features)
+| Phase | Feature | Status |
+|-------|---------|--------|
+| Phase 0 | Core DSL parsing | Complete |
+| Phase 1 | Tauri + Blockly.js GUI | Complete |
+| Phase 2 | Particle blocks | Complete |
+| Phase 3 | Verb blocks | Complete |
+| Phase 4 | Project persistence | Complete |
+| Phase 5 | Grammar validation | Complete |
+| Phase 6 | Pattern templates & punctuation | Complete |
+| v1.0.0 | Stable release | Released |
+| v1.1.0 | English grammar engine & i18n | Released |
+| v1.3.3 | CSS variable migration & security | Released |
 
 ---
 
@@ -303,6 +309,5 @@ For questions or suggestions, please open an issue on GitHub or contact us via e
 
 ---
 
-**Document Version**: 1.1
-**Last Updated**: 2026-01-19 (JST)
-**Next Review**: Before Phase 4 release
+**Document Version**: 2.0
+**Last Updated**: 2026-02-18

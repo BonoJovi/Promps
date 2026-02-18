@@ -1,80 +1,81 @@
-# AI Context: KakeiBon Project Structure
+# AI Context: Promps Project Structure
 
 **Purpose**: This document helps AI assistants quickly understand the project structure without reading every file.
-**Last Updated**: 2024-10-26
+**Last Updated**: 2026-02-18
 **Keywords**: project structure, プロジェクト構造, architecture, アーキテクチャ, directory structure, ディレクトリ構造, file organization, ファイル構成, modules, モジュール, components, コンポーネント, src, res, folder structure, フォルダ構造, codebase layout, コードベース構成
-**Related**: @TAURI.md, @CONVENTIONS.md, @API_STABILITY.md
+**Related**: @TAURI.md, @../coding/CONVENTIONS_OVERVIEW.md, @../coding/API_STABILITY.md
 
 ---
 
 ## Project Overview
 
-**Name**: KakeiBon  
-**Type**: Desktop application (Tauri + Rust + HTML/JS)  
-**Purpose**: Personal finance management (家計簿 - Kakeibo)
+**Name**: Promps
+**Type**: Desktop application (Tauri v2 + Rust + HTML/JS)
+**Purpose**: Visual prompt language generator using Blockly.js — a DSL-based tool for constructing structured prompts with Japanese/English grammar support
 
 ---
 
 ## Tech Stack
 
-- **Backend**: Rust (Tauri framework)
-- **Frontend**: Vanilla HTML/CSS/JavaScript (no framework)
-- **Database**: SQLite (via sqlx)
-- **Security**: Argon2 password hashing, AES-256-GCM encryption
+- **Backend**: Rust (Tauri v2 framework)
+- **Frontend**: Vanilla HTML/CSS/JavaScript + Blockly.js (no framework)
+- **Visual Editor**: Google Blockly.js (block-based programming)
+- **i18n**: Built-in Japanese/English support (frontend-side translations)
+- **Persistence**: JSON-based project files (`.promps`)
 
 ---
 
 ## Directory Structure
 
 ```
-KakeiBonByRust/
-├── src/                      # Rust backend source
-│   ├── main.rs               # Entry point
-│   ├── lib.rs                # Tauri commands export
-│   ├── db.rs                 # Database operations
-│   ├── validation.rs         # Input validation
-│   ├── security.rs           # Password hashing
-│   ├── crypto.rs             # Encryption/decryption
-│   ├── settings.rs           # Application settings
-│   ├── consts.rs             # Constants (ROLE_ADMIN=0, ROLE_USER=1)
-│   ├── test_helpers.rs       # Common test utilities (test only)
-│   ├── validation_tests.rs   # Reusable validation test suites (test only)
-│   └── services/             # Business logic modules
-│       ├── auth.rs           # Authentication
-│       ├── user_management.rs # User CRUD
-│       ├── category.rs       # Category management
-│       ├── encryption.rs     # Encryption service
-│       └── i18n.rs           # Internationalization
+Promps/
+├── src/                           # Rust backend source
+│   ├── main.rs                    # Entry point, Tauri builder & command registration
+│   ├── lib.rs                     # Phase 0 core: PromptPart, parse_input(), generate_prompt()
+│   ├── commands.rs                # Tauri commands (bridge frontend ↔ backend)
+│   └── modules/                   # Extended modules
+│       ├── mod.rs                 # Module declarations
+│       └── validation.rs          # Phase 5-6: Grammar validation engine
 │
-├── res/                      # Frontend resources
-│   ├── index.html            # Login/Admin setup screen
-│   ├── user-management.html  # User management screen
-│   ├── js/                   # JavaScript modules
-│   │   ├── menu.js           # Admin setup logic
-│   │   ├── user-management.js # User CRUD logic
-│   │   ├── i18n.js           # i18n client
-│   │   ├── indicators.js     # Caps Lock indicator
-│   │   └── consts.js         # JS constants
-│   ├── css/                  # Stylesheets
-│   └── locales/              # Translation files (ja, en)
+├── res/                           # Frontend resources
+│   ├── index.html                 # Single-page application entry
+│   ├── css/
+│   │   └── common.css             # Styles with CSS custom properties (dark/light theme)
+│   └── js/                        # JavaScript modules
+│       ├── main.js                # App initialization, theme, i18n, Tauri invocation
+│       ├── blockly-config.js      # Blockly workspace, custom blocks, template manager
+│       ├── project-manager.js     # Phase 4: Save/load/new project (.promps files)
+│       ├── validation-ui.js       # Phase 5-6: Validation result display & auto-fix
+│       └── i18n.js                # Internationalization (ja/en translations)
 │
-├── res/tests/                # Test suites
-│   ├── validation-helpers.js          # Common validation logic
-│   ├── password-validation-tests.js   # Password test suite
-│   ├── username-validation-tests.js   # Username test suite
-│   ├── admin-setup.test.js            # Admin setup tests (29 tests)
-│   ├── user-addition.test.js          # User addition tests (49 tests)
-│   ├── login.test.js                  # Login tests (58 tests)
-│   └── [docs]                         # See TEST_INDEX.md
+├── res/tests/                     # Frontend tests (Jest + JSDOM)
+│   ├── blockly-config.test.js     # Block definition & workspace tests
+│   ├── main.test.js               # Main logic tests
+│   ├── project-manager.test.js    # Project persistence tests
+│   ├── validation-ui.test.js      # Validation UI tests
+│   └── i18n.test.js               # i18n switching tests
 │
-├── .ai-context/              # AI assistant context (THIS DIRECTORY)
-│   ├── PROJECT_STRUCTURE.md  # This file
-│   ├── KEY_FILES.md          # Important files quick reference
-│   └── CONVENTIONS.md        # Coding conventions
+├── .ai-context/                   # AI assistant context (THIS DIRECTORY)
+│   ├── ESSENTIAL.md               # Session startup (always loaded)
+│   ├── context/                   # On-demand context files
+│   │   ├── architecture/          # PROJECT_STRUCTURE.md, TAURI.md
+│   │   ├── coding/                # CONVENTIONS, TESTING, API_STABILITY
+│   │   └── workflows/             # BRANCHING, RELEASE, I18N
+│   ├── shared/                    # Git submodule (ai-context-shared)
+│   └── archive/                   # Completed TODO records
 │
-├── Cargo.toml                # Rust dependencies
-├── tauri.conf.json           # Tauri configuration
-└── package.json              # (if exists) Node.js dependencies
+├── docs/                          # User & developer documentation (ja/en)
+│   ├── design/                    # Architecture docs
+│   ├── developer/                 # API reference, contributor guides
+│   ├── user/                      # User guide
+│   └── testing/                   # Test documentation
+│
+├── icons/                         # Application icons (Tauri)
+├── src-tauri/                     # Tauri v2 configuration (generated)
+├── Cargo.toml                     # Rust dependencies & version
+├── tauri.conf.json                # Tauri window & app configuration
+├── package.json                   # Node.js dependencies (Blockly, Jest)
+└── TODO.md                        # Phase tracking & roadmap
 ```
 
 ---
@@ -83,162 +84,135 @@ KakeiBonByRust/
 
 ### Backend (Rust)
 
-| Module | File | Purpose |
-|--------|------|---------|
-| Main | `src/main.rs` | Application entry point |
-| Library | `src/lib.rs` | Export all Tauri commands |
-| Database | `src/db.rs` | SQLite connection, migrations, queries |
-| Validation | `src/validation.rs` | Input validation (password length, etc.) |
-| Security | `src/security.rs` | Argon2 password hashing |
-| Crypto | `src/crypto.rs` | AES-256-GCM encryption/decryption |
-| Auth | `src/services/auth.rs` | Login, authentication |
-| User Mgmt | `src/services/user_management.rs` | User CRUD operations |
-| Encryption | `src/services/encryption.rs` | Encryption service layer |
-| i18n | `src/services/i18n.rs` | Backend i18n support |
-| **Test Helpers** | `src/test_helpers.rs` | **Common test utilities and database setup** |
-| **Validation Tests** | `src/validation_tests.rs` | **Reusable password validation test suites** |
+| Module | File | Phase | Purpose |
+|--------|------|-------|---------|
+| Core Library | `src/lib.rs` | Phase 0 | `PromptPart` struct, `parse_input()`, `generate_prompt()` — **immutable API** |
+| Tauri Commands | `src/commands.rs` | Phase 1+ | All `#[tauri::command]` functions bridging frontend ↔ backend |
+| Validation | `src/modules/validation.rs` | Phase 5-6 | Grammar validation, token classification, pattern matching |
 
 ### Frontend (JavaScript)
 
-| Module | File | Purpose |
-|--------|------|---------|
-| Admin Setup | `res/js/menu.js` | Admin user registration |
-| User Management | `res/js/user-management.js` | User CRUD UI |
-| i18n Client | `res/js/i18n.js` | Frontend translation |
-| Indicators | `res/js/indicators.js` | Caps Lock indicator |
-| Constants | `res/js/consts.js` | ROLE_ADMIN, ROLE_USER |
+| Module | File | Phase | Purpose |
+|--------|------|-------|---------|
+| Main | `res/js/main.js` | Phase 1+ | Theme management, i18n init, Tauri command invocation |
+| Blockly Config | `res/js/blockly-config.js` | Phase 2-3 | Custom blocks (noun/particle/verb/other), workspace setup, template manager |
+| Project Manager | `res/js/project-manager.js` | Phase 4 | Save/load/new project operations (`.promps` format) |
+| Validation UI | `res/js/validation-ui.js` | Phase 5-6 | Display validation results, highlight errors, auto-fix suggestions |
+| i18n | `res/js/i18n.js` | v1.1+ | Translation data & language switching (ja/en) |
 
-### Test Modules (Jest + ES Modules)
+---
 
-| Module | File | Purpose |
-|--------|------|---------|
-| Validation Helpers | `res/tests/validation-helpers.js` | Common validation functions |
-| Password Tests | `res/tests/password-validation-tests.js` | Reusable password test suite (26 tests) |
-| Username Tests | `res/tests/username-validation-tests.js` | Reusable username test suite (13 tests) |
-| Admin Setup Tests | `res/tests/admin-setup.test.js` | Admin registration screen tests |
-| User Addition Tests | `res/tests/user-addition.test.js` | User addition screen tests |
+## Tauri Commands (API Surface)
+
+All commands registered in `src/main.rs`:
+
+| Command | Purpose | Phase |
+|---------|---------|-------|
+| `generate_prompt_from_text` | Convert DSL input to formatted prompt | Phase 0-1 |
+| `greet` | Health check / communication test | Phase 1 |
+| `validate_dsl_sequence` | Grammar validation with locale support | Phase 5 |
+| `get_patterns` | Retrieve pattern templates by locale | Phase 6 |
+| `analyze_dsl_patterns` | Analyze DSL for pattern matches | Phase 6 |
+| `save_project` | Save project to `.promps` file | Phase 4 |
+| `load_project` | Load project from `.promps` file | Phase 4 |
+| `create_new_project` | Create new empty project | Phase 4 |
+| `update_project_timestamp` | Update project modification time | Phase 4 |
+| `show_open_dialog` | Native file open dialog | Phase 4 |
+| `show_save_dialog` | Native file save dialog | Phase 4 |
+| `show_confirm_dialog` | Native confirmation dialog | Phase 4 |
+| `set_window_title` | Update window title bar | Phase 4 |
 
 ---
 
 ## Data Flow
 
-### 1. Admin Setup (First Launch)
+### 1. Prompt Generation (Core Flow)
 ```
-index.html → menu.js → [Tauri] → register_admin_user() → db.rs
-                                → Creates admin in USERS table
+Blockly Workspace → DSL text (e.g., "_N:Document を 分析して")
+    ↓
+main.js → invoke('generate_prompt_from_text', { input })
+    ↓
+commands.rs → parse_input() + generate_prompt()
+    ↓
+Result: "Document (NOUN) を 分析して"
+    ↓
+main.js → Display in preview panel
 ```
 
-### 2. Login
+### 2. Grammar Validation
 ```
-index.html → menu.js → [Tauri] → verify_login() → auth.rs → db.rs
-                                → Returns user info + JWT (future)
+DSL text → invoke('validate_dsl_sequence', { input, locale })
+    ↓
+commands.rs → validate_sequence_with_locale()
+    ↓
+validation.rs → Token classification → Rule checking → ValidationResult
+    ↓
+validation-ui.js → Display errors/warnings, highlight blocks
 ```
 
-### 3. User Management
+### 3. Project Persistence
 ```
-user-management.html → user-management.js → [Tauri]
-  ├── list_users() → user_management.rs → db.rs
-  ├── create_general_user() → user_management.rs → db.rs
-  ├── update_general_user_info() → user_management.rs → db.rs
-  └── delete_general_user_info() → user_management.rs → db.rs
+Save: Blockly state + metadata → JSON → invoke('save_project') → .promps file
+Load: .promps file → invoke('load_project') → JSON → Restore Blockly workspace
 ```
 
 ---
 
-## Database Schema (SQLite)
+## Layered Architecture
 
-### USERS Table
-```sql
-CREATE TABLE USERS (
-    USER_ID INTEGER PRIMARY KEY,
-    NAME VARCHAR(128) UNIQUE NOT NULL,
-    PAW VARCHAR(128) NOT NULL,        -- Argon2 hash
-    ROLE INTEGER NOT NULL,             -- 1=ADMIN, 2=USER
-    ENTRY_DT DATETIME NOT NULL,
-    UPDATE_DT DATETIME
-);
 ```
-
-### Other Tables (Future)
-- CATEGORIES: Expense categories
-- TRANSACTIONS: Financial transactions
-- ENCRYPTED_DATA: User-encrypted sensitive data
-
----
-
-## Validation Rules
-
-### Password (enforced in both frontend and backend)
-- **Minimum length**: 16 characters
-- **Empty check**: `trim()` must not be empty
-- **Confirmation**: Must match confirmation field
-- **Storage**: Hashed with Argon2id
-
-### Username
-- **Empty check**: `trim()` must not be empty
-- **Uniqueness**: Checked in database (UNIQUE constraint)
-- **Length**: No hard limit (database accepts up to 128 chars)
-
----
-
-## i18n Support
-
-### Languages
-- Japanese (`ja`) - Default
-- English (`en`)
-
-### Files
-- Backend: `res/locales/{lang}.json`
-- Frontend: Loaded via `i18n.js`
-- Keys: Dot notation (e.g., `user_mgmt.add_user`)
+┌─────────────────────────────────────────────────┐
+│  Phase 5-6: Validation Layer                     │
+│  src/modules/validation.rs                       │
+│  - validate_sequence_with_locale()               │
+│  - TokenType classification                      │
+│  - Pattern templates & matching                  │
+└────────────────┬────────────────────────────────┘
+                 │ Depends on (calls only, no modify)
+                 ↓
+┌─────────────────────────────────────────────────┐
+│  Phase 1+: Tauri Command Layer                   │
+│  src/commands.rs                                 │
+│  - generate_prompt_from_text()                   │
+│  - save_project() / load_project()               │
+│  - validate_dsl_sequence()                       │
+└────────────────┬────────────────────────────────┘
+                 │ Depends on (calls only, no modify)
+                 ↓
+┌─────────────────────────────────────────────────┐
+│  Phase 0: Core Parsing Layer (IMMUTABLE)         │
+│  src/lib.rs                                      │
+│  - PromptPart struct                             │
+│  - parse_input()                                 │
+│  - generate_prompt()                             │
+└─────────────────────────────────────────────────┘
+```
 
 ---
 
 ## Test Architecture
 
-### Common Module Pattern
-Tests use a DRY (Don't Repeat Yourself) pattern:
+### Test Count: 282 tests (100% passing)
 
-**Frontend (JavaScript):**
-1. **Common validation functions** in `validation-helpers.js`
-2. **Common test suites** in `*-validation-tests.js`
-3. **Screen-specific tests** import and reuse common modules
+| Layer | Location | Count | Tool |
+|-------|----------|-------|------|
+| Backend | `src/lib.rs` | 13 | `cargo test` |
+| Backend | `src/commands.rs` | 25 | `cargo test` |
+| Backend | `src/modules/validation.rs` | 54 | `cargo test` |
+| Frontend | `res/tests/` (5 test files) | 190 | `npm test` |
+| **Total** | | **282** | |
 
-**Backend (Rust):**
-1. **Common test helpers** in `src/test_helpers.rs`
-2. **Common validation test suites** in `src/validation_tests.rs`
-3. **Module-specific tests** use common helpers and test suites
+### Running Tests
+```bash
+# Backend only
+cargo test
 
-**Example (JavaScript)**:
-```javascript
-// user-addition.test.js
-import { validateUserAddition } from './validation-helpers.js';
-import { runAllPasswordTests } from './password-validation-tests.js';
-import { testUsernameValidation } from './username-validation-tests.js';
+# Frontend only
+cd res/tests && npm test
 
-// Reuse 26 password tests + 13 username tests
-runAllPasswordTests(wrapperFn, 'User Addition Password Tests');
-testUsernameValidation(validateUserAddition);
+# All tests
+cargo test && cd res/tests && npm test
 ```
-
-**Example (Rust)**:
-```rust
-// src/services/user_management.rs
-use crate::test_helpers::database::{setup_test_db, create_test_admin};
-
-#[tokio::test]
-async fn test_register_general_user() {
-    let pool = setup_test_db().await;
-    create_test_admin(&pool, "admin", "password").await;
-    // ... test implementation
-}
-```
-
-**Benefits**:
-- Validation rule change → modify 1 file → all screens updated
-- New screen → 5 lines of code → full test coverage
-- Consistent behavior across all screens
-- Backend and frontend tests follow same pattern
 
 ---
 
@@ -249,78 +223,30 @@ async fn test_register_general_user() {
 cargo tauri dev
 ```
 
-### Tests
-```bash
-# Rust tests
-cargo test
-
-# JavaScript tests
-cd res/tests
-npm test
-
-# All tests
-./res/tests/run-all-tests.sh
-```
-
-**Test Count:**
-- Rust backend: 94 tests
-- JavaScript frontend: 199 tests
-- **Total: 293 tests**
-```
-
-### Build
+### Production Build
 ```bash
 cargo tauri build
 ```
 
 ---
 
-## Important Constants
+## Version Files (Must Update Together)
 
-| Constant | Value | Location |
-|----------|-------|----------|
-| ROLE_ADMIN | 0 | `src/consts.rs`, `res/js/consts.js` |
-| ROLE_USER | 1 | `src/consts.rs`, `res/js/consts.js` |
-| ROLE_VISIT | 999 | `src/consts.rs`, `res/js/consts.js` |
-| MIN_PASSWORD_LENGTH | 16 | `src/validation.rs` |
-| DATABASE_FILE | `KakeiBonDB.sqlite3` | `src/db.rs` |
+When releasing a new version, update all three:
 
----
-
-## Common Tasks (AI Assistant Quick Reference)
-
-### Adding a new screen
-1. Create HTML file in `res/`
-2. Create JS file in `res/js/`
-3. Add Tauri commands in `src/` (if needed)
-4. Create test file in `res/tests/` using common modules
-5. Update test documentation
-
-### Modifying validation rules
-1. Update `res/tests/validation-helpers.js`
-2. Update `res/tests/*-validation-tests.js` (if needed)
-3. Update backend in `src/validation.rs`
-4. Run `npm test` to verify all screens
-
-### Adding a new language
-1. Create `res/locales/{lang}.json`
-2. Add to `src/services/i18n.rs`
-3. Test with `invoke('set_language', { lang })`
-
----
-
-## Known Issues / TODOs
-
-- [ ] JWT/Session management not yet implemented
-- [ ] Encryption key derivation uses placeholder
-- [ ] Category management UI not yet created
-- [ ] Transaction recording UI not yet created
+| File | Field |
+|------|-------|
+| `Cargo.toml` | `version = "x.y.z"` |
+| `tauri.conf.json` | `"version": "x.y.z"` |
+| `package.json` | `"version": "x.y.z"` |
 
 ---
 
 ## Related Documentation
 
-- **User Documentation**: See `res/tests/README_NEW.md`
-- **Test Design**: See `res/tests/TEST_DESIGN.md`
-- **Test Cases**: See `res/tests/TEST_CASES.md`
-- **Quick Start**: See `res/tests/QUICK_START.md`
+- **Tauri Integration**: `@TAURI.md`
+- **API Stability**: `@../coding/API_STABILITY.md`
+- **Coding Conventions**: `@../coding/CONVENTIONS_OVERVIEW.md`
+- **Testing Strategy**: `@../coding/TESTING.md`
+- **Branching Strategy**: `@../workflows/BRANCHING.md`
+- **Release Process**: `@../workflows/RELEASE.md`
