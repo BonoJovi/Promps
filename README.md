@@ -6,7 +6,7 @@
 > **AIプロンプト作成のためのビジュアルブロックベースツール**
 
 [![Stable](https://img.shields.io/badge/Status-Stable-brightgreen)](https://github.com/BonoJovi/Promps/releases)
-[![Version](https://img.shields.io/badge/Version-1.3.2-blue)](https://github.com/BonoJovi/Promps/releases/tag/v1.3.2-free)
+[![Version](https://img.shields.io/badge/Version-1.3.3-blue)](https://github.com/BonoJovi/Promps/releases/tag/v1.3.3-free)
 [![Tests](https://img.shields.io/badge/Tests-282%20passing-brightgreen)](https://github.com/BonoJovi/Promps)
 [![Rust](https://img.shields.io/badge/Rust-1.70+-orange.svg)](https://www.rust-lang.org/)
 [![Tauri](https://img.shields.io/badge/Tauri-v2-blue.svg)](https://tauri.app/)
@@ -36,9 +36,9 @@
 いつもPrompsに関心を寄せていただき、誠にありがとうございます。
 プロジェクト発案者のBonoJovi(Yoshihiro NAKAHARA)です。
 
-**🎉 Ver.1.3.2 (安定版) をリリースいたしました！**
+**🎉 Ver.1.3.3 (安定版) をリリースいたしました！**
 
-v1.3.2ではダークモードとテンプレート機能を追加しました。
+v1.3.3ではダークモードとテンプレート機能を追加しました。
 
 **主な機能**:
 - **ビジュアルブロック編集** - Scratchのようにドラッグ&ドロップでプロンプト作成
@@ -63,9 +63,9 @@ v1.3.2ではダークモードとテンプレート機能を追加しました�
 Thank you for your continued interest in Promps.
 I'm BonoJovi (Yoshihiro NAKAHARA), the project initiator.
 
-**🎉 We have released Ver.1.3.2 (Stable)!**
+**🎉 We have released Ver.1.3.3 (Stable)!**
 
-v1.3.2 adds dark mode and template feature.
+v1.3.3 adds dark mode and template feature.
 
 **Key Features**:
 - **Visual block editing** - Create prompts by drag & drop, just like Scratch
@@ -89,8 +89,8 @@ v1.3.2 adds dark mode and template feature.
 
 ## ✅ Stable Release / 安定版リリース
 
-**This is the Stable release (v1.3.2)** - production ready.
-**これは安定版リリース(v1.3.2)です** - 本番利用可能。
+**This is the Stable release (v1.3.3)** - production ready.
+**これは安定版リリース(v1.3.3)です** - 本番利用可能。
 
 **Available Features: / 利用可能な機能：**
 - ✅ Visual block-based interface / ビジュアルブロックベースインターフェース
@@ -113,7 +113,7 @@ v1.3.2 adds dark mode and template feature.
 ### 1. Download & Install / ダウンロード & インストール
 
 **Download the latest release: / 最新リリースをダウンロード：**
-- [Download v1.3.2](https://github.com/BonoJovi/Promps/releases/tag/v1.3.2-free)
+- [Download v1.3.3](https://github.com/BonoJovi/Promps/releases/tag/v1.3.3-free)
 
 **Available for: / 対応プラットフォーム：**
 - Linux (AppImage, deb, rpm)
@@ -310,8 +310,8 @@ We welcome **all types of contributions** - not just code!
 
 **No programming experience needed! / プログラミング経験不要！**
 
-**✨ v1.3.2 Stable Release with Full Features!**
-**[新着] v1.3.2 安定版リリース！全機能搭載！**
+**✨ v1.3.3 Stable Release with Full Features!**
+**[新着] v1.3.3 安定版リリース！全機能搭載！**
 
 **Platform Status: / プラットフォーム状況：**
 - ✅ **Linux**: Verified and tested by developer / 開発者により検証済み・テスト済み
@@ -353,6 +353,13 @@ For code contributions:
 ---
 
 ## Release History / リリース履歴
+
+### Version 1.3.3 (2026-02-18) 🔒 CSS Variable Migration & Security
+
+**Improvements: / 改善：**
+- 🎨 Complete CSS variable migration (27 hardcoded values eliminated) / CSS変数化漏れ完全対応（27箇所のハードコード値解消）
+- 🔒 Add workflow permissions for GitHub Code Scanning compliance / GitHub Code Scanning対応のワークフロー権限追加
+- ⚡ JS theme colors now read from CSS variables dynamically / JSテーマカラーをCSS変数から動的取得
 
 ### Version 1.3.2 (2026-02-18) 🎨 CSS Variables & Maintenance
 
