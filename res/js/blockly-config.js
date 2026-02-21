@@ -472,7 +472,7 @@ function registerBlockDefinitions() {
         }
     };
     javascriptGenerator.forBlock['promps_verb_analyze'] = function(block, generator) {
-        return tt('blockly.verb.analyze.output', '分析して ');
+        return '_V:' + tt('blockly.verb.analyze.output', '分析して ');
     };
 
     // 要約して (summarize)
@@ -488,7 +488,7 @@ function registerBlockDefinitions() {
         }
     };
     javascriptGenerator.forBlock['promps_verb_summarize'] = function(block, generator) {
-        return tt('blockly.verb.summarize.output', '要約して ');
+        return '_V:' + tt('blockly.verb.summarize.output', '要約して ');
     };
 
     // 翻訳して (translate)
@@ -504,7 +504,7 @@ function registerBlockDefinitions() {
         }
     };
     javascriptGenerator.forBlock['promps_verb_translate'] = function(block, generator) {
-        return tt('blockly.verb.translate.output', '翻訳して ');
+        return '_V:' + tt('blockly.verb.translate.output', '翻訳して ');
     };
 
     // 作成して (create)
@@ -520,7 +520,7 @@ function registerBlockDefinitions() {
         }
     };
     javascriptGenerator.forBlock['promps_verb_create'] = function(block, generator) {
-        return tt('blockly.verb.create.output', '作成して ');
+        return '_V:' + tt('blockly.verb.create.output', '作成して ');
     };
 
     // 生成して (generate)
@@ -536,7 +536,7 @@ function registerBlockDefinitions() {
         }
     };
     javascriptGenerator.forBlock['promps_verb_generate'] = function(block, generator) {
-        return tt('blockly.verb.generate.output', '生成して ');
+        return '_V:' + tt('blockly.verb.generate.output', '生成して ');
     };
 
     // 変換して (convert)
@@ -552,7 +552,7 @@ function registerBlockDefinitions() {
         }
     };
     javascriptGenerator.forBlock['promps_verb_convert'] = function(block, generator) {
-        return tt('blockly.verb.convert.output', '変換して ');
+        return '_V:' + tt('blockly.verb.convert.output', '変換して ');
     };
 
     // 削除して (delete)
@@ -568,7 +568,7 @@ function registerBlockDefinitions() {
         }
     };
     javascriptGenerator.forBlock['promps_verb_delete'] = function(block, generator) {
-        return tt('blockly.verb.delete.output', '削除して ');
+        return '_V:' + tt('blockly.verb.delete.output', '削除して ');
     };
 
     // 更新して (update)
@@ -584,7 +584,7 @@ function registerBlockDefinitions() {
         }
     };
     javascriptGenerator.forBlock['promps_verb_update'] = function(block, generator) {
-        return tt('blockly.verb.update.output', '更新して ');
+        return '_V:' + tt('blockly.verb.update.output', '更新して ');
     };
 
     // 抽出して (extract)
@@ -600,7 +600,7 @@ function registerBlockDefinitions() {
         }
     };
     javascriptGenerator.forBlock['promps_verb_extract'] = function(block, generator) {
-        return tt('blockly.verb.extract.output', '抽出して ');
+        return '_V:' + tt('blockly.verb.extract.output', '抽出して ');
     };
 
     // 説明して (explain)
@@ -616,7 +616,7 @@ function registerBlockDefinitions() {
         }
     };
     javascriptGenerator.forBlock['promps_verb_explain'] = function(block, generator) {
-        return tt('blockly.verb.explain.output', '説明して ');
+        return '_V:' + tt('blockly.verb.explain.output', '説明して ');
     };
 
     // 解説して (describe)
@@ -632,7 +632,7 @@ function registerBlockDefinitions() {
         }
     };
     javascriptGenerator.forBlock['promps_verb_describe'] = function(block, generator) {
-        return tt('blockly.verb.describe.output', '解説して ');
+        return '_V:' + tt('blockly.verb.describe.output', '解説して ');
     };
 
     // 教えて (teach)
@@ -648,7 +648,7 @@ function registerBlockDefinitions() {
         }
     };
     javascriptGenerator.forBlock['promps_verb_teach'] = function(block, generator) {
-        return tt('blockly.verb.teach.output', '教えて ');
+        return '_V:' + tt('blockly.verb.teach.output', '教えて ');
     };
 
     // Custom Verb (user input)
@@ -666,7 +666,7 @@ function registerBlockDefinitions() {
     };
     javascriptGenerator.forBlock['promps_verb_custom'] = function(block, generator) {
         const text = block.getFieldValue('TEXT');
-        return text + ' ';
+        return '_V:' + text + ' ';
     };
 
     // ========================================================================

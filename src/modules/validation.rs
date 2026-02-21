@@ -40,6 +40,11 @@ impl TokenType {
             return TokenType::Noun;
         }
 
+        // Check for verb marker
+        if token.starts_with("_V:") {
+            return TokenType::Verb;
+        }
+
         // Check for particles (助詞)
         if Self::is_particle(token) {
             return TokenType::Particle;
@@ -124,6 +129,11 @@ impl TokenType {
         // Check for noun marker
         if token.starts_with("_N:") {
             return TokenType::Noun;
+        }
+
+        // Check for verb marker
+        if token.starts_with("_V:") {
+            return TokenType::Verb;
         }
 
         // Check for articles

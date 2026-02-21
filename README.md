@@ -6,7 +6,7 @@
 > **AIプロンプト作成のためのビジュアルブロックベースツール**
 
 [![Stable](https://img.shields.io/badge/Status-Stable-brightgreen)](https://github.com/BonoJovi/Promps/releases)
-[![Version](https://img.shields.io/badge/Version-1.3.3-blue)](https://github.com/BonoJovi/Promps/releases/tag/v1.3.3-free)
+[![Version](https://img.shields.io/badge/Version-1.3.4-blue)](https://github.com/BonoJovi/Promps/releases/tag/v1.3.4-free)
 [![Tests](https://img.shields.io/badge/Tests-282%20passing-brightgreen)](https://github.com/BonoJovi/Promps)
 [![Rust](https://img.shields.io/badge/Rust-1.70+-orange.svg)](https://www.rust-lang.org/)
 [![Tauri](https://img.shields.io/badge/Tauri-v2-blue.svg)](https://tauri.app/)
@@ -310,8 +310,8 @@ We welcome **all types of contributions** - not just code!
 
 **No programming experience needed! / プログラミング経験不要！**
 
-**✨ v1.3.3 Stable Release with Full Features!**
-**[新着] v1.3.3 安定版リリース！全機能搭載！**
+**✨ v1.3.4 Stable Release - _V: Verb Prefix for Reliable Grammar Validation!**
+**[新着] v1.3.4 安定版リリース！_V: 動詞プレフィックスによる文法検証の信頼性向上！**
 
 **Platform Status: / プラットフォーム状況：**
 - ✅ **Linux**: Verified and tested by developer / 開発者により検証済み・テスト済み
@@ -353,6 +353,14 @@ For code contributions:
 ---
 
 ## Release History / リリース履歴
+
+### Version 1.3.4 (2026-02-22) 🔧 _V: Verb Prefix for Grammar Validation
+
+**Enhancement: / 改善：**
+- 🔧 **_V: Verb Prefix**: Added _V: prefix to all verb block generators for 100% reliable verb classification in grammar validation
+  **_V: 動詞プレフィックス**: 全動詞ブロックジェネレーターに_V:プレフィックスを追加し、文法検証での動詞分類を100%信頼性に向上
+- 🐛 **Period Validation Fix**: Fixed false "period must follow verb" error for verbs like 教えて
+  **句点検証修正**: 「教えて」等の動詞で発生していた「句点は動詞の後でのみ使用可能」の誤検知を修正
 
 ### Version 1.3.3 (2026-02-18) 🔒 CSS Variable Migration & Security
 

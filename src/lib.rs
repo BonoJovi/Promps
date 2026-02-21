@@ -93,10 +93,12 @@ pub fn parse_input(input: &str) -> Vec<PromptPart> {
                     }
                     None => {
                         // Regular token - accumulate into current part
+                        // Strip _V: prefix (verb marker for validation only)
+                        let token_text = token.strip_prefix("_V:").unwrap_or(token);
                         if !first_in_part {
                             current_text.push(' ');
                         }
-                        current_text.push_str(token);
+                        current_text.push_str(token_text);
                         first_in_part = false;
                     }
                 }
