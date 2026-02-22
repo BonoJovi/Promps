@@ -6,7 +6,7 @@
 > **AIプロンプト作成のためのビジュアルブロックベースツール**
 
 [![Stable](https://img.shields.io/badge/Status-Stable-brightgreen)](https://github.com/BonoJovi/Promps/releases)
-[![Version](https://img.shields.io/badge/Version-1.4.0-blue)](https://github.com/BonoJovi/Promps/releases/tag/v1.4.0-free)
+[![Version](https://img.shields.io/badge/Version-1.5.0-blue)](https://github.com/BonoJovi/Promps/releases/tag/v1.4.0-free)
 [![Tests](https://img.shields.io/badge/Tests-282%20passing-brightgreen)](https://github.com/BonoJovi/Promps)
 [![Rust](https://img.shields.io/badge/Rust-1.70+-orange.svg)](https://www.rust-lang.org/)
 [![Tauri](https://img.shields.io/badge/Tauri-v2-blue.svg)](https://tauri.app/)
@@ -310,8 +310,8 @@ We welcome **all types of contributions** - not just code!
 
 **No programming experience needed! / プログラミング経験不要！**
 
-**✨ v1.4.0 Stable Release - Drag & Drop Template Insertion!**
-**[新着] v1.4.0 安定版リリース！ドラッグ＆ドロップ テンプレート挿入！**
+**✨ v1.5.0 Stable Release - French Language Support (Trilingual)!**
+**[新着] v1.5.0 安定版リリース！フランス語対応（3言語対応）！**
 
 **Platform Status: / プラットフォーム状況：**
 - ✅ **Linux**: Verified and tested by developer / 開発者により検証済み・テスト済み
@@ -353,6 +353,18 @@ For code contributions:
 ---
 
 ## Release History / リリース履歴
+
+### Version 1.5.0 (2026-02-23) ✨ French Language Support (Trilingual)
+
+**New Features: / 新機能：**
+- ✨ **French Language Support**: Added French as third language (ja → en → fr toggle cycle)
+  **フランス語対応**: フランス語を第3言語として追加（ja → en → fr トグル切替）
+- ✨ **French Grammar Validation**: SVO grammar rules with French token classification
+  **フランス語文法チェック**: フランス語トークン分類によるSVO文法ルール
+- ✨ **French Pattern Templates**: 7 French prompt patterns
+  **フランス語パターンテンプレート**: 7つのフランス語プロンプトパターン
+- ✨ **Locale-aware Punctuation**: Japanese mode shows 、。, English/French mode shows , .
+  **言語別句読点**: 日本語モードでは、。、英仏モードでは , . を表示
 
 ### Version 1.4.0 (2026-02-22) ✨ Drag & Drop Template Insertion
 

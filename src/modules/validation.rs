@@ -200,6 +200,84 @@ impl TokenType {
         ];
         PUNCTUATION.contains(&token)
     }
+
+    // ========================================================================
+    // French Token Classification
+    // ========================================================================
+
+    /// Classify a token for French mode
+    pub fn classify_fr(token: &str) -> Self {
+        let token = token.trim();
+        let token_lower = token.to_lowercase();
+
+        // Check for noun marker
+        if token.starts_with("_N:") {
+            return TokenType::Noun;
+        }
+
+        // Check for verb marker
+        if token.starts_with("_V:") {
+            return TokenType::Verb;
+        }
+
+        // Check for articles
+        if Self::is_french_article(&token_lower) {
+            return TokenType::Article;
+        }
+
+        // Check for "veuillez" (French polite marker)
+        if token_lower == "veuillez" {
+            return TokenType::Please;
+        }
+
+        // Check for French verbs
+        if Self::is_french_verb(&token_lower) {
+            return TokenType::Verb;
+        }
+
+        // Check for prepositions
+        if Self::is_french_preposition(&token_lower) {
+            return TokenType::Preposition;
+        }
+
+        // Check for punctuation
+        if Self::is_english_punctuation(token) {
+            return TokenType::Punctuation;
+        }
+
+        TokenType::Other
+    }
+
+    /// Check if token is a French article
+    fn is_french_article(token: &str) -> bool {
+        const ARTICLES: &[&str] = &[
+            "le", "la", "les", "un", "une", "des",
+            "ce", "cette", "ces", "cet",
+        ];
+        ARTICLES.contains(&token)
+    }
+
+    /// Check if token is a French verb (infinitive form)
+    fn is_french_verb(token: &str) -> bool {
+        const VERBS: &[&str] = &[
+            "analyser", "résumer", "traduire", "créer", "générer",
+            "convertir", "supprimer", "mettre", "extraire", "expliquer",
+            "décrire", "enseigner", "traiter", "trouver", "chercher",
+            "afficher", "lister", "obtenir", "faire",
+            "écrire", "lire", "vérifier", "valider",
+            "comparer", "formater", "optimiser", "réviser", "modifier",
+        ];
+        VERBS.contains(&token)
+    }
+
+    /// Check if token is a French preposition
+    fn is_french_preposition(token: &str) -> bool {
+        const PREPOSITIONS: &[&str] = &[
+            "à", "de", "avec", "pour", "par", "en", "dans",
+            "sur", "vers", "entre", "sous", "sans",
+        ];
+        PREPOSITIONS.contains(&token)
+    }
 }
 
 // ============================================================================
@@ -633,6 +711,7 @@ pub fn validate_sequence(input: &str) -> ValidationResult {
 pub fn validate_sequence_with_locale(input: &str, locale: &str) -> ValidationResult {
     match locale {
         "en" => validate_sequence_en(input),
+        "fr" => validate_sequence_fr(input),
         _ => validate_sequence(input), // Default to Japanese
     }
 }
@@ -818,6 +897,190 @@ pub fn validate_sequence_en(input: &str) -> ValidationResult {
                     block_type: "promps_noun".to_string(),
                     target_position: *last_i,
                     label: "Add noun".to_string(),
+                },
+            ));
+        }
+    }
+
+    result
+}
+
+// ============================================================================
+// French Validation (フランス語バリデーション)
+// ============================================================================
+
+/// Validate a DSL token sequence for French grammar
+///
+/// # Arguments
+/// * `input` - Space-delimited DSL tokens
+///
+/// # Returns
+/// ValidationResult with any errors/warnings found
+///
+/// # Rules (same SVO structure as English)
+/// 1. Article must be followed by noun (or adjective/other) (Error)
+/// 2. No consecutive articles (Error)
+/// 3. Verb at start is imperative (accepted) (Info)
+/// 4. Preposition must be followed by noun/article (Warning)
+/// 5. "veuillez" should be at start or before verb (Warning)
+/// 6. Period should be at end (Warning)
+/// 7. Missing verb in sentence (Warning)
+pub fn validate_sequence_fr(input: &str) -> ValidationResult {
+    let mut result = ValidationResult::new();
+
+    // Tokenize input
+    let tokens: Vec<&str> = input.split_whitespace().collect();
+
+    if tokens.is_empty() {
+        return result;
+    }
+
+    // Classify all tokens for French
+    let classified: Vec<(usize, &str, TokenType)> = tokens
+        .iter()
+        .enumerate()
+        .map(|(i, t)| (i, *t, TokenType::classify_fr(t)))
+        .collect();
+
+    // Track state for validation
+    let mut prev_type: Option<TokenType> = None;
+    let mut prev_token: Option<&str> = None;
+
+    for (i, token, token_type) in classified.iter() {
+        let i = *i;
+        let token_type = *token_type;
+
+        // Rule 1: Article must be followed by noun (or other content)
+        if let Some(prev) = prev_type {
+            if prev == TokenType::Article {
+                if token_type == TokenType::Verb
+                    || token_type == TokenType::Preposition
+                    || token_type == TokenType::Punctuation
+                    || token_type == TokenType::Article
+                    || token_type == TokenType::Please
+                {
+                    result.add_error(ValidationError::with_autofix(
+                        ValidationErrorCode::ArticleNotBeforeNoun,
+                        format!("L'article '{}' doit être suivi d'un nom", prev_token.unwrap_or("")),
+                        i - 1,
+                        Severity::Error,
+                        Some("Ajoutez un nom après l'article".to_string()),
+                        AutoFixAction {
+                            action_type: AutoFixActionType::InsertAfter,
+                            block_type: "promps_noun".to_string(),
+                            target_position: i - 1,
+                            label: "Ajouter un nom".to_string(),
+                        },
+                    ));
+                }
+            }
+        }
+
+        // Rule 2: No consecutive articles
+        if token_type == TokenType::Article && prev_type == Some(TokenType::Article) {
+            result.add_error(ValidationError::new(
+                ValidationErrorCode::ConsecutiveArticles,
+                format!("Articles consécutifs : '{}' suit un autre article", token),
+                i,
+                Severity::Error,
+                Some("Supprimez l'un des articles".to_string()),
+            ));
+        }
+
+        // Rule 4: Preposition must be followed by noun or article
+        if let Some(prev) = prev_type {
+            if prev == TokenType::Preposition {
+                if token_type != TokenType::Noun
+                    && token_type != TokenType::Article
+                    && token_type != TokenType::Other
+                {
+                    result.add_error(ValidationError::with_autofix(
+                        ValidationErrorCode::PrepositionWithoutObject,
+                        format!("La préposition '{}' doit être suivie d'un nom", prev_token.unwrap_or("")),
+                        i - 1,
+                        Severity::Warning,
+                        Some("Ajoutez un nom après la préposition".to_string()),
+                        AutoFixAction {
+                            action_type: AutoFixActionType::InsertAfter,
+                            block_type: "promps_noun".to_string(),
+                            target_position: i - 1,
+                            label: "Ajouter un nom".to_string(),
+                        },
+                    ));
+                }
+            }
+        }
+
+        // Rule 5: "veuillez" should be at start or immediately before verb
+        if token_type == TokenType::Please {
+            if i > 0 {
+                let verb_follows = classified.get(i + 1).map(|(_, _, t)| *t == TokenType::Verb).unwrap_or(false);
+                if !verb_follows {
+                    result.add_error(ValidationError::new(
+                        ValidationErrorCode::PleasePosition,
+                        "'veuillez' doit être placé en début de phrase ou avant un verbe".to_string(),
+                        i,
+                        Severity::Warning,
+                        Some("Déplacez 'veuillez' au début ou avant le verbe".to_string()),
+                    ));
+                }
+            }
+        }
+
+        // Rule 6: Period should be at end
+        if token_type == TokenType::Punctuation {
+            if TokenType::is_period(token) && i < tokens.len() - 1 {
+                result.add_error(ValidationError::new(
+                    ValidationErrorCode::PeriodNotAtEnd,
+                    "Le point doit être à la fin de la phrase".to_string(),
+                    i,
+                    Severity::Warning,
+                    Some("Déplacez le point à la fin".to_string()),
+                ));
+            }
+        }
+
+        prev_type = Some(token_type);
+        prev_token = Some(*token);
+    }
+
+    // Rule 7: Missing verb check
+    let has_verb = classified.iter().any(|(_, _, t)| *t == TokenType::Verb);
+    if !has_verb && !tokens.is_empty() {
+        let has_content = classified.iter().any(|(_, _, t)| {
+            matches!(t, TokenType::Noun | TokenType::Other | TokenType::Article)
+        });
+        if has_content {
+            result.add_error(ValidationError::with_autofix(
+                ValidationErrorCode::MissingVerb,
+                "La phrase ne contient pas de verbe (action)".to_string(),
+                0,
+                Severity::Warning,
+                Some("Ajoutez un verbe pour préciser l'action".to_string()),
+                AutoFixAction {
+                    action_type: AutoFixActionType::InsertBefore,
+                    block_type: "promps_verb_analyze".to_string(),
+                    target_position: 0,
+                    label: "Ajouter un verbe".to_string(),
+                },
+            ));
+        }
+    }
+
+    // Final check: Article at end without noun
+    if let Some((last_i, last_token, last_type)) = classified.last() {
+        if *last_type == TokenType::Article {
+            result.add_error(ValidationError::with_autofix(
+                ValidationErrorCode::ArticleNotBeforeNoun,
+                format!("L'article '{}' en fin de phrase nécessite un nom", last_token),
+                *last_i,
+                Severity::Error,
+                Some("Ajoutez un nom après l'article".to_string()),
+                AutoFixAction {
+                    action_type: AutoFixActionType::InsertAfter,
+                    block_type: "promps_noun".to_string(),
+                    target_position: *last_i,
+                    label: "Ajouter un nom".to_string(),
                 },
             ));
         }
@@ -1127,10 +1390,115 @@ pub fn get_pattern_templates_en() -> Vec<PatternTemplate> {
     ]
 }
 
+/// Get pattern templates for French mode
+pub fn get_pattern_templates_fr() -> Vec<PatternTemplate> {
+    vec![
+        // Pattern 1: Simple imperative (Verb Noun)
+        PatternTemplate::new(
+            "svo_basic",
+            "Commande simple",
+            "Impératif basique : verbe + objet",
+            "Verbe Nom",
+            "analyser document",
+            vec![
+                PatternBlock::placeholder("promps_verb_analyze", "Action"),
+                PatternBlock::placeholder("promps_noun", "Objet"),
+            ],
+        ),
+        // Pattern 2: With article (Verb Article Noun)
+        PatternTemplate::new(
+            "svo_article",
+            "Commande avec article",
+            "Impératif avec article défini/indéfini",
+            "Verbe Article Nom",
+            "résumer le rapport",
+            vec![
+                PatternBlock::placeholder("promps_verb_summarize", "Action"),
+                PatternBlock::fixed("promps_article_the", "le"),
+                PatternBlock::placeholder("promps_noun", "Objet"),
+            ],
+        ),
+        // Pattern 3: With preposition (Verb Noun Prep Noun)
+        PatternTemplate::new(
+            "svo_prep",
+            "Commande avec préposition",
+            "Impératif avec complément prépositionnel",
+            "Verbe Nom Prép Nom",
+            "traduire document en japonais",
+            vec![
+                PatternBlock::placeholder("promps_verb_translate", "Action"),
+                PatternBlock::placeholder("promps_noun", "Objet"),
+                PatternBlock::fixed("promps_particle_ni", "à"),
+                PatternBlock::placeholder("promps_noun", "Cible"),
+            ],
+        ),
+        // Pattern 4: Polite request (veuillez Verb Noun)
+        PatternTemplate::new(
+            "polite",
+            "Requête polie",
+            "Impératif poli avec 'veuillez'",
+            "veuillez Verbe Nom",
+            "veuillez analyser ce document",
+            vec![
+                PatternBlock::fixed("promps_article_please", "veuillez"),
+                PatternBlock::placeholder("promps_verb_analyze", "Action"),
+                PatternBlock::fixed("promps_article_this", "ce"),
+                PatternBlock::placeholder("promps_noun", "Objet"),
+            ],
+        ),
+        // Pattern 5: With article and preposition
+        PatternTemplate::new(
+            "svo_article_prep",
+            "Commande complète",
+            "Commande avec article et préposition",
+            "Verbe Article Nom Prép Nom",
+            "convertir le fichier en PDF",
+            vec![
+                PatternBlock::placeholder("promps_verb_convert", "Action"),
+                PatternBlock::fixed("promps_article_the", "le"),
+                PatternBlock::placeholder("promps_noun", "Objet"),
+                PatternBlock::fixed("promps_particle_ni", "à"),
+                PatternBlock::placeholder("promps_noun", "Cible"),
+            ],
+        ),
+        // Pattern 6: From-to pattern
+        PatternTemplate::new(
+            "from_to",
+            "Conversion de-à",
+            "Patron de conversion ou transfert",
+            "Verbe Nom de Nom à Nom",
+            "traduire texte de anglais à japonais",
+            vec![
+                PatternBlock::placeholder("promps_verb_translate", "Action"),
+                PatternBlock::placeholder("promps_noun", "Objet"),
+                PatternBlock::fixed("promps_particle_kara", "de"),
+                PatternBlock::placeholder("promps_noun", "Source"),
+                PatternBlock::fixed("promps_particle_ni", "à"),
+                PatternBlock::placeholder("promps_noun", "Cible"),
+            ],
+        ),
+        // Pattern 7: With modifier (avec)
+        PatternTemplate::new(
+            "with_modifier",
+            "Commande avec modificateur",
+            "Commande précisant la méthode ou l'outil",
+            "Verbe Nom avec Nom",
+            "analyser données avec IA",
+            vec![
+                PatternBlock::placeholder("promps_verb_analyze", "Action"),
+                PatternBlock::placeholder("promps_noun", "Objet"),
+                PatternBlock::fixed("promps_particle_de", "avec"),
+                PatternBlock::placeholder("promps_noun", "Outil/Méthode"),
+            ],
+        ),
+    ]
+}
+
 /// Get pattern templates based on locale
 pub fn get_pattern_templates_by_locale(locale: &str) -> Vec<PatternTemplate> {
     match locale {
         "en" => get_pattern_templates_en(),
+        "fr" => get_pattern_templates_fr(),
         _ => get_pattern_templates(), // Default to Japanese
     }
 }
@@ -1149,11 +1517,6 @@ pub struct PatternMatchResult {
     pub missing_elements: Vec<String>,
     /// Whether the pattern is complete
     pub is_complete: bool,
-}
-
-/// Analyze current input against all patterns
-pub fn analyze_patterns(input: &str) -> Vec<PatternMatchResult> {
-    analyze_patterns_with_locale(input, "ja")
 }
 
 /// Analyze current input against patterns with locale support
@@ -1197,10 +1560,10 @@ fn match_pattern_with_locale(tokens: &[&str], pattern: &PatternTemplate, locale:
     for (i, exp) in expected.iter().enumerate() {
         if i < tokens.len() && !had_mismatch {
             let token = tokens[i];
-            let token_type = if locale == "en" {
-                TokenType::classify_en(token)
-            } else {
-                TokenType::classify(token)
+            let token_type = match locale {
+                "en" => TokenType::classify_en(token),
+                "fr" => TokenType::classify_fr(token),
+                _ => TokenType::classify(token),
             };
 
             // Check if token matches expected
@@ -1211,7 +1574,7 @@ fn match_pattern_with_locale(tokens: &[&str], pattern: &PatternTemplate, locale:
                     // Empty particles match position only
                     if p.is_empty() {
                         true // Skip empty particle markers
-                    } else if locale == "en" {
+                    } else if locale == "en" || locale == "fr" {
                         token.to_lowercase() == *p
                     } else {
                         token == *p
@@ -1229,10 +1592,10 @@ fn match_pattern_with_locale(tokens: &[&str], pattern: &PatternTemplate, locale:
             } else {
                 // Mismatch found - stop counting matches
                 had_mismatch = true;
-                let msg = if locale == "en" {
-                    format!("Position {}: {} required", i + 1, pattern.blocks[i].label)
-                } else {
-                    format!("位置{}: {} が必要", i + 1, pattern.blocks[i].label)
+                let msg = match locale {
+                    "en" => format!("Position {}: {} required", i + 1, pattern.blocks[i].label),
+                    "fr" => format!("Position {} : {} requis", i + 1, pattern.blocks[i].label),
+                    _ => format!("位置{}: {} が必要", i + 1, pattern.blocks[i].label),
                 };
                 missing_elements.push(msg);
             }
@@ -1283,22 +1646,34 @@ impl ExpectedToken {
         if block_type.starts_with("promps_noun") {
             ExpectedToken::Noun
         } else if block_type.starts_with("promps_article") {
-            // Articles (English mode)
-            let article = match block_type {
-                "promps_article_a" => "a",
-                "promps_article_an" => "an",
-                "promps_article_the" => "the",
-                "promps_article_this" => "this",
-                "promps_article_that" => "that",
-                "promps_article_please" => "please",
-                _ => "the", // default
+            // Articles (English/French mode)
+            let article = if locale == "fr" {
+                match block_type {
+                    "promps_article_a" => "un",
+                    "promps_article_an" => "une",
+                    "promps_article_the" => "le",
+                    "promps_article_this" => "ce",
+                    "promps_article_that" => "cette",
+                    "promps_article_please" => "veuillez",
+                    _ => "le", // default
+                }
+            } else {
+                match block_type {
+                    "promps_article_a" => "a",
+                    "promps_article_an" => "an",
+                    "promps_article_the" => "the",
+                    "promps_article_this" => "this",
+                    "promps_article_that" => "that",
+                    "promps_article_please" => "please",
+                    _ => "the", // default
+                }
             };
             ExpectedToken::Article(article)
         } else if block_type.starts_with("promps_particle") {
             // Extract specific particle from block type
-            // Use different values for English mode
-            let particle = if locale == "en" {
-                match block_type {
+            // Use different values per locale
+            let particle = match locale {
+                "en" => match block_type {
                     "promps_particle_ga" => "",    // Subject marker (omitted in English)
                     "promps_particle_wo" => "",    // Object marker (omitted in English)
                     "promps_particle_ni" => "to",
@@ -1309,9 +1684,20 @@ impl ExpectedToken {
                     "promps_particle_made" => "until",
                     "promps_particle_yori" => "than",
                     _ => "", // default
-                }
-            } else {
-                match block_type {
+                },
+                "fr" => match block_type {
+                    "promps_particle_ga" => "",    // Subject marker (omitted in French)
+                    "promps_particle_wo" => "",    // Object marker (omitted in French)
+                    "promps_particle_ni" => "\u{00e0}",  // à
+                    "promps_particle_de" => "avec",
+                    "promps_particle_to" => "et",
+                    "promps_particle_he" => "vers",
+                    "promps_particle_kara" => "de",
+                    "promps_particle_made" => "jusqu'\u{00e0}",  // jusqu'à
+                    "promps_particle_yori" => "que",
+                    _ => "", // default
+                },
+                _ => match block_type {
                     "promps_particle_ga" => "が",
                     "promps_particle_wo" => "を",
                     "promps_particle_ni" => "に",
@@ -1322,16 +1708,16 @@ impl ExpectedToken {
                     "promps_particle_made" => "まで",
                     "promps_particle_yori" => "より",
                     _ => "が", // default
-                }
+                },
             };
             ExpectedToken::Particle(particle)
         } else if block_type.starts_with("promps_verb") {
             ExpectedToken::Verb
         } else if block_type == "promps_other" {
-            if locale == "en" {
-                ExpectedToken::Other("about")
-            } else {
-                ExpectedToken::Other("について")
+            match locale {
+                "en" => ExpectedToken::Other("about"),
+                "fr" => ExpectedToken::Other("concernant"),
+                _ => ExpectedToken::Other("について"),
             }
         } else {
             ExpectedToken::Other("")
@@ -1649,7 +2035,7 @@ mod tests {
     #[test]
     fn test_analyze_patterns_osv_match() {
         // "_N:Doc を _N:User が" should match osv_emphasis pattern
-        let results = analyze_patterns("_N:Doc を _N:User が");
+        let results = analyze_patterns_with_locale("_N:Doc を _N:User が", "ja");
         let osv_match = results.iter().find(|r| r.pattern_id == "osv_emphasis").unwrap();
 
         // 4 out of 5 tokens match
@@ -1660,7 +2046,7 @@ mod tests {
     #[test]
     fn test_analyze_patterns_osv_complete() {
         // Complete OSV pattern
-        let results = analyze_patterns("_N:Doc を _N:User が 分析して");
+        let results = analyze_patterns_with_locale("_N:Doc を _N:User が 分析して", "ja");
         let osv_match = results.iter().find(|r| r.pattern_id == "osv_emphasis").unwrap();
 
         assert_eq!(osv_match.match_score, 1.0);
@@ -1685,7 +2071,7 @@ mod tests {
 
     #[test]
     fn test_analyze_patterns_empty_input() {
-        let results = analyze_patterns("");
+        let results = analyze_patterns_with_locale("", "ja");
         assert!(!results.is_empty());
         // All patterns should have 0 match score for empty input
         for result in &results {
@@ -1696,7 +2082,7 @@ mod tests {
     #[test]
     fn test_analyze_patterns_partial_match() {
         // "_N:Doc を" should partially match ov_simple pattern
-        let results = analyze_patterns("_N:Doc を");
+        let results = analyze_patterns_with_locale("_N:Doc を", "ja");
         let ov_match = results.iter().find(|r| r.pattern_id == "ov_simple").unwrap();
 
         // 2 out of 3 tokens match
@@ -1707,7 +2093,7 @@ mod tests {
     #[test]
     fn test_analyze_patterns_complete_match() {
         // "_N:Doc を 分析して" should match ov_simple completely
-        let results = analyze_patterns("_N:Doc を 分析して");
+        let results = analyze_patterns_with_locale("_N:Doc を 分析して", "ja");
         let ov_match = results.iter().find(|r| r.pattern_id == "ov_simple").unwrap();
 
         assert_eq!(ov_match.match_score, 1.0);
@@ -1716,7 +2102,7 @@ mod tests {
 
     #[test]
     fn test_analyze_patterns_sorted_by_score() {
-        let results = analyze_patterns("_N:Doc を 分析して");
+        let results = analyze_patterns_with_locale("_N:Doc を 分析して", "ja");
 
         // Results should be sorted by match_score descending
         for i in 1..results.len() {
@@ -1736,7 +2122,7 @@ mod tests {
 
     #[test]
     fn test_pattern_match_result_serialization() {
-        let results = analyze_patterns("_N:Doc を");
+        let results = analyze_patterns_with_locale("_N:Doc を", "ja");
         let json = serde_json::to_string(&results).unwrap();
 
         assert!(json.contains("\"patternId\":"));
@@ -2095,6 +2481,209 @@ mod tests {
     #[test]
     fn test_analyze_patterns_en_complete() {
         let results = analyze_patterns_with_locale("analyze _N:document", "en");
+        let svo_match = results.iter().find(|r| r.pattern_id == "svo_basic");
+        if let Some(m) = svo_match {
+            assert_eq!(m.match_score, 1.0, "Should be complete match");
+            assert!(m.is_complete, "Should be marked as complete");
+        }
+    }
+
+    // ========================================================================
+    // French Token Classification Tests
+    // ========================================================================
+
+    #[test]
+    fn test_classify_fr_noun() {
+        assert_eq!(TokenType::classify_fr("_N:utilisateur"), TokenType::Noun);
+        assert_eq!(TokenType::classify_fr("_N:document"), TokenType::Noun);
+    }
+
+    #[test]
+    fn test_classify_fr_article() {
+        assert_eq!(TokenType::classify_fr("le"), TokenType::Article);
+        assert_eq!(TokenType::classify_fr("la"), TokenType::Article);
+        assert_eq!(TokenType::classify_fr("les"), TokenType::Article);
+        assert_eq!(TokenType::classify_fr("un"), TokenType::Article);
+        assert_eq!(TokenType::classify_fr("une"), TokenType::Article);
+        assert_eq!(TokenType::classify_fr("des"), TokenType::Article);
+        assert_eq!(TokenType::classify_fr("ce"), TokenType::Article);
+        assert_eq!(TokenType::classify_fr("cette"), TokenType::Article);
+        assert_eq!(TokenType::classify_fr("Le"), TokenType::Article); // Case insensitive
+    }
+
+    #[test]
+    fn test_classify_fr_verb() {
+        assert_eq!(TokenType::classify_fr("analyser"), TokenType::Verb);
+        assert_eq!(TokenType::classify_fr("résumer"), TokenType::Verb);
+        assert_eq!(TokenType::classify_fr("traduire"), TokenType::Verb);
+        assert_eq!(TokenType::classify_fr("créer"), TokenType::Verb);
+        assert_eq!(TokenType::classify_fr("générer"), TokenType::Verb);
+        assert_eq!(TokenType::classify_fr("convertir"), TokenType::Verb);
+        assert_eq!(TokenType::classify_fr("supprimer"), TokenType::Verb);
+    }
+
+    #[test]
+    fn test_classify_fr_preposition() {
+        assert_eq!(TokenType::classify_fr("à"), TokenType::Preposition);
+        assert_eq!(TokenType::classify_fr("de"), TokenType::Preposition);
+        assert_eq!(TokenType::classify_fr("avec"), TokenType::Preposition);
+        assert_eq!(TokenType::classify_fr("pour"), TokenType::Preposition);
+        assert_eq!(TokenType::classify_fr("par"), TokenType::Preposition);
+        assert_eq!(TokenType::classify_fr("dans"), TokenType::Preposition);
+    }
+
+    #[test]
+    fn test_classify_fr_please() {
+        assert_eq!(TokenType::classify_fr("veuillez"), TokenType::Please);
+        assert_eq!(TokenType::classify_fr("Veuillez"), TokenType::Please);
+    }
+
+    #[test]
+    fn test_classify_fr_punctuation() {
+        assert_eq!(TokenType::classify_fr("."), TokenType::Punctuation);
+        assert_eq!(TokenType::classify_fr(","), TokenType::Punctuation);
+        assert_eq!(TokenType::classify_fr("!"), TokenType::Punctuation);
+    }
+
+    #[test]
+    fn test_classify_fr_other() {
+        assert_eq!(TokenType::classify_fr("bonjour"), TokenType::Other);
+        assert_eq!(TokenType::classify_fr("monde"), TokenType::Other);
+    }
+
+    // ========================================================================
+    // French Validation Tests
+    // ========================================================================
+
+    #[test]
+    fn test_validate_fr_simple_command() {
+        let result = validate_sequence_fr("analyser _N:document");
+        assert!(result.is_valid);
+        assert_eq!(result.error_count, 0);
+    }
+
+    #[test]
+    fn test_validate_fr_with_article() {
+        let result = validate_sequence_fr("résumer le _N:rapport");
+        assert!(result.is_valid);
+        assert_eq!(result.error_count, 0);
+    }
+
+    #[test]
+    fn test_validate_fr_with_veuillez() {
+        let result = validate_sequence_fr("veuillez analyser _N:document");
+        assert!(result.is_valid);
+        assert_eq!(result.error_count, 0);
+    }
+
+    #[test]
+    fn test_validate_fr_article_not_before_noun() {
+        let result = validate_sequence_fr("le analyser _N:document");
+        assert!(!result.is_valid);
+        assert!(result.errors.iter().any(|e| e.code == ValidationErrorCode::ArticleNotBeforeNoun));
+    }
+
+    #[test]
+    fn test_validate_fr_consecutive_articles() {
+        let result = validate_sequence_fr("le la _N:document");
+        assert!(!result.is_valid);
+        assert!(result.errors.iter().any(|e| e.code == ValidationErrorCode::ConsecutiveArticles));
+    }
+
+    #[test]
+    fn test_validate_fr_article_at_end() {
+        let result = validate_sequence_fr("analyser le");
+        assert!(!result.is_valid);
+        assert!(result.errors.iter().any(|e| e.code == ValidationErrorCode::ArticleNotBeforeNoun));
+    }
+
+    #[test]
+    fn test_validate_fr_missing_verb() {
+        let result = validate_sequence_fr("le _N:document");
+        assert!(result.warning_count >= 1);
+        assert!(result.errors.iter().any(|e| e.code == ValidationErrorCode::MissingVerb));
+    }
+
+    #[test]
+    fn test_validate_fr_veuillez_in_middle() {
+        let result = validate_sequence_fr("analyser veuillez _N:document");
+        assert!(result.warning_count >= 1);
+        assert!(result.errors.iter().any(|e| e.code == ValidationErrorCode::PleasePosition));
+    }
+
+    #[test]
+    fn test_validate_fr_period_at_end_ok() {
+        let result = validate_sequence_fr("analyser _N:document .");
+        let has_period_error = result.errors.iter()
+            .any(|e| e.code == ValidationErrorCode::PeriodNotAtEnd);
+        assert!(!has_period_error, "Period at end should be OK");
+    }
+
+    #[test]
+    fn test_validate_fr_empty_input() {
+        let result = validate_sequence_fr("");
+        assert!(result.is_valid);
+        assert_eq!(result.error_count, 0);
+        assert_eq!(result.warning_count, 0);
+    }
+
+    #[test]
+    fn test_validate_fr_complex_sentence() {
+        let result = validate_sequence_fr("veuillez traduire le _N:document de _N:anglais à _N:japonais");
+        assert!(result.is_valid, "Complex valid French sentence should pass");
+    }
+
+    #[test]
+    fn test_validate_with_locale_fr() {
+        let result = validate_sequence_with_locale("analyser _N:document", "fr");
+        assert!(result.is_valid);
+    }
+
+    // ========================================================================
+    // French Pattern Template Tests
+    // ========================================================================
+
+    #[test]
+    fn test_get_pattern_templates_fr() {
+        let patterns = get_pattern_templates_fr();
+        assert!(!patterns.is_empty());
+        assert!(patterns.len() >= 5);
+    }
+
+    #[test]
+    fn test_pattern_template_fr_svo_basic() {
+        let patterns = get_pattern_templates_fr();
+        let svo = patterns.iter().find(|p| p.id == "svo_basic").unwrap();
+
+        assert_eq!(svo.name, "Commande simple");
+        assert_eq!(svo.blocks.len(), 2); // Verb, Noun
+    }
+
+    #[test]
+    fn test_pattern_template_fr_polite() {
+        let patterns = get_pattern_templates_fr();
+        let polite = patterns.iter().find(|p| p.id == "polite").unwrap();
+
+        assert_eq!(polite.name, "Requête polie");
+        assert!(polite.blocks.len() >= 3);
+    }
+
+    #[test]
+    fn test_get_pattern_templates_by_locale_fr() {
+        let fr_patterns = get_pattern_templates_by_locale("fr");
+        assert!(fr_patterns.iter().any(|p| p.id == "svo_basic" && p.name.contains("Commande")));
+    }
+
+    #[test]
+    fn test_analyze_patterns_fr() {
+        let results = analyze_patterns_with_locale("analyser _N:document", "fr");
+        let has_match = results.iter().any(|r| r.match_score > 0.0);
+        assert!(has_match, "Should find at least one matching French pattern");
+    }
+
+    #[test]
+    fn test_analyze_patterns_fr_complete() {
+        let results = analyze_patterns_with_locale("analyser _N:document", "fr");
         let svo_match = results.iter().find(|r| r.pattern_id == "svo_basic");
         if let Some(m) = svo_match {
             assert_eq!(m.match_score, 1.0, "Should be complete match");

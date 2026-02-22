@@ -943,7 +943,8 @@ function buildToolbox() {
             },
             // Article category (English mode only)
             ...(function() {
-                const isEnglish = typeof window.getLocale === 'function' && window.getLocale() === 'en';
+                const locale = typeof window.getLocale === 'function' ? window.getLocale() : 'ja';
+                const isEnglish = locale === 'en' || locale === 'fr';
                 if (!isEnglish) return [];
                 return [{
                     "kind": "category",
@@ -980,22 +981,33 @@ function buildToolbox() {
                     { "kind": "block", "type": "promps_verb_custom" }
                 ]
             },
-            // Punctuation category
+            // Punctuation category (language-specific to avoid duplicates)
             {
                 "kind": "category",
                 "name": tt('blockly.category.punctuation', 'Punctuation'),
                 "colour": "60",
-                "contents": [
+                "contents": (typeof window.getLocale === 'function' && window.getLocale() === 'ja') ? [
+                    // Japanese mode: use Japanese punctuation (touten/kuten) + common symbols
                     { "kind": "block", "type": "promps_punct_touten" },
                     { "kind": "block", "type": "promps_punct_kuten" },
                     { "kind": "block", "type": "promps_punct_exclaim" },
                     { "kind": "block", "type": "promps_punct_question" },
                     { "kind": "block", "type": "promps_punct_dquote" },
                     { "kind": "block", "type": "promps_punct_squote" },
-                    { "kind": "block", "type": "promps_punct_comma" },
                     { "kind": "block", "type": "promps_punct_slash" },
                     { "kind": "block", "type": "promps_punct_amp" },
+                    { "kind": "block", "type": "promps_punct_comma" },
                     { "kind": "block", "type": "promps_punct_period" }
+                ] : [
+                    // English/French mode: use ASCII punctuation only (no touten/kuten)
+                    { "kind": "block", "type": "promps_punct_comma" },
+                    { "kind": "block", "type": "promps_punct_period" },
+                    { "kind": "block", "type": "promps_punct_exclaim" },
+                    { "kind": "block", "type": "promps_punct_question" },
+                    { "kind": "block", "type": "promps_punct_dquote" },
+                    { "kind": "block", "type": "promps_punct_squote" },
+                    { "kind": "block", "type": "promps_punct_slash" },
+                    { "kind": "block", "type": "promps_punct_amp" }
                 ]
             },
             // Other category

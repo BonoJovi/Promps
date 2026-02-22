@@ -9,8 +9,8 @@
 
 ## Current Status
 
-**Version**: v1.4.0 (Stable Release)
-**Phase**: All phases complete - First stable release
+**Version**: v1.5.0 (Stable Release)
+**Phase**: All phases complete - French Language Support (Trilingual)
 **Tests**: 282 tests at 100% passing (Backend 92 + Frontend 190)
 **Branch**: dev (integration branch)
 
@@ -31,6 +31,7 @@
 | **v1.3.4** | - | **_V: Verb Prefix for Grammar Validation** | 🎉 **Released** |
 | **v1.3.5** | - | **Template Dialog Fix** | 🎉 **Released** |
 | **v1.4.0** | - | **Drag & Drop Template Insertion** | 🎉 **Released** |
+| **v1.5.0** | - | **French Language Support (Trilingual)** | 🎉 **Released** |
 
 ---
 

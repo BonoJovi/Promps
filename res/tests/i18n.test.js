@@ -181,7 +181,7 @@ describe('i18n Module', () => {
 
         test('should not change locale for unsupported language', () => {
             setLocale('ja');
-            setLocale('fr');
+            setLocale('zz');
             // Locale should remain unchanged for unsupported language
             expect(localStorageMock.store['promps-lang']).toBe('ja');
         });
@@ -196,9 +196,17 @@ describe('i18n Module', () => {
             expect(localStorageMock.store['promps-lang']).toBe('en');
         });
 
-        test('should toggle from en to ja', () => {
+        test('should toggle from en to fr', () => {
             // Set initial locale to en
             setLocale('en');
+
+            toggleLocale();
+            expect(localStorageMock.store['promps-lang']).toBe('fr');
+        });
+
+        test('should toggle from fr to ja', () => {
+            // Set initial locale to fr
+            setLocale('fr');
 
             toggleLocale();
             expect(localStorageMock.store['promps-lang']).toBe('ja');

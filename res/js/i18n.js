@@ -219,7 +219,7 @@ const TRANSLATIONS = {
         'project.load.failed': 'プロジェクトの読み込みに失敗しました',
 
         // Footer
-        'footer.version': 'Promps v1.4.0 - 日英対応',
+        'footer.version': 'Promps v1.5.0 - 日英仏対応',
 
         // Block limit
         'blocks.counter.label': 'ブロック',
@@ -242,7 +242,7 @@ const TRANSLATIONS = {
         'toolbar.theme.title.toDark': 'Switch to Dark Mode',
         'toolbar.theme.title.toLight': 'Switch to Light Mode',
         'toolbar.lang': 'EN',
-        'toolbar.lang.title': '日本語に切り替え',
+        'toolbar.lang.title': 'Passer en français',
 
         // Workspace & Preview
         'workspace.title': 'Workspace',
@@ -436,12 +436,229 @@ const TRANSLATIONS = {
         'project.load.failed': 'Failed to load project',
 
         // Footer
-        'footer.version': 'Promps v1.4.0 - Bilingual',
+        'footer.version': 'Promps v1.5.0 - Trilingual',
 
         // Block limit
         'blocks.counter.label': 'Blocks',
         'blocks.warning.threshold': 'Block count is getting high. Consider simplifying your prompt.',
         'blocks.warning.limit': 'Block limit (100) reached. Remove existing blocks to add more.'
+    },
+
+    fr: {
+        // Header & Toolbar
+        'app.subtitle': 'Générateur visuel de langage de prompt',
+        'toolbar.new': 'Nouveau',
+        'toolbar.new.title': 'Nouveau projet (Ctrl+N)',
+        'toolbar.open': 'Ouvrir',
+        'toolbar.open.title': 'Ouvrir un projet (Ctrl+O)',
+        'toolbar.save': 'Enregistrer',
+        'toolbar.save.title': 'Enregistrer le projet (Ctrl+S)',
+        'toolbar.saveAs': 'Enregistrer sous',
+        'toolbar.saveAs.title': 'Enregistrer sous (Ctrl+Shift+S)',
+        'toolbar.theme': 'Thème',
+        'toolbar.theme.title.toDark': 'Passer au mode sombre',
+        'toolbar.theme.title.toLight': 'Passer au mode clair',
+        'toolbar.lang': 'FR',
+        'toolbar.lang.title': '日本語に切り替え',
+
+        // Workspace & Preview
+        'workspace.title': 'Espace de travail',
+        'workspace.loading': 'Chargement de l\'espace Blockly...',
+        'preview.title': 'Prompt généré',
+        'preview.placeholder': 'Le prompt généré apparaîtra ici.',
+        // Validation
+        'validation.passed': 'Vérification grammaticale OK',
+        'validation.error': 'erreur',
+        'validation.errors': 'erreurs',
+        'validation.warning': 'avertissement',
+        'validation.warnings': 'avertissements',
+
+        // Pattern Templates (Phase 6)
+        'pattern.header': 'Modèles de patron',
+        'pattern.apply': 'Appliquer',
+        'pattern.example': 'Exemple',
+        'suggestion.header': 'Patrons recommandés',
+        'suggestion.complete': 'Complet',
+        'suggestion.apply': 'Appliquer',
+
+        // Blockly Category Names
+        'blockly.category.noun': 'Nom',
+        'blockly.category.particle': 'Connecteur',
+        'blockly.category.article': 'Article',
+        'blockly.category.verb': 'Action',
+        'blockly.category.punctuation': 'Ponctuation',
+        'blockly.category.other': 'Autre',
+
+        // Template (Macro) Feature
+        'toolbox.myTemplates': 'Mes modèles',
+        'template.saveAs': 'Enregistrer comme modèle',
+        'template.enterName': 'Nom du modèle :',
+        'template.empty': 'Aucun modèle enregistré',
+        'template.delete': 'Supprimer',
+        'template.deleteConfirm': 'Supprimer ce modèle ?',
+        'template.save': 'Enregistrer',
+        'template.cancel': 'Annuler',
+        'template.namePlaceholder': 'Nom du modèle',
+
+        // Blockly Block Labels (displayed on blocks)
+        'blockly.noun.label': 'Nom :',
+        'blockly.other.label': 'Autre :',
+        'blockly.verb.label': 'Action :',
+
+        // Connector Labels (French equivalents of Japanese particles)
+        'blockly.particle.ga.label': '(sujet)',
+        'blockly.particle.wo.label': '(objet)',
+        'blockly.particle.ni.label': 'à',
+        'blockly.particle.de.label': 'avec',
+        'blockly.particle.to.label': 'et',
+        'blockly.particle.he.label': 'vers',
+        'blockly.particle.kara.label': 'de',
+        'blockly.particle.made.label': 'jusqu\'à',
+        'blockly.particle.yori.label': 'que',
+
+        // Connector DSL Output (empty for subject/object markers, French for others)
+        'blockly.particle.ga.output': '',
+        'blockly.particle.wo.output': '',
+        'blockly.particle.ni.output': 'à ',
+        'blockly.particle.de.output': 'avec ',
+        'blockly.particle.to.output': 'et ',
+        'blockly.particle.he.output': 'vers ',
+        'blockly.particle.kara.output': 'de ',
+        'blockly.particle.made.output': 'jusqu\'à ',
+        'blockly.particle.yori.output': 'que ',
+
+        // Article Labels (French mode)
+        'blockly.article.a.label': 'un',
+        'blockly.article.an.label': 'une',
+        'blockly.article.the.label': 'le',
+        'blockly.article.this.label': 'ce',
+        'blockly.article.that.label': 'cette',
+        'blockly.article.please.label': 'veuillez',
+
+        // Article DSL Output
+        'blockly.article.a.output': 'un ',
+        'blockly.article.an.output': 'une ',
+        'blockly.article.the.output': 'le ',
+        'blockly.article.this.output': 'ce ',
+        'blockly.article.that.output': 'cette ',
+        'blockly.article.please.output': 'veuillez ',
+
+        // Article Tooltips
+        'blockly.article.a.tooltip': 'Article indéfini masculin singulier',
+        'blockly.article.an.tooltip': 'Article indéfini féminin singulier',
+        'blockly.article.the.tooltip': 'Article défini (le, la, les)',
+        'blockly.article.this.tooltip': 'Démonstratif (ce, cette)',
+        'blockly.article.that.tooltip': 'Démonstratif (ce, cette - éloigné)',
+        'blockly.article.please.tooltip': 'Formule de politesse',
+
+        // Action Labels (French infinitives)
+        'blockly.verb.analyze.label': 'analyser',
+        'blockly.verb.summarize.label': 'résumer',
+        'blockly.verb.translate.label': 'traduire',
+        'blockly.verb.create.label': 'créer',
+        'blockly.verb.generate.label': 'générer',
+        'blockly.verb.convert.label': 'convertir',
+        'blockly.verb.delete.label': 'supprimer',
+        'blockly.verb.update.label': 'mettre à jour',
+        'blockly.verb.extract.label': 'extraire',
+        'blockly.verb.explain.label': 'expliquer',
+        'blockly.verb.describe.label': 'décrire',
+        'blockly.verb.teach.label': 'enseigner',
+        'blockly.verb.custom.default': 'traiter',
+
+        // Action DSL Output
+        'blockly.verb.analyze.output': 'analyser ',
+        'blockly.verb.summarize.output': 'résumer ',
+        'blockly.verb.translate.output': 'traduire ',
+        'blockly.verb.create.output': 'créer ',
+        'blockly.verb.generate.output': 'générer ',
+        'blockly.verb.convert.output': 'convertir ',
+        'blockly.verb.delete.output': 'supprimer ',
+        'blockly.verb.update.output': 'mettre à jour ',
+        'blockly.verb.extract.output': 'extraire ',
+        'blockly.verb.explain.output': 'expliquer ',
+        'blockly.verb.describe.output': 'décrire ',
+        'blockly.verb.teach.output': 'enseigner ',
+
+        // Punctuation Labels & Output
+        'blockly.punct.touten.label': ',',
+        'blockly.punct.kuten.label': '.',
+        'blockly.punct.exclaim.label': '!',
+        'blockly.punct.question.label': '?',
+        'blockly.punct.dquote.label': '"',
+        'blockly.punct.squote.label': "'",
+        'blockly.punct.comma.label': ',',
+        'blockly.punct.slash.label': '/',
+        'blockly.punct.amp.label': '&',
+        'blockly.punct.touten.output': ', ',
+        'blockly.punct.kuten.output': '. ',
+        'blockly.punct.exclaim.output': '! ',
+        'blockly.punct.question.output': '? ',
+        'blockly.punct.dquote.output': '" ',
+        'blockly.punct.squote.output': "' ",
+        'blockly.punct.comma.output': ', ',
+        'blockly.punct.slash.output': '/ ',
+        'blockly.punct.amp.output': '& ',
+        'blockly.punct.period.label': '.',
+        'blockly.punct.period.output': '. ',
+        'blockly.punct.period.tooltip': 'Ponctuation : point',
+
+        // Blockly Block Tooltips
+        'blockly.noun.tooltip': 'Bloc nom - marque les termes importants (préfixe _N:)',
+        'blockly.other.tooltip': 'Bloc autre - pour le texte personnalisé',
+        'blockly.particle.ga.tooltip': 'Marqueur de sujet (peut être omis en français)',
+        'blockly.particle.wo.tooltip': 'Marqueur d\'objet (peut être omis en français)',
+        'blockly.particle.ni.tooltip': 'Marqueur de direction - équivalent à « à »',
+        'blockly.particle.de.tooltip': 'Marqueur de moyen - équivalent à « avec »',
+        'blockly.particle.to.tooltip': 'Conjonction - équivalent à « et »',
+        'blockly.particle.he.tooltip': 'Marqueur de direction - équivalent à « vers »',
+        'blockly.particle.kara.tooltip': 'Marqueur d\'origine - équivalent à « de »',
+        'blockly.particle.made.tooltip': 'Marqueur de limite - équivalent à « jusqu\'à »',
+        'blockly.particle.yori.tooltip': 'Marqueur de comparaison - équivalent à « que »',
+        'blockly.verb.analyze.tooltip': 'Action : analyser',
+        'blockly.verb.summarize.tooltip': 'Action : résumer',
+        'blockly.verb.translate.tooltip': 'Action : traduire',
+        'blockly.verb.create.tooltip': 'Action : créer',
+        'blockly.verb.generate.tooltip': 'Action : générer',
+        'blockly.verb.convert.tooltip': 'Action : convertir',
+        'blockly.verb.delete.tooltip': 'Action : supprimer',
+        'blockly.verb.update.tooltip': 'Action : mettre à jour',
+        'blockly.verb.extract.tooltip': 'Action : extraire',
+        'blockly.verb.explain.tooltip': 'Action : expliquer',
+        'blockly.verb.describe.tooltip': 'Action : décrire',
+        'blockly.verb.teach.tooltip': 'Action : enseigner',
+        'blockly.verb.custom.tooltip': 'Bloc d\'action personnalisé',
+        'blockly.punct.touten.tooltip': 'Ponctuation : virgule',
+        'blockly.punct.kuten.tooltip': 'Ponctuation : point',
+        'blockly.punct.exclaim.tooltip': 'Ponctuation : point d\'exclamation',
+        'blockly.punct.question.tooltip': 'Ponctuation : point d\'interrogation',
+        'blockly.punct.dquote.tooltip': 'Ponctuation : guillemet double',
+        'blockly.punct.squote.tooltip': 'Ponctuation : guillemet simple',
+        'blockly.punct.comma.tooltip': 'Ponctuation : virgule',
+        'blockly.punct.slash.tooltip': 'Ponctuation : barre oblique',
+        'blockly.punct.amp.tooltip': 'Ponctuation : esperluette',
+
+        // Validation Error Messages - French Grammar
+        'validation.en.articleNotBeforeNoun': 'L\'article doit être suivi d\'un nom',
+        'validation.en.consecutiveArticles': 'Articles consécutifs non autorisés',
+        'validation.en.prepositionWithoutObject': 'La préposition doit être suivie d\'un nom',
+        'validation.en.pleasePosition': '« veuillez » doit être au début ou avant un verbe',
+        'validation.en.periodNotAtEnd': 'Le point doit être en fin de phrase',
+        'validation.en.missingVerb': 'La phrase ne contient pas de verbe (action)',
+
+        // Project Manager
+        'project.unsaved.title': 'Modifications non enregistrées',
+        'project.unsaved.message': 'Vous avez des modifications non enregistrées. Voulez-vous les abandonner ?',
+        'project.save.failed': 'Échec de l\'enregistrement du projet',
+        'project.load.failed': 'Échec du chargement du projet',
+
+        // Footer
+        'footer.version': 'Promps v1.5.0 - Trilingue',
+
+        // Block limit
+        'blocks.counter.label': 'blocs',
+        'blocks.warning.threshold': 'Le nombre de blocs est élevé. Envisagez de simplifier votre prompt.',
+        'blocks.warning.limit': 'Limite de blocs (100) atteinte. Supprimez des blocs existants pour en ajouter.'
     }
 };
 
@@ -475,7 +692,7 @@ function t(key, params = {}) {
 
 /**
  * Get current locale
- * @returns {string} Current locale code ('ja' or 'en')
+ * @returns {string} Current locale code ('ja', 'en', or 'fr')
  */
 function getLocale() {
     return currentLocale;
@@ -483,7 +700,7 @@ function getLocale() {
 
 /**
  * Set locale and update UI
- * @param {string} lang - Language code ('ja' or 'en')
+ * @param {string} lang - Language code ('ja', 'en', or 'fr')
  */
 function setLocale(lang) {
     if (!TRANSLATIONS[lang]) {
@@ -509,10 +726,11 @@ function setLocale(lang) {
 }
 
 /**
- * Toggle between Japanese and English
+ * Toggle between Japanese, English, and French
  */
 function toggleLocale() {
-    const newLocale = currentLocale === 'ja' ? 'en' : 'ja';
+    const cycle = { ja: 'en', en: 'fr', fr: 'ja' };
+    const newLocale = cycle[currentLocale] || 'ja';
     setLocale(newLocale);
 }
 
