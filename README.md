@@ -6,7 +6,7 @@
 > **AIプロンプト作成のためのビジュアルブロックベースツール**
 
 [![Stable](https://img.shields.io/badge/Status-Stable-brightgreen)](https://github.com/BonoJovi/Promps/releases)
-[![Version](https://img.shields.io/badge/Version-1.3.5-blue)](https://github.com/BonoJovi/Promps/releases/tag/v1.3.5-free)
+[![Version](https://img.shields.io/badge/Version-1.4.0-blue)](https://github.com/BonoJovi/Promps/releases/tag/v1.4.0-free)
 [![Tests](https://img.shields.io/badge/Tests-282%20passing-brightgreen)](https://github.com/BonoJovi/Promps)
 [![Rust](https://img.shields.io/badge/Rust-1.70+-orange.svg)](https://www.rust-lang.org/)
 [![Tauri](https://img.shields.io/badge/Tauri-v2-blue.svg)](https://tauri.app/)
@@ -310,8 +310,8 @@ We welcome **all types of contributions** - not just code!
 
 **No programming experience needed! / プログラミング経験不要！**
 
-**✨ v1.3.5 Stable Release - Template Dialog Fix!**
-**[新着] v1.3.5 安定版リリース！テンプレートダイアログ修正！**
+**✨ v1.4.0 Stable Release - Drag & Drop Template Insertion!**
+**[新着] v1.4.0 安定版リリース！ドラッグ＆ドロップ テンプレート挿入！**
 
 **Platform Status: / プラットフォーム状況：**
 - ✅ **Linux**: Verified and tested by developer / 開発者により検証済み・テスト済み
@@ -353,6 +353,18 @@ For code contributions:
 ---
 
 ## Release History / リリース履歴
+
+### Version 1.4.0 (2026-02-22) ✨ Drag & Drop Template Insertion
+
+**New Features: / 新機能：**
+- ✨ **Drag & Drop Template Insertion**: Templates are now draggable blocks in the toolbox, matching Ent edition behavior
+  **ドラッグ＆ドロップ テンプレート挿入**: テンプレートがツールボックス内のドラッグ可能ブロックになり、Ent版と同じ動作に統一
+- ✨ **Center Placement**: Template blocks are automatically placed at the center of the visible display area
+  **中央配置**: テンプレートブロックが表示領域の中央に自動配置
+- 🐛 **Scroll Position Fix**: Scrollbar no longer jumps when inserting templates
+  **スクロール位置修正**: テンプレート挿入時にスクロールバーが飛ばなくなった
+- 🐛 **Initial Scroll Fix**: Workspace scrollbar starts at top-left position on launch
+  **初期スクロール修正**: 起動時にワークスペースのスクロールバーが左上に配置
 
 ### Version 1.3.5 (2026-02-22) 🐛 Template Dialog Fix
 

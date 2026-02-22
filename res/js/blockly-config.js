@@ -99,6 +99,73 @@ const templateManager = {
     },
 
     /**
+     * Insert a template into the workspace at center of visible area
+     * @param {string} id - Template ID
+     */
+    insertTemplate(id) {
+        const template = this.getTemplates().find(t => t.id === id);
+        if (template && workspace) {
+            try {
+                // Calculate center of visible area using SVG coordinate transform
+                const svg = workspace.getParentSvg();
+                const rect = svg.getBoundingClientRect();
+                const svgPoint = svg.createSVGPoint();
+                svgPoint.x = rect.left + rect.width / 2;
+                svgPoint.y = rect.top + rect.height / 2;
+                const ctm = workspace.getCanvas().getScreenCTM();
+                const wsPoint = ctm ? svgPoint.matrixTransform(ctm.inverse()) : { x: 50, y: 50 };
+
+                // Clone the template blocks data and set position
+                const blockData = JSON.parse(JSON.stringify(template.blocks));
+                blockData.x = wsPoint.x;
+                blockData.y = wsPoint.y;
+
+                // Remove block IDs to ensure Blockly generates new unique IDs
+                this._removeBlockIds(blockData);
+
+                // Get blocks before insertion to identify new blocks
+                const blocksBefore = new Set(workspace.getAllBlocks(false).map(b => b.id));
+
+                // Insert blocks (serialization API doesn't record undo)
+                Blockly.serialization.blocks.append(blockData, workspace);
+
+                // Get newly created blocks
+                const allBlocks = workspace.getAllBlocks(false);
+                const newBlocks = allBlocks.filter(b => !blocksBefore.has(b.id));
+
+                // Manually fire BLOCK_CREATE events for undo support
+                if (newBlocks.length > 0) {
+                    const eventGroup = Blockly.utils.idGenerator.genUid();
+                    Blockly.Events.setGroup(eventGroup);
+                    try {
+                        newBlocks.forEach(block => {
+                            const event = new Blockly.Events.BlockCreate(block);
+                            event.recordUndo = true;
+                            Blockly.Events.fire(event);
+                        });
+                    } finally {
+                        Blockly.Events.setGroup(false);
+                    }
+                }
+            } catch (e) {
+                console.error('Error inserting template:', e);
+                // Fallback: insert without positioning
+                const fallbackData = JSON.parse(JSON.stringify(template.blocks));
+                this._removeBlockIds(fallbackData);
+                Blockly.serialization.blocks.append(fallbackData, workspace);
+            }
+
+            // Trigger preview update
+            setTimeout(() => {
+                if (typeof updatePreview === 'function') {
+                    const code = getWorkspaceCode();
+                    updatePreview(code);
+                }
+            }, 100);
+        }
+    },
+
+    /**
      * Refresh the toolbox to show updated templates
      */
     refreshToolbox() {
@@ -118,6 +185,9 @@ const templateManager = {
         if (!workspace) return;
 
         this.getTemplates().forEach(template => {
+            workspace.registerButtonCallback(`insert_template_${template.id}`, () => {
+                this.insertTemplate(template.id);
+            });
             workspace.registerButtonCallback(`delete_template_${template.id}`, () => {
                 const confirmMsg = tt('template.deleteConfirm', 'Delete this template?');
                 if (confirm(`${confirmMsg}\n${template.name}`)) {
@@ -1146,27 +1216,64 @@ function expandTemplateBlock(templateBlock) {
     const template = templateManager.getTemplateById(templateId);
     if (!template) return;
 
-    // Get position of template block
-    const position = templateBlock.getRelativeToSurfaceXY();
-
-    // Clone template block data
+    // Clone template block data - place at workspace origin
     const blockData = JSON.parse(JSON.stringify(template.blocks));
-    blockData.x = position.x;
-    blockData.y = position.y;
+    blockData.x = 0;
+    blockData.y = 0;
 
     // Remove block IDs for unique generation
     templateManager._removeBlockIds(blockData);
 
-    // Disable all events during the manipulation
+    // Store template block ID to clean up undo stack
+    const templateBlockId = templateBlock.id;
+
+    // Track blocks before insertion
+    const blockIdsBefore = new Set(workspace.getAllBlocks(false).map(b => b.id));
+
+    // Disable all events during dispose + append + center offset
     Blockly.Events.disable();
     try {
-        // Delete the template block
         templateBlock.dispose(false, false);
-
-        // Insert the actual template blocks
         Blockly.serialization.blocks.append(blockData, workspace);
+
+        // Center block on origin: shift by half block size
+        const newBlock = workspace.getAllBlocks(false).find(b => !blockIdsBefore.has(b.id));
+        if (newBlock) {
+            const size = newBlock.getHeightWidth();
+            newBlock.moveBy(-size.width / 2, -size.height / 2);
+            console.log('=== expandTemplateBlock: centered at origin, blockSize:', size.width, size.height);
+        }
     } finally {
         Blockly.Events.enable();
+    }
+
+    // Remove template block events from undo stack (v1.4.0)
+    // This ensures clean undo behavior - only expanded blocks are undoable
+    if (workspace.undoStack_) {
+        workspace.undoStack_ = workspace.undoStack_.filter(event =>
+            event.blockId !== templateBlockId
+        );
+    }
+
+    // Get newly created blocks (excluding pre-existing blocks)
+    const newBlocks = workspace.getAllBlocks(false).filter(b =>
+        !blockIdsBefore.has(b.id) && b.id !== templateBlockId
+    );
+
+    // Fire grouped events for undo/redo support
+    if (newBlocks.length > 0) {
+        const eventGroup = Blockly.utils.idGenerator.genUid();
+        Blockly.Events.setGroup(eventGroup);
+        try {
+            const topBlock = newBlocks.find(b => !b.getParent()) || newBlocks[0];
+            if (topBlock) {
+                const event = new Blockly.Events.BlockCreate(topBlock);
+                event.recordUndo = true;
+                Blockly.Events.fire(event);
+            }
+        } finally {
+            Blockly.Events.setGroup(false);
+        }
     }
 
     // Trigger preview update
@@ -1301,12 +1408,11 @@ function initBlockly() {
     // Add change listener for real-time preview
     workspace.addChangeListener(onBlocklyChange);
 
-    // Set initial scroll position to top-left (deferred for metrics calculation)
+    // Center workspace origin (0,0) in the viewport
     requestAnimationFrame(() => {
         const metrics = workspace.getMetrics();
-        workspace.scroll(-metrics.scrollLeft, -metrics.scrollTop);
+        workspace.scroll(metrics.viewWidth / 2, metrics.viewHeight / 2);
     });
-
 
     console.log('Blockly workspace initialized');
 }
@@ -1510,16 +1616,16 @@ function reinitializeBlockly() {
         // Re-add change listener
         workspace.addChangeListener(onBlocklyChange);
 
+        // Center workspace origin (0,0) in the viewport
+        requestAnimationFrame(() => {
+            const metrics = workspace.getMetrics();
+            workspace.scroll(metrics.viewWidth / 2, metrics.viewHeight / 2);
+        });
+
         // Reset project manager dirty state (since workspace is now empty)
         if (window.projectManager && typeof window.projectManager.resetDirtyState === 'function') {
             window.projectManager.resetDirtyState();
         }
-
-        // Set initial scroll position to top-left (deferred for metrics calculation)
-        requestAnimationFrame(() => {
-            const metrics = workspace.getMetrics();
-            workspace.scroll(-metrics.scrollLeft, -metrics.scrollTop);
-        });
 
         console.log('Blockly workspace reinitialized with new language (workspace cleared)');
 

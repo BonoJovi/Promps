@@ -219,7 +219,7 @@ const TRANSLATIONS = {
         'project.load.failed': 'プロジェクトの読み込みに失敗しました',
 
         // Footer
-        'footer.version': 'Promps v1.0.1 - 日英対応'
+        'footer.version': 'Promps v1.4.0 - 日英対応'
     },
 
     en: {
@@ -431,7 +431,7 @@ const TRANSLATIONS = {
         'project.load.failed': 'Failed to load project',
 
         // Footer
-        'footer.version': 'Promps v1.0.1 - Bilingual'
+        'footer.version': 'Promps v1.4.0 - Bilingual'
     }
 };
 
