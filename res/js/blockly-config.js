@@ -11,6 +11,10 @@
 // Global workspace variable
 let workspace = null;
 
+// Block limit constants
+const BLOCK_WARNING_THRESHOLD = 50;
+const BLOCK_LIMIT = 100;
+
 // ========================================================================
 // Template Manager - Save and reuse block groups (macros)
 // ========================================================================
@@ -1216,6 +1220,20 @@ function expandTemplateBlock(templateBlock) {
     const template = templateManager.getTemplateById(templateId);
     if (!template) return;
 
+    // Block limit check before expansion
+    const currentCount = workspace.getAllBlocks(false).length;
+    if (currentCount >= BLOCK_LIMIT) {
+        showBlockLimitWarning();
+        Blockly.Events.disable();
+        try {
+            templateBlock.dispose(false, false);
+        } finally {
+            Blockly.Events.enable();
+        }
+        updateBlockCounter();
+        return;
+    }
+
     // Clone template block data - place at workspace origin
     const blockData = JSON.parse(JSON.stringify(template.blocks));
     blockData.x = 0;
@@ -1283,6 +1301,11 @@ function expandTemplateBlock(templateBlock) {
             updatePreview(code);
         }
     }, 100);
+
+    // Delayed block limit check after expansion
+    setTimeout(() => {
+        updateBlockCounter();
+    }, 200);
 }
 
 /**
@@ -1430,6 +1453,9 @@ function onBlocklyChange(event) {
     if (!workspace || event.workspaceId !== workspace.id) {
         return;
     }
+
+    // Update block counter on any change
+    updateBlockCounter();
 
     let shouldMarkDirty = false;
 
@@ -1636,5 +1662,58 @@ function reinitializeBlockly() {
 
     } catch (error) {
         console.error('Failed to reinitialize Blockly:', error);
+    }
+}
+
+/**
+ * Update block counter display and check limits
+ */
+function updateBlockCounter() {
+    if (!workspace) {
+        return 0;
+    }
+
+    const count = workspace.getAllBlocks(false).length;
+    const counter = document.getElementById('blockCounter');
+    const countSpan = document.getElementById('blockCount');
+
+    if (!counter || !countSpan) {
+        return count;
+    }
+
+    countSpan.textContent = count;
+    counter.classList.remove('warning', 'danger');
+
+    // Remove existing tooltip
+    const existingTooltip = counter.querySelector('.block-limit-tooltip');
+    if (existingTooltip) existingTooltip.remove();
+
+    if (count >= BLOCK_LIMIT) {
+        counter.classList.add('danger');
+        const msg = window.t ? window.t('blocks.warning.limit')
+            : 'Block limit reached (100). Remove some blocks to add more.';
+        const tooltip = document.createElement('span');
+        tooltip.className = 'block-limit-tooltip';
+        tooltip.textContent = msg;
+        counter.appendChild(tooltip);
+    } else if (count >= BLOCK_WARNING_THRESHOLD) {
+        counter.classList.add('warning');
+    }
+
+    return count;
+}
+
+/**
+ * Show block limit warning via tooltip on counter
+ */
+function showBlockLimitWarning() {
+    const counter = document.getElementById('blockCounter');
+    if (counter && !counter.querySelector('.block-limit-tooltip')) {
+        const msg = window.t ? window.t('blocks.warning.limit')
+            : 'Block limit reached (100). Remove some blocks to add more.';
+        const tooltip = document.createElement('span');
+        tooltip.className = 'block-limit-tooltip';
+        tooltip.textContent = msg;
+        counter.appendChild(tooltip);
     }
 }

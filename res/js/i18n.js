@@ -219,7 +219,12 @@ const TRANSLATIONS = {
         'project.load.failed': 'プロジェクトの読み込みに失敗しました',
 
         // Footer
-        'footer.version': 'Promps v1.4.0 - 日英対応'
+        'footer.version': 'Promps v1.4.0 - 日英対応',
+
+        // Block limit
+        'blocks.counter.label': 'ブロック',
+        'blocks.warning.threshold': 'ブロック数が多くなっています。プロンプトの簡略化を検討してください。',
+        'blocks.warning.limit': 'ブロック数の上限（100）に達しました。追加するには既存のブロックを削除してください。'
     },
 
     en: {
@@ -431,7 +436,12 @@ const TRANSLATIONS = {
         'project.load.failed': 'Failed to load project',
 
         // Footer
-        'footer.version': 'Promps v1.4.0 - Bilingual'
+        'footer.version': 'Promps v1.4.0 - Bilingual',
+
+        // Block limit
+        'blocks.counter.label': 'Blocks',
+        'blocks.warning.threshold': 'Block count is getting high. Consider simplifying your prompt.',
+        'blocks.warning.limit': 'Block limit (100) reached. Remove existing blocks to add more.'
     }
 };
 
