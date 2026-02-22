@@ -73,39 +73,29 @@ const templateManager = {
      * Insert a template into the workspace at center of visible area
      * @param {string} id - Template ID
      */
-    insertTemplate(id) {
-        const template = this.getTemplates().find(t => t.id === id);
-        if (template && workspace) {
-            try {
-                // Get workspace metrics for positioning
-                const metrics = workspace.getMetrics();
-
-                // Calculate center position in workspace coordinates
-                // viewLeft/viewTop are already in workspace coordinates
-                const centerX = (metrics.viewLeft + metrics.viewWidth / 2) / workspace.scale;
-                const centerY = (metrics.viewTop + metrics.viewHeight / 2) / workspace.scale;
-
-                // Clone the template blocks data and set position
-                const blockData = JSON.parse(JSON.stringify(template.blocks));
-                blockData.x = centerX;
-                blockData.y = centerY;
-
-                Blockly.serialization.blocks.append(blockData, workspace);
-            } catch (e) {
-                console.error('Error inserting template:', e);
-                // Fallback: insert without positioning
-                Blockly.serialization.blocks.append(template.blocks, workspace);
-            }
-
-            // Trigger preview update and validation after inserting template
-            // Use setTimeout to ensure blocks are fully added to workspace
-            setTimeout(() => {
-                if (typeof updatePreview === 'function') {
-                    const code = getWorkspaceCode();
-                    updatePreview(code);
-                }
-            }, 100);
+    _removeBlockIds(blockData) {
+        if (!blockData || typeof blockData !== 'object') return;
+        delete blockData.id;
+        if (blockData.next && blockData.next.block) {
+            this._removeBlockIds(blockData.next.block);
         }
+        if (blockData.inputs) {
+            for (const inputName in blockData.inputs) {
+                const input = blockData.inputs[inputName];
+                if (input && input.block) {
+                    this._removeBlockIds(input.block);
+                }
+            }
+        }
+    },
+
+    /**
+     * Get a template by ID
+     * @param {string} id - Template ID
+     * @returns {Object|undefined} Template object
+     */
+    getTemplateById(id) {
+        return this.getTemplates().find(t => t.id === id);
     },
 
     /**
@@ -128,9 +118,6 @@ const templateManager = {
         if (!workspace) return;
 
         this.getTemplates().forEach(template => {
-            workspace.registerButtonCallback(`insert_template_${template.id}`, () => {
-                this.insertTemplate(template.id);
-            });
             workspace.registerButtonCallback(`delete_template_${template.id}`, () => {
                 const confirmMsg = tt('template.deleteConfirm', 'Delete this template?');
                 if (confirm(`${confirmMsg}\n${template.name}`)) {
@@ -972,14 +959,23 @@ function generateTemplateCategory(ws) {
             text: tt('template.empty', 'No templates saved')
         });
     } else {
+        // Add template blocks (draggable)
         templates.forEach(template => {
-            // Add insert button for each template
+            const blockType = registerTemplateBlock(template);
             blockList.push({
-                kind: 'button',
-                text: template.name,
-                callbackKey: `insert_template_${template.id}`
+                kind: 'block',
+                type: blockType
             });
-            // Add delete button
+        });
+
+        // Separator
+        blockList.push({
+            kind: 'label',
+            text: '──────────'
+        });
+
+        // Add delete buttons for each template
+        templates.forEach(template => {
             blockList.push({
                 kind: 'button',
                 text: `${tt('template.delete', 'Delete')}: ${template.name}`,
@@ -1097,6 +1093,89 @@ function registerTemplateContextMenu() {
     } catch (e) {
         console.error('Failed to register template context menu:', e);
     }
+}
+
+/**
+ * Register a dynamic block type for a template (drag-and-drop from toolbox)
+ * @param {Object} template - Template object
+ * @returns {string} The registered block type name
+ */
+function registerTemplateBlock(template) {
+    const blockType = `promps_template_${template.id}`;
+
+    // Delete old registration if exists (to allow updates)
+    if (Blockly.Blocks[blockType]) {
+        delete Blockly.Blocks[blockType];
+    }
+
+    const displayText = `\u{1F4CB} ${template.name}`;
+
+    // Register the block
+    Blockly.Blocks[blockType] = {
+        init: function() {
+            this.appendDummyInput()
+                .appendField(new Blockly.FieldLabel(displayText));
+            this.setPreviousStatement(true, null);
+            this.setNextStatement(true, null);
+            this.setColour(330);
+            this.setTooltip(displayText);
+            this.setHelpUrl("");
+
+            // Store template ID for expansion
+            this._templateId = template.id;
+        }
+    };
+
+    // Register the generator - returns empty string since this block will be expanded
+    javascriptGenerator.forBlock[blockType] = function(block, generator) {
+        return '';
+    };
+
+    return blockType;
+}
+
+/**
+ * Expand a template block into its component blocks
+ * Called when a template block is dropped into the workspace
+ * @param {Blockly.Block} templateBlock - The template block to expand
+ */
+function expandTemplateBlock(templateBlock) {
+    const templateId = templateBlock._templateId;
+    if (!templateId) return;
+
+    const template = templateManager.getTemplateById(templateId);
+    if (!template) return;
+
+    // Get position of template block
+    const position = templateBlock.getRelativeToSurfaceXY();
+
+    // Clone template block data
+    const blockData = JSON.parse(JSON.stringify(template.blocks));
+    blockData.x = position.x;
+    blockData.y = position.y;
+
+    // Remove block IDs for unique generation
+    templateManager._removeBlockIds(blockData);
+
+    // Disable all events during the manipulation
+    Blockly.Events.disable();
+    try {
+        // Delete the template block
+        templateBlock.dispose(false, false);
+
+        // Insert the actual template blocks
+        Blockly.serialization.blocks.append(blockData, workspace);
+    } finally {
+        Blockly.Events.enable();
+    }
+
+    // Trigger preview update
+    setTimeout(() => {
+        if (typeof updatePreview === 'function') {
+            const code = getWorkspaceCode();
+            updatePreview(code);
+        }
+    }, 100);
 }
 
 /**
@@ -1222,6 +1301,13 @@ function initBlockly() {
     // Add change listener for real-time preview
     workspace.addChangeListener(onBlocklyChange);
 
+    // Set initial scroll position to top-left (deferred for metrics calculation)
+    requestAnimationFrame(() => {
+        const metrics = workspace.getMetrics();
+        workspace.scroll(-metrics.scrollLeft, -metrics.scrollTop);
+    });
+
+
     console.log('Blockly workspace initialized');
 }
 
@@ -1249,6 +1335,32 @@ function onBlocklyChange(event) {
     // Create event - track as newly created
     if (event.type === Blockly.Events.BLOCK_CREATE) {
         window._newlyCreatedBlocks.set(event.blockId, null);
+
+        // Template block - track for expansion on drop
+        const block = workspace.getBlockById(event.blockId);
+        if (block && block.type && block.type.startsWith('promps_template_') && block._templateId) {
+            window._pendingTemplateExpansion = event.blockId;
+            return; // Don't process further - expansion will happen on BLOCK_MOVE
+        }
+    }
+
+    // Template block expansion after drop
+    if (event.type === Blockly.Events.BLOCK_MOVE && window._pendingTemplateExpansion) {
+        const blockId = window._pendingTemplateExpansion;
+        if (event.blockId === blockId) {
+            window._pendingTemplateExpansion = null;
+            const templateBlock = workspace.getBlockById(blockId);
+            if (templateBlock && !templateBlock.isInFlyout) {
+                // Use setTimeout to ensure the block is fully placed
+                setTimeout(() => {
+                    const block = workspace.getBlockById(blockId);
+                    if (block) {
+                        expandTemplateBlock(block);
+                    }
+                }, 50);
+            }
+            return; // Don't process further - expansion will handle everything
+        }
     }
 
     // Move event
@@ -1402,6 +1514,12 @@ function reinitializeBlockly() {
         if (window.projectManager && typeof window.projectManager.resetDirtyState === 'function') {
             window.projectManager.resetDirtyState();
         }
+
+        // Set initial scroll position to top-left (deferred for metrics calculation)
+        requestAnimationFrame(() => {
+            const metrics = workspace.getMetrics();
+            workspace.scroll(-metrics.scrollLeft, -metrics.scrollTop);
+        });
 
         console.log('Blockly workspace reinitialized with new language (workspace cleared)');
 
