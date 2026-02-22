@@ -82,6 +82,26 @@
         </footer>
     </div>
 
+    <!-- Template Name Input Modal -->
+    <div id="templateNameModal" class="modal-overlay">
+        <div class="modal-content template-name-modal">
+            <div class="modal-header">
+                <h3 data-i18n="template.saveAs">Save as Template</h3>
+                <button id="btnCloseTemplateNameModal" class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="templateNameInput" data-i18n="template.enterName">Enter template name:</label>
+                    <input type="text" id="templateNameInput" class="template-name-input" data-i18n-placeholder="template.namePlaceholder" placeholder="Template name" autofocus>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="btnCancelTemplateName" class="btn-secondary" data-i18n="template.cancel">Cancel</button>
+                <button id="btnSaveTemplateName" class="btn-primary" data-i18n="template.save">Save</button>
+            </div>
+        </div>
+    </div>
+
     <script src="js/blockly-config.js"></script>
     <script src="js/project-manager.js"></script>
     <script src="js/validation-ui.js"></script>

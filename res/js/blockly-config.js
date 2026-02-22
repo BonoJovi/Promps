@@ -992,6 +992,61 @@ function generateTemplateCategory(ws) {
 }
 
 /**
+ * Show template name input modal and call onConfirm with the entered name
+ */
+function showTemplateNameModal(onConfirm) {
+    var modal = document.getElementById('templateNameModal');
+    var input = document.getElementById('templateNameInput');
+    var btnSave = document.getElementById('btnSaveTemplateName');
+    var btnCancel = document.getElementById('btnCancelTemplateName');
+    var btnClose = document.getElementById('btnCloseTemplateNameModal');
+
+    if (!modal || !input) return;
+
+    input.value = '';
+    modal.classList.add('modal-visible');
+    input.focus();
+
+    function cleanup() {
+        modal.classList.remove('modal-visible');
+        btnSave.removeEventListener('click', handleSave);
+        btnCancel.removeEventListener('click', handleCancel);
+        btnClose.removeEventListener('click', handleCancel);
+        modal.removeEventListener('click', handleOverlay);
+        input.removeEventListener('keydown', handleKeydown);
+    }
+
+    function handleSave() {
+        var name = input.value;
+        cleanup();
+        if (onConfirm) onConfirm(name);
+    }
+
+    function handleCancel() {
+        cleanup();
+    }
+
+    function handleOverlay(e) {
+        if (e.target === modal) cleanup();
+    }
+
+    function handleKeydown(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            handleSave();
+        } else if (e.key === 'Escape') {
+            handleCancel();
+        }
+    }
+
+    btnSave.addEventListener('click', handleSave);
+    btnCancel.addEventListener('click', handleCancel);
+    btnClose.addEventListener('click', handleCancel);
+    modal.addEventListener('click', handleOverlay);
+    input.addEventListener('keydown', handleKeydown);
+}
+
+/**
  * Register custom context menu for saving blocks as templates
  */
 function registerTemplateContextMenu() {
@@ -1026,11 +1081,15 @@ function registerTemplateContextMenu() {
                 return 'hidden';
             },
             callback: function(scope) {
-                const namePrompt = tt('template.enterName', 'Enter template name:');
-                const name = prompt(namePrompt);
-                if (name && name.trim()) {
-                    templateManager.saveTemplate(name.trim(), scope.block);
-                }
+                // Use custom modal instead of native prompt() to avoid
+                // Blockly context menu cleanup issues in Tauri WebView
+                setTimeout(function() {
+                    showTemplateNameModal(function(name) {
+                        if (name && name.trim()) {
+                            templateManager.saveTemplate(name.trim(), scope.block);
+                        }
+                    });
+                }, 0);
             },
             scopeType: Blockly.ContextMenuRegistry.ScopeType.BLOCK
         });

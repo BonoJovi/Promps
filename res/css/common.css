@@ -787,6 +787,109 @@ h2 {
     fill: var(--text-primary) !important;
 }
 
+/* ============================================================================
+   Template Name Modal
+   ============================================================================ */
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-overlay.modal-visible {
+    display: flex;
+}
+
+.modal-content {
+    background-color: var(--bg-surface);
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    width: 90%;
+    max-width: 500px;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    background: var(--gradient-modal-header);
+    color: var(--text-inverse);
+    border-radius: 8px 8px 0 0;
+}
+
+.modal-header h3 {
+    margin: 0;
+    font-size: 16px;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    color: var(--text-inverse);
+    font-size: 24px;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+}
+
+.modal-body {
+    padding: 20px;
+}
+
+.modal-footer {
+    padding: 12px 20px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    border-top: 1px solid var(--border-color);
+}
+
+.modal-footer .btn-secondary {
+    background-color: var(--btn-secondary-bg);
+    color: var(--text-inverse);
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.modal-footer .btn-secondary:hover {
+    background-color: var(--btn-secondary-hover-bg);
+}
+
+.modal-footer .btn-primary {
+    padding: 8px 16px;
+}
+
+.template-name-modal {
+    max-width: 400px;
+}
+
+.template-name-input {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-size: 14px;
+    background: var(--bg-surface);
+    color: var(--text-primary);
+}
+
+.template-name-input:focus {
+    outline: none;
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+}
+
 /* Theme transition for smooth switching */
 body,
 .app-header,

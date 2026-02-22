@@ -6,7 +6,7 @@
 > **AIプロンプト作成のためのビジュアルブロックベースツール**
 
 [![Stable](https://img.shields.io/badge/Status-Stable-brightgreen)](https://github.com/BonoJovi/Promps/releases)
-[![Version](https://img.shields.io/badge/Version-1.3.4-blue)](https://github.com/BonoJovi/Promps/releases/tag/v1.3.4-free)
+[![Version](https://img.shields.io/badge/Version-1.3.5-blue)](https://github.com/BonoJovi/Promps/releases/tag/v1.3.5-free)
 [![Tests](https://img.shields.io/badge/Tests-282%20passing-brightgreen)](https://github.com/BonoJovi/Promps)
 [![Rust](https://img.shields.io/badge/Rust-1.70+-orange.svg)](https://www.rust-lang.org/)
 [![Tauri](https://img.shields.io/badge/Tauri-v2-blue.svg)](https://tauri.app/)
@@ -310,8 +310,8 @@ We welcome **all types of contributions** - not just code!
 
 **No programming experience needed! / プログラミング経験不要！**
 
-**✨ v1.3.4 Stable Release - _V: Verb Prefix for Reliable Grammar Validation!**
-**[新着] v1.3.4 安定版リリース！_V: 動詞プレフィックスによる文法検証の信頼性向上！**
+**✨ v1.3.5 Stable Release - Template Dialog Fix!**
+**[新着] v1.3.5 安定版リリース！テンプレートダイアログ修正！**
 
 **Platform Status: / プラットフォーム状況：**
 - ✅ **Linux**: Verified and tested by developer / 開発者により検証済み・テスト済み
@@ -353,6 +353,14 @@ For code contributions:
 ---
 
 ## Release History / リリース履歴
+
+### Version 1.3.5 (2026-02-22) 🐛 Template Dialog Fix
+
+**Bug Fix: / バグ修正：**
+- 🐛 **Template Save Dialog Fix**: Replaced native prompt() with custom modal to prevent Blockly workspace freeze in Tauri WebView
+  **テンプレート保存ダイアログ修正**: ネイティブprompt()をカスタムモーダルに置換し、Tauri WebViewでのBlocklyワークスペースフリーズを防止
+- 🌐 **Template Dialog i18n**: Added localized placeholder for template name input
+  **テンプレートダイアログi18n**: テンプレート名入力のプレースホルダーを多言語対応
 
 ### Version 1.3.4 (2026-02-22) 🔧 _V: Verb Prefix for Grammar Validation
 

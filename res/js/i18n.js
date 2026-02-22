@@ -62,6 +62,9 @@ const TRANSLATIONS = {
         'template.empty': '保存されたテンプレートはありません',
         'template.delete': '削除',
         'template.deleteConfirm': 'このテンプレートを削除しますか？',
+        'template.save': '保存',
+        'template.cancel': 'キャンセル',
+        'template.namePlaceholder': 'テンプレート名',
 
         // Blockly Block Labels (displayed on blocks)
         'blockly.noun.label': '名詞:',
@@ -271,6 +274,9 @@ const TRANSLATIONS = {
         'template.empty': 'No templates saved',
         'template.delete': 'Delete',
         'template.deleteConfirm': 'Delete this template?',
+        'template.save': 'Save',
+        'template.cancel': 'Cancel',
+        'template.namePlaceholder': 'Template name',
 
         // Blockly Block Labels (displayed on blocks)
         'blockly.noun.label': 'Noun:',
